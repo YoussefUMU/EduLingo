@@ -88,7 +88,7 @@ La aplicación debe guardar estadísticas de uso como:
 ---
 
 ## Modelado de dominio  
-![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/3ac5ec956b0ccc48aa6e62ec442da40dec1f008d/Recursos%20Entrega%20Opcional/Modelado.drawio.jpg)
+![Modelado de dominio]([https://github.com/YoussefUMU/proyecto-pds-24-25/blob/3ac5ec956b0ccc48aa6e62ec442da40dec1f008d/Recursos%20Entrega%20Opcional/Modelado.drawio.jpg](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/90fbfc3be5f7380470d30521d0d30e1a68d188ca/Recursos%20Entrega%20Opcional/modelado/Modelado.drawio.jpg)
 
 El modelo de dominio representa la relación entre **usuarios**, **cursos**, **preguntas** y **estrategias de aprendizaje**.  
 
