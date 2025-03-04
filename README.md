@@ -1,6 +1,9 @@
 # EduLingo - Repostorio colaborativo para el proyecto de PDS.
 **EduLingo** es una aplicación de aprendizaje diseñada para ofrecer una experiencia interactiva y efectiva basada en ejercicios rápidos, flashcards y juegos educativos. Inspirada en plataformas como Duolingo y Mochi, la aplicación permite a los usuarios reforzar sus conocimientos en diferentes áreas, como idiomas, programación, cultura general, entre otros.
 
+Como **primera entrega** hemos realizado una primera idenitifación de los casos de uso con sus actores y objetivos y hemos decidido desarrollar 2 de ellos que hemos considerado importantes, por otro lado, también se ha realizado un primer diseño del modelado de dominio que pretendemos seguir para la realización del proyecto:
+[Enlace a la primera entrega](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/6abe8cb50a34eedc35a271f12195824527f9bd20/Recursos%20Entrega%20Opcional/Entrega1Opcional.md)
+
 **Realizado por:** `Joaquín Manuel Redón Sánchez`
               `Marcos Davidson Antón`
                `Youssef Bouaouiouich Souidi`
