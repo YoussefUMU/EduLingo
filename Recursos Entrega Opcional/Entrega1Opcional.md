@@ -11,9 +11,6 @@
 **Profesor:**  
 Jesús Sánchez Cuadrado  
 
-**Repositorio:**  
-[GitHub - Proyecto PDS](https://github.com/YoussefUMU/proyecto-pds-24-25.git)
-
 ---
 
 ## Índice  
