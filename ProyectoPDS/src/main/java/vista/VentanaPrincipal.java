@@ -1,4 +1,4 @@
-package Vista;
+package vista;
 
 public class VentanaPrincipal {
 
