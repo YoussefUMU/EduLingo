@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class CursoEnMarcha {
 	private final Curso curso;
 	private final LocalDate FechaInicio;
+	private LocalDate FechaUltimaActividad;
 	private int Progreso;
 	private final Estrategia EstrategiaUsada;
 	
@@ -30,6 +31,7 @@ public class CursoEnMarcha {
 	public Curso getCurso() {
 		return curso;
 	}
+	
 	
 	
 	
