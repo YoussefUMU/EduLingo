@@ -1,43 +1,51 @@
 package modelado;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class Curso {
-	private final String Titulo;
-	private final String Descripcion;
-	private LinkedList<Pregunta> PreguntasCurso;
-	private final Usuario Creador;
-	private int NumeroInscritos;
-	
-	public Curso(String T, String D, LinkedList<Pregunta> P, Usuario U) {
-		this.Titulo = T;
-		this.Descripcion = D;
-		this.PreguntasCurso = P;
-		this.Creador = U;
-		this.NumeroInscritos = 0;
+    private final String id;
+    private String nombre;
+    private String descripcion;
+    private List<Bloque> bloques;
+    private Estrategia estrategia;
+
+    public String getDescripcion() {
+		return descripcion;
 	}
 
-	public String getTitulo() {
-		return Titulo;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
-	public String getDescripcion() {
-		return Descripcion;
+	public Estrategia getEstrategia() {
+		return estrategia;
 	}
 
-	public LinkedList<Pregunta> getPreguntasCurso() {
-		return PreguntasCurso;
+	public void setEstrategia(Estrategia estrategia) {
+		this.estrategia = estrategia;
 	}
 
-	public Usuario getCreador() {
-		return Creador;
-	}
+	public Curso(String id, String nombre, String descripcion, List<Bloque> bloques, Estrategia estrategia) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.bloques = bloques;
+        this.estrategia = estrategia;
+    }
 
-	public int getNumeroInscritos() {
-		return NumeroInscritos;
-	}
-	
-	public void nuevoInscrito() {
-		this.NumeroInscritos++;
-	}
+    public Bloque obtenerSiguienteBloque(int actual) {
+        return estrategia.siguiente(bloques, actual);
+    }
+
+    public String getId() {
+        return id;
+    }
+    
+    public String getNombre() {
+        return nombre;
+    }
+    
+    public List<Bloque> getBloques() {
+        return bloques;
+    }
 }
