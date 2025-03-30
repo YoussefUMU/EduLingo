@@ -28,26 +28,24 @@ Jesús Sánchez Cuadrado
 
 | Actor   | Objetivo |
 |---------|---------|
-| **Usuario** | - Añadir nuevos tipos de preguntas  <br>- Seleccionar la estrategia de aprendizaje  <br>- Crear cursos  <br>- Compartir cursos creados |
+| **Creador** | - Añadir nuevos tipos de preguntas  <br>- Crear cursos  <br>- Compartir cursos creados |
+| **Consumidor** | - Realizar curso |
 | **Sistema** | - Ofrecer distintos tipos de estrategias  <br>- Guardar estado actual del curso  <br>- Restaurar estado previo del curso  <br>- Guardar las estadísticas de uso  <br>- Permitir la instalación de nuevos cursos en su biblioteca interna |
 
 ---
 
 ## Desarrollo de casos de uso  
 
-### Caso de Uso 1: Seleccionar la estrategia de aprendizaje  
+### Caso de Uso 1: Realizar curso  
 
 **Resumen:**  
-Cuando un usuario va a realizar un curso, tiene que poder elegir la estrategia de aprendizaje. Algunas opciones pueden ser:  
-- **Secuencial:** Una pregunta tras otra en un orden predefinido.  
-- **Repetición espaciada:** Repetir la misma pregunta cada ciertas preguntas (ejemplo: cada 3 preguntas).  
-- **Aleatoria:** Orden de preguntas al azar.  
+Un usuario deberá poder realizar cursos creados por otros usuarios.
 
-**Actor Principal:** Usuario  
+**Actor Principal:** Consumidor  
 
 **Flujo Básico:**  
-1. El usuario selecciona un curso y quiere elegir el tipo de estrategia.  
-2. El sistema muestra los distintos tipos de estrategia.  
+1. El usuario selecciona un curso.
+2. El sistema muestra las distintas estrategias de aprendizaje que puede utilizar.  
 3. El usuario elige una opción.  
 4. El sistema muestra las preguntas del curso de acuerdo con la estrategia seleccionada.  
 
@@ -70,7 +68,6 @@ La aplicación debe guardar estadísticas de uso como:
 - Calcular la mejor racha (ejemplo: número de días consecutivos).  
 
 **Actor Principal:** Sistema  
-
 **Flujo Básico:**  
 1. El sistema lleva un registro de las estadísticas de uso relevantes.  
 2. El sistema detecta cuando un usuario cierra un curso.  
