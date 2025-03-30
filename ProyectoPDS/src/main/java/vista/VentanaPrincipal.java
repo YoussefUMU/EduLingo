@@ -1,90 +1,99 @@
 package vista;
 
+import modelado.*;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Ventana principal mejorada con una interfaz más agradable y funcionalidad de cursos guardados.
+ */
 public class VentanaPrincipal extends JFrame {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Usuario usuario;
+    private JComboBox<String> comboCursosDisponibles;
+    private JComboBox<String> comboCursosGuardados;
+    private JTextArea areaSalida;
+    private JLabel saludoUsuario;
 
     public VentanaPrincipal() {
-        // Configuración de la ventana principal
-        setTitle("EduLingo - Aprende Jugando");
-        setSize(800, 600);
+        usuario = new Usuario("1", "Youssef", "youssef@example.com");
+        inicializarInterfaz();
+    }
+
+    private void inicializarInterfaz() {
+        setTitle("Plataforma de Aprendizaje");
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-        // Panel principal con imagen de fondo
-        JPanel panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                ImageIcon background = new ImageIcon("src/resources/background.jpg"); // Ruta de la imagen de fondo
-                g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        panel.setLayout(new BorderLayout());
+        JPanel panelSuperior = new JPanel(new FlowLayout());
+        saludoUsuario = new JLabel("Bienvenido, " + usuario.getNombre());
+        JButton btnCambiarUsuario = new JButton("Cambiar Usuario");
+        btnCambiarUsuario.addActionListener(e -> cambiarUsuario());
+        panelSuperior.add(saludoUsuario);
+        panelSuperior.add(btnCambiarUsuario);
+        
+        JPanel panelCentral = new JPanel(new GridLayout(3, 2, 10, 10));
+        comboCursosDisponibles = new JComboBox<>();
+        comboCursosGuardados = new JComboBox<>();
+        JButton btnIniciarCurso = new JButton("Iniciar Curso");
+        JButton btnReanudarCurso = new JButton("Reanudar Curso");
 
-        // Título
-        JLabel title = new JLabel("¡Bienvenido a EduLingo!", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 32));
-        title.setForeground(Color.WHITE);
-        panel.add(title, BorderLayout.NORTH);
+        btnIniciarCurso.addActionListener(e -> iniciarCurso());
+        btnReanudarCurso.addActionListener(e -> reanudarCurso());
 
-        // Panel de botones
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setOpaque(false);
-        buttonPanel.setLayout(new GridLayout(4, 1, 10, 10));
+        panelCentral.add(new JLabel("Cursos Disponibles:"));
+        panelCentral.add(comboCursosDisponibles);
+        panelCentral.add(new JLabel("Cursos Guardados:"));
+        panelCentral.add(comboCursosGuardados);
+        panelCentral.add(btnIniciarCurso);
+        panelCentral.add(btnReanudarCurso);
+        
+        areaSalida = new JTextArea();
+        areaSalida.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(areaSalida);
+        
+        add(panelSuperior, BorderLayout.NORTH);
+        add(panelCentral, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.SOUTH);
 
-        // Botones estilizados
-        JButton btnStart = createStyledButton("📚 Iniciar Curso");
-        JButton btnCourses = createStyledButton("📂 Mis Cursos");
-        JButton btnSettings = createStyledButton("⚙️ Configuración");
-        JButton btnExit = createStyledButton("🚪 Salir");
-
-        // Añadir botones al panel
-        buttonPanel.add(btnStart);
-        buttonPanel.add(btnCourses);
-        buttonPanel.add(btnSettings);
-        buttonPanel.add(btnExit);
-
-        // Acción de los botones
-        btnStart.addActionListener(e -> JOptionPane.showMessageDialog(this, "¡Iniciando curso!"));
-        btnCourses.addActionListener(e -> JOptionPane.showMessageDialog(this, "Mostrando tus cursos."));
-        btnSettings.addActionListener(e -> JOptionPane.showMessageDialog(this, "Abriendo configuración."));
-        btnExit.addActionListener(e -> System.exit(0));
-
-        // Agregar los botones en el centro del panel
-        panel.add(buttonPanel, BorderLayout.CENTER);
-
-        // Configuración final
-        add(panel);
-        setVisible(true);
+        cargarCursos();
     }
 
-    // Método para crear botones estilizados
-    private JButton createStyledButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 20));
-        button.setForeground(Color.WHITE);
-        button.setBackground(new Color(30, 144, 255));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Efecto hover
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(0, 102, 204));
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(30, 144, 255));
-            }
-        });
-
-        return button;
+    private void cargarCursos() {
+        // Simulación de carga de cursos desde JSON/YAML
+        comboCursosDisponibles.addItem("Curso de Geografía");
+        comboCursosDisponibles.addItem("Curso de Matemáticas");
+        comboCursosDisponibles.addItem("Curso de Programación");
+        
+        // Simulación de cursos guardados (ya empezados)
+        comboCursosGuardados.addItem("Curso de Geografía - Progreso 50%");
+        comboCursosGuardados.addItem("Curso de Matemáticas - Progreso 30%");
     }
 
+    private void iniciarCurso() {
+        String cursoSeleccionado = (String) comboCursosDisponibles.getSelectedItem();
+        areaSalida.setText("Iniciando curso: " + cursoSeleccionado + "\n¡Buena suerte!");
+    }
+    
+    private void reanudarCurso() {
+        String cursoSeleccionado = (String) comboCursosGuardados.getSelectedItem();
+        areaSalida.setText("Reanudando curso: " + cursoSeleccionado + "\n¡Sigue aprendiendo!");
+    }
+    
+    private void cambiarUsuario() {
+        String nuevoNombre = JOptionPane.showInputDialog(this, "Ingrese el nuevo nombre de usuario:", "Cambiar Usuario", JOptionPane.PLAIN_MESSAGE);
+        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+            usuario = new Usuario("2", nuevoNombre, nuevoNombre.toLowerCase() + "@example.com");
+            saludoUsuario.setText("Bienvenido, " + usuario.getNombre());
+            areaSalida.setText("Usuario cambiado a " + usuario.getNombre());
+        }
+    }
+    
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(VentanaPrincipal::new);
+        SwingUtilities.invokeLater(() -> new VentanaPrincipal().setVisible(true));
     }
 }
