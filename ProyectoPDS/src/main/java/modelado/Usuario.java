@@ -15,7 +15,7 @@ public class Usuario {
     private String correo;
     private LocalDate fechaRegistro;
     private List<CursoEnMarcha> cursosActivos;
-    private List<Estadistica> estadisticas;
+    private Estadistica estadisticas;
 
     public Usuario(String id, String nombre, String correo) {
         this.id = id;
@@ -23,26 +23,24 @@ public class Usuario {
         this.correo = correo;
         this.fechaRegistro = LocalDate.now();
         this.cursosActivos = new ArrayList<>();
-        this.estadisticas = new ArrayList<>();
+        this.estadisticas = new Estadistica();
     }
 
-    public void agregarCurso(Curso curso) {
-        cursosActivos.add(new CursoEnMarcha(curso));
+    public void agregarCurso(Curso curso, int vidas,Estrategia estrategia) {
+        cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia ));
     }
 
     public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
         cursoEnMarcha.finalizar();
-        estadisticas.add(new Estadistica(this, cursoEnMarcha.getCurso()));
     }
 
     public List<CursoEnMarcha> obtenerCursosActivos() {
         return cursosActivos.stream()
-                .filter(CursoEnMarcha::estaEnProgreso)
                 .collect(Collectors.toList());
     }
     
     public Optional<CursoEnMarcha> obtenerCursoEnMarcha(String cursoId) {
-        return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(cursoId)).findFirst();
+        return cursosActivos.stream().filter(c -> c.getId().equals(cursoId)).findFirst();
     }
     
     public void iniciarCurso(String cursoId) {
@@ -53,7 +51,7 @@ public class Usuario {
         obtenerCursoEnMarcha(cursoId).ifPresent(CursoEnMarcha::avanzarPregunta);
     }
     
-    public List<Estadistica> obtenerEstadisticas() {
+    public Estadistica obtenerEstadisticas() {
         return estadisticas;
     }
     
