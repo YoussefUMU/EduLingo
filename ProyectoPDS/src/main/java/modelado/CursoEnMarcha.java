@@ -1,27 +1,30 @@
 package modelado;
 
-public class CursoEnMarcha {
-    private Curso curso;
+import java.util.List;
+
+public class CursoEnMarcha extends Curso {
     public int bloqueActual;
     public int preguntaActual;
-    private boolean finalizado;
     private int vidas;
+    private Estrategia estrategia;
+    
+    
 
-    public CursoEnMarcha(Curso curso) {
-        this.curso = curso;
-        this.bloqueActual = 0;
-        this.preguntaActual = 0;
-        this.finalizado = false;
-        this.setVidas(5);
-    }
+    public CursoEnMarcha(Curso curso,int vidas, Estrategia estrategia) {
+		super(curso.getId(), curso.getNombre(), curso.getDescripcion(), curso.getBloques());
+		this.bloqueActual = 1;
+		this.preguntaActual = 1;
+		this.vidas = vidas;
+		this.estrategia = estrategia;
+	}
 
-    public void avanzarPregunta() {
-        Bloque bloque = curso.obtenerSiguienteBloque(bloqueActual);
+	public void avanzarPregunta() {
+        Bloque bloque =obtenerSiguienteBloque(bloqueActual);
         if (preguntaActual < bloque.getPreguntas().size() - 1) {
             preguntaActual++;
         } else {
             preguntaActual = 0;
-            if (bloqueActual < curso.getBloques().size() - 1) {
+            if (bloqueActual < super.getBloques().size() - 1) {
                 bloqueActual++;
             } else {
                 finalizar();
@@ -32,28 +35,23 @@ public class CursoEnMarcha {
     public void reiniciarCurso() {
         this.bloqueActual = 0;
         this.preguntaActual = 0;
-        this.finalizado = false;
     }
     
     public Pregunta getPreguntaActual() {
-        return curso.getBloques().get(bloqueActual).getPreguntas().get(preguntaActual);
+        return super.getBloques().get(bloqueActual).getPreguntas().get(preguntaActual);
     }
     
     public Bloque getBloqueActual() {
-        return curso.getBloques().get(bloqueActual);
+        return super.getBloques().get(bloqueActual);
     }
 
+    public Bloque obtenerSiguienteBloque(int actual) {
+        return estrategia.siguiente(super.getBloques(), actual);
+    }
     public void finalizar() {
-        finalizado = true;
+       
     }
 
-    public boolean estaEnProgreso() {
-        return !finalizado;
-    }
-
-    public Curso getCurso() {
-        return curso;
-    }
 
 	public int getVidas() {
 		return vidas;

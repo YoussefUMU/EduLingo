@@ -63,7 +63,7 @@ public class CursoCellRenderer extends JPanel implements ListCellRenderer<Curso>
     public Component getListCellRendererComponent(JList<? extends Curso> list, Curso curso, int index,
             boolean isSelected, boolean cellHasFocus) {
         // Set the text
-    	textoLabel.setText(curso.getDescripcion());
+    	textoLabel.setText(curso.getDescripcion().getTextoDescripcion());
         
     	// Set user
     	CursoLabel.setText(curso.getNombre());

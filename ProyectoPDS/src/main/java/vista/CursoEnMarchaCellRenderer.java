@@ -68,13 +68,13 @@ public class CursoEnMarchaCellRenderer extends JPanel implements ListCellRendere
         
     	// Set user
     	//To do: este get lo deberia hacer a traves del controlador
-    	CursoLabel.setText(curso.getCurso().getNombre());
+    	CursoLabel.setText(curso.getNombre());
     	
         // Cargar la imagen del perfil
         try {
             URL imageUrl = null;
             //to do: este get tambien se deberia hacer desde el controlador
-            imageUrl = curso.getCurso().getImagenCurso();
+            imageUrl = curso.getImagenCurso();
             Image image = ImageIO.read(imageUrl);
             ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
             imageLabel.setIcon(imageIcon);
