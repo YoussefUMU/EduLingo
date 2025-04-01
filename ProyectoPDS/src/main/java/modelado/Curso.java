@@ -1,5 +1,6 @@
 package modelado;
 
+import java.net.URL;
 import java.util.List;
 
 public class Curso {
@@ -8,7 +9,8 @@ public class Curso {
     private String descripcion;
     private List<Bloque> bloques;
     private Estrategia estrategia;
-
+    private URL imagenCurso;
+    
     public String getDescripcion() {
 		return descripcion;
 	}
@@ -48,4 +50,12 @@ public class Curso {
     public List<Bloque> getBloques() {
         return bloques;
     }
+
+	public URL getImagenCurso() {
+		return imagenCurso;
+	}
+
+	public void setImagenCurso(URL imagenCurso) {
+		this.imagenCurso = imagenCurso;
+	}
 }

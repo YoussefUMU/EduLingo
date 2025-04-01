@@ -27,7 +27,7 @@ public class Usuario {
     }
 
     public void agregarCurso(Curso curso) {
-        cursosActivos.add(new CursoEnMarcha(this, curso));
+        cursosActivos.add(new CursoEnMarcha(curso));
     }
 
     public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {

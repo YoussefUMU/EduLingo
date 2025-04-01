@@ -1,18 +1,18 @@
 package modelado;
 
 public class CursoEnMarcha {
-    private Usuario usuario;
     private Curso curso;
     public int bloqueActual;
     public int preguntaActual;
     private boolean finalizado;
+    private int vidas;
 
-    public CursoEnMarcha(Usuario usuario, Curso curso) {
-        this.usuario = usuario;
+    public CursoEnMarcha(Curso curso) {
         this.curso = curso;
         this.bloqueActual = 0;
         this.preguntaActual = 0;
         this.finalizado = false;
+        this.setVidas(5);
     }
 
     public void avanzarPregunta() {
@@ -55,12 +55,13 @@ public class CursoEnMarcha {
         return curso;
     }
 
-	public Usuario getUsuario() {
-		return usuario;
+	public int getVidas() {
+		return vidas;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setVidas(int vidas) {
+		this.vidas = vidas;
 	}
+
 }
 
