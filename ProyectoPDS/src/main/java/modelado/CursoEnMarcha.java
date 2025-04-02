@@ -1,9 +1,12 @@
 package modelado;
 
-import java.util.List;
 
 public class CursoEnMarcha extends Curso {
-    public int bloqueActual;
+	
+    public static final int VIDAS_PREDETERMINADAS = 5;
+	public static final Estrategia ESTRATEGIA_PREDETERMINADA = new EstrategiaSecuencial();
+	
+	public int bloqueActual;
     public int preguntaActual;
     private int vidas;
     private Estrategia estrategia;
