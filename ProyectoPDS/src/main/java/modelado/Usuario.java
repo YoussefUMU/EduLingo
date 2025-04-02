@@ -13,19 +13,32 @@ public class Usuario {
     private final String id;
     private String nombre;
     private String correo;
+    private String contraseña;
     private LocalDate fechaRegistro;
     private List<CursoEnMarcha> cursosActivos;
     private Estadistica estadisticas;
 
-    public Usuario(String id, String nombre, String correo) {
+    public Usuario(String id, String nombre, String contraseña, String correo) {
         this.id = id;
         this.nombre = nombre;
+        this.contraseña = contraseña;
+        this.correo = correo;
+        this.fechaRegistro = LocalDate.now();
+        this.cursosActivos = new ArrayList<>();
+
+        this.estadisticas = new Estadistica();
+    }
+
+    public Usuario(String nombre, String contraseña, String correo) {
+    	this.id = "";
+        this.nombre = nombre;
+        this.contraseña = contraseña;
         this.correo = correo;
         this.fechaRegistro = LocalDate.now();
         this.cursosActivos = new ArrayList<>();
         this.estadisticas = new Estadistica();
     }
-
+    
     public void agregarCurso(Curso curso, int vidas,Estrategia estrategia) {
         cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia ));
     }
@@ -63,6 +76,10 @@ public class Usuario {
         return nombre;
     }
 
+    public String getContraseña() {
+        return contraseña;
+    }
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
