@@ -21,6 +21,7 @@ public class ControladorPDS {
 	//Constructor
 	private ControladorPDS() {
 		sesionActual = null;
+        repositorioUsuarios = RepositorioUsuarios.getUnicaInstancia(); 
 	}
 	
 	// Implementación del patrón Singleton: devuelve la única instancia de la clase.
@@ -35,8 +36,8 @@ public class ControladorPDS {
 	 * existe.
 	 * 
 	 */
-	public boolean registrarUsuario(String nombre, String contraseña, String correo) {
-		Usuario usuario = new Usuario(nombre, contraseña, correo);
+	public boolean registrarUsuario(String nombre, String contraseña, String correo, String nombreUsuario) {
+		Usuario usuario = new Usuario(nombre, contraseña, correo, nombreUsuario);
 		if (repositorioUsuarios.getUsuario(usuario.getNombre()) != null) {
 			return false;
 		}
@@ -47,8 +48,8 @@ public class ControladorPDS {
 	// Accede al repositorio de Usuarios utilizando el nombre del usuario introducido.
 	// Si existe un Usuario vinculado y su contraseña corresponde a la introducida,
 	// se inicia sesion correctamente.
-	public boolean login (String nombre, String contraseña) {
-		Usuario usuario = repositorioUsuarios.getUsuario(nombre);
+	public boolean login (String nombreUsuario, String contraseña) {
+		Usuario usuario = repositorioUsuarios.getUsuario(nombreUsuario);
 		if (usuario == null) {
 			return false;
 		}

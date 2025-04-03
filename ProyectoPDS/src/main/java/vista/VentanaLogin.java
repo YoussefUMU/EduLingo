@@ -1,100 +1,118 @@
 package vista;
 
 import javax.swing.*;
+
+import controlador.ControladorPDS;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class VentanaLogin extends JPanel {
-    private JTextField textField;
-    private JPasswordField passwordField;
+public class VentanaLogin extends JFrame {
+	private JTextField userField;
+	private JPasswordField passwordField;
 
-    public VentanaLogin() {
-        setLayout(new BorderLayout(0, 0));
+	// Constructor que configura la ventana de login
+	public VentanaLogin() {
+		setTitle("Login");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(400, 300); // Tamaño de la ventana de login
+		setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+		setLayout(new BorderLayout(0, 0)); // Usar BorderLayout
 
-        // Panel superior
-        JPanel panelNorte = new JPanel();
-        panelNorte.setBackground(new Color(240, 240, 240));
-        add(panelNorte, BorderLayout.NORTH);
+		// Panel superior
+		JPanel panelNorte = new JPanel();
+		panelNorte.setBackground(new Color(240, 240, 240));
+		add(panelNorte, BorderLayout.NORTH);
 
-        JLabel lblTitulo = new JLabel("");
-        lblTitulo.setIcon(new ImageIcon(VentanaLogin.class.getResource("/Recursos/EdulingoRedimensionadad.png")));
-        lblTitulo.setForeground(Color.BLUE);
-        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 22));
-        panelNorte.add(lblTitulo);
+		JLabel lblTitulo = new JLabel("");
+		lblTitulo.setIcon(new ImageIcon(getClass().getResource("/Recursos/EdulingoRedimensionadad.png")));
+		lblTitulo.setForeground(Color.BLUE);
+		lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 22));
+		panelNorte.add(lblTitulo);
 
-        // Botonera inferior
-        JPanel botonera = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        add(botonera, BorderLayout.SOUTH);
+		// Panel central (formulario)
+		JPanel panelCentral = new JPanel();
+		add(panelCentral, BorderLayout.CENTER);
+		panelCentral.setLayout(new GridBagLayout());
 
-        JButton btnAceptar = new JButton("Aceptar");
-        JButton btnCancelar = new JButton("Cancelar");
-        JButton btnRegistro = new JButton("Registro");
+		// Etiqueta usuario
+		JLabel lblUsuario = new JLabel("Nombre de Usuario:");
+		GridBagConstraints gbcUsuario = new GridBagConstraints();
+		gbcUsuario.gridx = 0;
+		gbcUsuario.gridy = 0;
+		gbcUsuario.insets = new Insets(10, 10, 10, 10); // Espaciado
+		panelCentral.add(lblUsuario, gbcUsuario);
 
-        Dimension btnSize = new Dimension(100, 40);
-        btnAceptar.setPreferredSize(btnSize);
-        btnCancelar.setPreferredSize(btnSize);
-        btnRegistro.setPreferredSize(btnSize);
+		// Campo usuario
+		userField = new JTextField(20);
+		GridBagConstraints gbcUsuarioCampo = new GridBagConstraints();
+		gbcUsuarioCampo.gridx = 1;
+		gbcUsuarioCampo.gridy = 0;
+		gbcUsuarioCampo.insets = new Insets(10, 10, 10, 10);
+		panelCentral.add(userField, gbcUsuarioCampo);
 
-        botonera.add(btnAceptar);
-        botonera.add(btnCancelar);
-        botonera.add(btnRegistro);
+		// Etiqueta contraseña
+		JLabel lblContrasena = new JLabel("Contraseña:");
+		GridBagConstraints gbcContrasena = new GridBagConstraints();
+		gbcContrasena.gridx = 0;
+		gbcContrasena.gridy = 1;
+		gbcContrasena.insets = new Insets(10, 10, 10, 10);
+		panelCentral.add(lblContrasena, gbcContrasena);
 
-        // Panel central (formulario)
-        JPanel panelCentral = new JPanel();
-        add(panelCentral, BorderLayout.CENTER);
-        GridBagLayout gbl_panelCentral = new GridBagLayout();
-        gbl_panelCentral.columnWidths = new int[]{150, 250, 0};
-        gbl_panelCentral.rowHeights = new int[]{30, 30, 30, 30};
-        gbl_panelCentral.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-        gbl_panelCentral.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-        panelCentral.setLayout(gbl_panelCentral);
+		// Campo contraseña
+		passwordField = new JPasswordField(20);
+		GridBagConstraints gbcContrasenaCampo = new GridBagConstraints();
+		gbcContrasenaCampo.gridx = 1;
+		gbcContrasenaCampo.gridy = 1;
+		gbcContrasenaCampo.insets = new Insets(10, 10, 10, 10);
+		panelCentral.add(passwordField, gbcContrasenaCampo);
 
-        // Etiqueta usuario
-        JLabel lblUsuario = new JLabel("Nombre de Usuario:");
-        lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        GridBagConstraints gbc_lblUsuario = new GridBagConstraints();
-        gbc_lblUsuario.anchor = GridBagConstraints.EAST;
-        gbc_lblUsuario.insets = new Insets(10, 10, 10, 10);
-        gbc_lblUsuario.gridx = 0;
-        gbc_lblUsuario.gridy = 0;
-        panelCentral.add(lblUsuario, gbc_lblUsuario);
+		// Botonera inferior
+		JPanel botonera = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		add(botonera, BorderLayout.SOUTH);
+		JButton btnRegistro = new JButton("Registro");
+		JButton btnAceptar = new JButton("Aceptar");
 
-        // Campo usuario
-        textField = new JTextField();
-        GridBagConstraints gbc_textField = new GridBagConstraints();
-        gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-        gbc_textField.insets = new Insets(10, 0, 10, 10);
-        gbc_textField.gridx = 1;
-        gbc_textField.gridy = 0;
-        panelCentral.add(textField, gbc_textField);
-        textField.setColumns(20);
+		// Cambiar tamaño y estilo de los botones
+		Dimension btnSize = new Dimension(100, 35);
+		btnAceptar.setPreferredSize(btnSize);
+		btnRegistro.setPreferredSize(btnSize);
 
-        // Etiqueta contraseña
-        JLabel lblContrasena = new JLabel("Contraseña:");
-        lblContrasena.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        GridBagConstraints gbc_lblContrasena = new GridBagConstraints();
-        gbc_lblContrasena.anchor = GridBagConstraints.EAST;
-        gbc_lblContrasena.insets = new Insets(10, 10, 10, 10);
-        gbc_lblContrasena.gridx = 0;
-        gbc_lblContrasena.gridy = 1;
-        panelCentral.add(lblContrasena, gbc_lblContrasena);
+		// Estilo más bonito para los botones
+		btnAceptar.setFont(new Font("Arial", Font.BOLD, 14));
+		btnRegistro.setFont(new Font("Arial", Font.BOLD, 14));
 
-        // Campo contraseña
-        passwordField = new JPasswordField();
-        GridBagConstraints gbc_passwordField = new GridBagConstraints();
-        gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
-        gbc_passwordField.insets = new Insets(10, 0, 10, 10);
-        gbc_passwordField.gridx = 1;
-        gbc_passwordField.gridy = 1;
-        panelCentral.add(passwordField, gbc_passwordField);
-        passwordField.setColumns(20);
-    }
+		// Agregar botones a la botonera
+		botonera.add(btnAceptar);
+		botonera.add(btnRegistro);
 
-    // Getters si los necesitas
-    public JTextField getTextField() {
-        return textField;
-    }
+		// Acción para el botón "Registro"
+		btnRegistro.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Crear la nueva ventana registro
+				VentanaRegistro ventanaRegistro = new VentanaRegistro();
+				ventanaRegistro.setVisible(true);
 
-    public JPasswordField getPasswordField() {
-        return passwordField;
-    }
+				dispose();
+			}
+		});
+
+		// Acción para el botón "Aceptar"
+		btnAceptar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Crear la nueva ventana principal
+				boolean login = ControladorPDS.getUnicaInstancia().login(userField.getText(), String.valueOf(passwordField.getPassword()));
+				if(login) {
+					VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+					ventanaPrincipal.setVisible(true);
+					dispose(); // Cierra la ventana de login
+				} else {
+		            JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos.", "Error de Login", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+	}
 }
