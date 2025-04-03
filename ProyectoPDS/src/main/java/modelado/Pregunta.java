@@ -1,14 +1,14 @@
 package modelado;
 
 public abstract class Pregunta {
-    protected final String id;
     protected String enunciado;
 
-    public Pregunta(String id, String enunciado) {
-        this.id = id;
+    public Pregunta(String enunciado) {
         this.enunciado = enunciado;
     }
 
+    public Pregunta() {}
+    
     public abstract boolean verificarRespuesta(String respuesta);
 
 	public String getEnunciado() {
@@ -17,9 +17,5 @@ public abstract class Pregunta {
 
 	public void setEnunciado(String enunciado) {
 		this.enunciado = enunciado;
-	}
-
-	public String getId() {
-		return id;
 	}
 }
