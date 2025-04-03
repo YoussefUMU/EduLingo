@@ -44,40 +44,69 @@ Un usuario deberá poder realizar cursos creados por otros usuarios.
 **Actor Principal:** Consumidor  
 
 **Flujo Básico:**  
-1. El usuario selecciona un curso.
-2. El sistema muestra las distintas estrategias de aprendizaje que puede utilizar.  
-3. El usuario elige una opción.  
-4. El sistema muestra las preguntas del curso de acuerdo con la estrategia seleccionada.  
+1. El usuario inicia la app y accede a la ventana login. El sistema tiene en cuenta el dia del acceso a la app y empieza a contar el tiempo de uso en la app.
+2. El usuario introduce su nombre de usuario y contraseña.
+3. El usuario le da al botón *Aceptar*.
+4. El usuario accede a la ventana principal de la app.
+5. El usuario que desea inicar un nuevo curso, pulsa el botón *Cursos*.
+6. El usuario accede la Ventana de cursos sin empezar.
+7. El ususario selecciona un curso de los que le aperecen en la lista y pulsa el botón *Empezar*. 
+8. El usuario accede a la Ventana Iniciar Curso, donde deberá seleccionar una estrategia a seguir de las ofertadas.
+9. Una vez seleccionada la estrategia, el usuario pulsa el botón *Iniciar*.
+10. El usuario irá completando las preguntas conforme a la estrategia seleccionada.
+11. El usuario finaliza el curso sin gastar sus vidas.
 
 **Extensiones (Flujos Alternativos):**  
-- **3a.** El usuario se equivoca y no escoge la estrategia que quería.  
-  - Sale al menú principal.  
-  - Selecciona nuevamente el curso.  
-  - En lugar de seleccionar "continuar", elige "volver a empezar".  
-  - El usuario selecciona la estrategia correcta.  
-- **1b.** El sistema no tiene cursos disponibles.  
+- **3a** El usuario no está registrado en la app.
+   - El sistema le muestra un mensaje de error.
+   - El usuario procede a pulsar el botón *Registro*.
+   - El usuario accede a la Ventana de Registro.
+   - El usuario introduce los siguientes datos: nombre, contraseña, correo, fecha de nacimiento, nombre de usuario y apellidos.
+   - El usuario pulsa el botón *Aceptar* y queda registrado en el sistema.
+   - Vuelve al punto 2.
+- **5a** El ususario desa continuar con un curso ya empezado.
+   - El ususario pulsa el botón *Continuar Cursos* de la Ventana Principal.
+   - El usuario accede a la Ventana de cursos empezados.
+   - El ususario selecciona uno de sus Cursos empezados y pulsa el botón *Continuar*.
+   - Vuelve al punto 10.
+- **9a** El usuario ha seleccionado la misma estrategia en un curso que ya tenia empezado con esa estrategia.
+   - El sistema le muestra un mensaje de error al usuario indicando que no puede hacer el mismo curso a la vez con la misma estrategia.
+- **7a.** El usuario no tiene cursos disponibles en su biblioteca interna.  
   - Se notifica al usuario que no hay cursos para seleccionar.  
+- **11a** El ususario ha gastado todas sus vidas.
+  - Se le notifica al usuario que ha gastado todas sus vidas.
+  - Se le notifica al ususaio que con la funcionalidad premium, tendrá vidas infinitas.
+  - El usuario tiene que volver el curso desde el principio.
+---
+
+### Caso de Uso 2: Cancelar un curso en marcha
+**Resumen:**  
+Un usuario deberá poder cancelar un curso ya empezado.
+
+**Actor Principal:** Consumidor  
+
+**Flujo Básico:**
+1. Un usuario ya logueado y dentro de la ventana principal pulsa el botón *Continuar Cursos*.
+2. En la ventana de cursos empezados, el usuario selecciona el curso que desea abandonar, y pulsa el botón *Abandonar*.
+3. El sistema le muestra al usuario un mensaje sobre la importancia del esfuerzo.
+4. El curso desaparece la ventana de cursos empezados.
 
 ---
 
-### Caso de Uso 2: Guardar las estadísticas de uso  
+### Caso de Uso 3: Agregar un nuevo curso
 
-**Resumen:**  
-La aplicación debe guardar estadísticas de uso como:  
-- Contar el tiempo de uso.  
-- Calcular la mejor racha (ejemplo: número de días consecutivos).  
+**Resumen:**
+Un usuario podrá importar cursos a si biblioteca interna.
 
-**Actor Principal:** Sistema  
-**Flujo Básico:**  
-1. El sistema lleva un registro de las estadísticas de uso relevantes.  
-2. El sistema detecta cuando un usuario cierra un curso.  
-3. El sistema persiste las estadísticas en la base de datos (BBDD).  
+**Actor Principal:** Consumidor
 
-**Extensiones (Flujos Alternativos):**  
-- **2a.** El usuario nunca cierra un curso.  
-  - El sistema dispone de un **timeout** para cada pregunta.  
-  - Si se excede el tiempo, el sistema asume que el usuario no está conectado.  
-  - El sistema persiste las estadísticas en la BBDD y cierra automáticamente el curso.  
+**Flujo Básico:**
+1. Un usuario ya logueado y dentro de la ventana principal pulsa el botón *Cursos*.
+2. Dentro de la ventana de cursos sin empezar, el usuario seleccionara el botón *Añadir Curso*.
+3. El sistema abrirá una ventana de dialogo donde el usuario podrá seleccionar el archivo del curso pertinente.
+4. El curso se agregará a su biblioteca interna.
+---
+
 
 ---
 
