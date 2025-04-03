@@ -29,13 +29,15 @@ public class RepositorioUsuarios {
     
     private RepositorioUsuarios() {
     	usuarios = new HashMap<String, Usuario>();
+    	Usuario usuarioE = new Usuario("Ramón", "1234", "ramon@um.es", "ramonPRO");
+    	usuarios.put(usuarioE.getNombreUsuario(), usuarioE);
     }
     
     public void addUsuario(Usuario usuario) {
-    	usuarios.put(usuario.getNombre(), usuario);
+    	usuarios.put(usuario.getNombreUsuario(), usuario);
     }
     
-    public Usuario getUsuario(String usuario) {
-    	return usuarios.get(usuario);
+    public Usuario getUsuario(String userName) {
+    	return usuarios.get(userName);
     }
 }
