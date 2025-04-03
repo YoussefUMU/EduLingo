@@ -19,7 +19,7 @@ public class VentanaPrincipal extends JFrame {
     private JLabel saludoUsuario;
 
     public VentanaPrincipal() {
-        usuario = new Usuario("1", "Youssef", "youssef@example.com");
+        usuario = new Usuario("1", "Youssef", "youssef@example.com", "youssef_2004");
         inicializarInterfaz();
     }
 
@@ -30,7 +30,7 @@ public class VentanaPrincipal extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel panelSuperior = new JPanel(new FlowLayout());
-        saludoUsuario = new JLabel("Bienvenido, " + usuario.getNombre());
+        saludoUsuario = new JLabel("Bienvenido, " + usuario.getNombreUsuario());
         JButton btnCambiarUsuario = new JButton("Cambiar Usuario");
         btnCambiarUsuario.addActionListener(e -> cambiarUsuario());
         panelSuperior.add(saludoUsuario);
@@ -87,7 +87,7 @@ public class VentanaPrincipal extends JFrame {
     private void cambiarUsuario() {
         String nuevoNombre = JOptionPane.showInputDialog(this, "Ingrese el nuevo nombre de usuario:", "Cambiar Usuario", JOptionPane.PLAIN_MESSAGE);
         if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
-            usuario = new Usuario("2", nuevoNombre, nuevoNombre.toLowerCase() + "@example.com");
+            usuario = new Usuario("2", nuevoNombre, nuevoNombre.toLowerCase() + "@example.com", "userExample");
             saludoUsuario.setText("Bienvenido, " + usuario.getNombre());
             areaSalida.setText("Usuario cambiado a " + usuario.getNombre());
         }

@@ -13,20 +13,68 @@ public class Usuario {
     private final String id;
     private String nombre;
     private String correo;
+    private String contraseña;
+    private String nombreUsuario;
     private LocalDate fechaRegistro;
     private List<CursoEnMarcha> cursosActivos;
     private Estadistica estadisticas;
 
-    public Usuario(String id, String nombre, String correo) {
+    public Usuario(String id, String nombre, String contraseña, String correo, String nombreUsuario) {
         this.id = id;
         this.nombre = nombre;
+        this.contraseña = contraseña;
         this.correo = correo;
+        this.nombreUsuario = nombreUsuario;
+        this.fechaRegistro = LocalDate.now();
+        this.cursosActivos = new ArrayList<>();
+
+        this.estadisticas = new Estadistica();
+    }
+
+    public Usuario(String nombre, String contraseña, String correo, String nombreUsuario) {
+    	this.id = "";
+        this.nombre = nombre;
+        this.contraseña = contraseña;
+        this.correo = correo;
+        this.nombreUsuario = nombreUsuario;
         this.fechaRegistro = LocalDate.now();
         this.cursosActivos = new ArrayList<>();
         this.estadisticas = new Estadistica();
     }
+    
+    public String getNombreUsuario() {
+		return nombreUsuario;
+	}
 
-    public void agregarCurso(Curso curso, int vidas,Estrategia estrategia) {
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public List<CursoEnMarcha> getCursosActivos() {
+		return cursosActivos;
+	}
+
+	public void setCursosActivos(List<CursoEnMarcha> cursosActivos) {
+		this.cursosActivos = cursosActivos;
+	}
+
+	public Estadistica getEstadisticas() {
+		return estadisticas;
+	}
+
+	public void setEstadisticas(Estadistica estadisticas) {
+		this.estadisticas = estadisticas;
+	}
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+	}
+
+	public void setFechaRegistro(LocalDate fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
+	}
+
+	public void agregarCurso(Curso curso, int vidas,Estrategia estrategia) {
         cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia ));
     }
 
@@ -63,6 +111,10 @@ public class Usuario {
         return nombre;
     }
 
+    public String getContraseña() {
+        return contraseña;
+    }
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
