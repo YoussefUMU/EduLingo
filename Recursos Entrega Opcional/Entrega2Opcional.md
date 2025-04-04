@@ -16,9 +16,9 @@ Jesús Sánchez Cuadrado
 ## Índice  
 1. [Identificación de casos de uso](#identificación-de-casos-de-uso)  
 2. [Desarrollo de casos de uso](#desarrollo-de-casos-de-uso)  
-   - [Caso de Uso 1: Realizar Cueso](#caso-de-uso-1-seleccionar-la-estrategia-de-aprendizaje)  
-   - [Caso de Uso 2: Cancelar un curso en marcha](#caso-de-uso-2-guardar-las-estadísticas-de-uso)
-   - [Caso de Uso 3: Agregar un nuevo curso.](#)
+   - [Caso de Uso 1: Realizar Cueso](#caso-de-uso-1-realizar-curso)  
+   - [Caso de Uso 2: Cancelar un curso en marcha](#caso-de-uso-2-cancelar-un-curso-en-marcha)
+   - [Caso de Uso 3: Agregar un nuevo curso.](#caso-de-uso-3-agregar-un-nuevo-curso)
 3. [Modelado de dominio](#modelado-de-dominio)  
 
 ---
