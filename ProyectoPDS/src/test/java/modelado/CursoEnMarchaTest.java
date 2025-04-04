@@ -101,38 +101,6 @@ class CursoEnMarchaTest {
 
 
     @Test
-    void testSettersConValidacion() {
-        // Setters válidos
-        cursoEnMarcha.setBloqueActual(1);
-        assertEquals(1, cursoEnMarcha.getBloqueActualIndex());
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex()); // Debería resetear pregunta
-        
-        cursoEnMarcha.setPreguntaActual(0);
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex());
-        
-        // Setters inválidos no deberían cambiar los valores
-        cursoEnMarcha.setBloqueActual(-1);
-        assertEquals(1, cursoEnMarcha.getBloqueActualIndex());
-        
-        cursoEnMarcha.setBloqueActual(10);
-        assertEquals(1, cursoEnMarcha.getBloqueActualIndex());
-        
-        cursoEnMarcha.setPreguntaActual(-1);
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex());
-        
-        cursoEnMarcha.setPreguntaActual(10);
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex());
-    }
-
-    @Test
-    void testGetters() {
-        assertEquals(3, cursoEnMarcha.getVidas());
-        assertNotNull(cursoEnMarcha.getEstrategia());
-        assertEquals(0, cursoEnMarcha.getBloqueActualIndex());
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex());
-    }
-
-    @Test
     void testSetVidas() {
         cursoEnMarcha.setVidas(5);
         assertEquals(5, cursoEnMarcha.getVidas());

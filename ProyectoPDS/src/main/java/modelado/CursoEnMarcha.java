@@ -9,7 +9,7 @@ public class CursoEnMarcha extends Curso {
 	private int preguntaActual;
 	private int vidas;
 	private Estrategia estrategia;
-
+ 
 	public CursoEnMarcha(Curso curso) {
 		this(curso, VIDAS_PREDETERMINADAS, ESTRATEGIA_PREDETERMINADA);
 	}

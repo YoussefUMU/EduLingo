@@ -1,10 +1,16 @@
 package vista;
 
 import javax.swing.*;
+
+import modelado.CursoEnMarcha;
+import modelado.TestPregunta;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class FlashcardTipoA extends JPanel {
+public class FlashcardTipoA extends JFrame {
 
     private JProgressBar barraTiempo;
     private JLabel preguntaLabel;
@@ -13,13 +19,20 @@ public class FlashcardTipoA extends JPanel {
     private JButton opcion2Button;
     private JButton opcion3Button;
     private JButton opcion4Button;
-
+    
+    private TestPregunta pregunta;
+    private int vidas;
+    
     private Timer temporizador;
 
-    public FlashcardTipoA() {
-        setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+    public FlashcardTipoA(CursoEnMarcha curso, int indBloque, int indPregunta) {
+    	//curso.getBloqueActual();
+    	pregunta = (TestPregunta) curso.getBloques().get(indBloque).getPreguntas().get(indPregunta);
+    	vidas = curso.getVidas();
+    	
+        getContentPane().setLayout(new BorderLayout(10, 10));
+        //setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+       
         // Barra de tiempo y pregunta en la parte superior
         barraTiempo = new JProgressBar(0, 100);
         barraTiempo.setValue(100);
@@ -29,11 +42,11 @@ public class FlashcardTipoA extends JPanel {
         JPanel panelSuperior = new JPanel(new BorderLayout(5, 5));
         panelSuperior.add(barraTiempo, BorderLayout.NORTH);
 
-        preguntaLabel = new JLabel("Aquí va la pregunta", SwingConstants.CENTER);
+        preguntaLabel = new JLabel(pregunta.getEnunciado(), SwingConstants.CENTER);
         preguntaLabel.setFont(new Font("Arial", Font.BOLD, 18));
         panelSuperior.add(preguntaLabel, BorderLayout.SOUTH);
 
-        add(panelSuperior, BorderLayout.NORTH);
+        getContentPane().add(panelSuperior, BorderLayout.NORTH);
 
         // Imagen centrada
         imagenLabel = new JLabel("", SwingConstants.CENTER);
@@ -42,13 +55,37 @@ public class FlashcardTipoA extends JPanel {
 
         JPanel imagenPanel = new JPanel(new GridBagLayout());
         imagenPanel.add(imagenLabel);
-        add(imagenPanel, BorderLayout.CENTER);
+        getContentPane().add(imagenPanel, BorderLayout.CENTER);
 
         // Botones de opciones
-        opcion1Button = new JButton("Opción 1");
-        opcion2Button = new JButton("Opción 2");
-        opcion3Button = new JButton("Opción 3");
-        opcion4Button = new JButton("Opción 4");
+        opcion1Button = new JButton(pregunta.getOpciones().get(0));
+        opcion1Button.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		evaluar(opcion1Button.getText());
+        	}
+        });
+        opcion2Button = new JButton(pregunta.getOpciones().get(1));
+        opcion2Button.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		evaluar(opcion2Button.getText());
+        	}
+        });
+        opcion3Button = new JButton(pregunta.getOpciones().get(2));
+        opcion3Button.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		evaluar(opcion3Button.getText());
+        	}
+        });
+        opcion4Button = new JButton(pregunta.getOpciones().get(3));
+        opcion4Button.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		evaluar(opcion4Button.getText());
+        	}
+        });
 
         Dimension botonGrande = new Dimension(200, 45);
         opcion1Button.setPreferredSize(botonGrande);
@@ -66,10 +103,29 @@ public class FlashcardTipoA extends JPanel {
         JPanel botonesWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         botonesWrapper.add(botonesPanel);
 
-        add(botonesWrapper, BorderLayout.SOUTH);
+        getContentPane().add(botonesWrapper, BorderLayout.SOUTH);
     }
 
-    // Temporizador integrado
+    protected void evaluar(String opcion) {
+    	if (vidas<=0) {
+    		JOptionPane.showMessageDialog(null, "Se te han acabado las vidas.");
+    		VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+    		ventanaPrincipal.setVisible(true);
+    		dispose();
+    	}
+    	else if (opcion.equals(pregunta.getRespuestaCorrecta())){
+    		JOptionPane.showMessageDialog(null, "Bien Hecho!");
+    		VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+    		ventanaPrincipal.setVisible(true);
+    		dispose();
+    	}
+    	else {
+    		JOptionPane.showMessageDialog(null, "Inténtalo de nuevo!");
+    		vidas--;
+    	}
+	}
+
+	// Temporizador integrado
     public void iniciarTemporizador(int duracionMilisegundos, Runnable alFinal) {
         if (temporizador != null && temporizador.isRunning()) {
             temporizador.stop();

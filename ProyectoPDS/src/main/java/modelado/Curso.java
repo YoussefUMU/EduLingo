@@ -23,6 +23,7 @@ public class Curso {
         this.descripcion = descripcion;
         this.categoria = categoria;
         this.bloques = new ArrayList<>();
+        this.imagenCurso = "https://cdn-icons-png.flaticon.com/512/2000/2000860.png";
         
         // ID temporal
         this.id = "TEMP_" + nombre.replaceAll("\\s+", "_").toLowerCase();
@@ -30,7 +31,7 @@ public class Curso {
         // Autor por defecto
         this.autor = "Profesor";
     }
-
+  
     public void setId(String id) {
         this.id = id;
     }
@@ -52,7 +53,7 @@ public class Curso {
     }
     
     // Constructor completo con URL para imagen
-    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, URL imagenCurso) {
+    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, String imagenCurso) {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
@@ -70,7 +71,7 @@ public class Curso {
         this.bloques = bloques != null ? bloques : new ArrayList<>();
     }
     
-    
+
     public String getId() {
         return id;
     }
@@ -99,7 +100,7 @@ public class Curso {
         this.imagenCurso = imagenCurso;
     }
     
-    
+   
     public String getCategoria() {
         return categoria;
     }
@@ -107,6 +108,7 @@ public class Curso {
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
+    
     
     @Override
     public String toString() {
