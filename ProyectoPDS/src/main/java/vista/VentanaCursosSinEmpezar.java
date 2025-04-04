@@ -8,7 +8,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import modelado.Curso;
+import modelado.CursoEnMarcha;
 import controlador.ControladorPDS;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VentanaCursosSinEmpezar extends JFrame {
 	private JPanel panelContenidoScroll;
@@ -88,7 +91,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
 		
 		// Obtener los cursos disponibles
 		// Esto debería ser implementado en el controlador
-		List<Curso> cursosDisponibles = null; // ControladorPDS.getUnicaInstancia().getCursosDisponibles();
+		List<Curso> cursosDisponibles = ControladorPDS.getUnicaInstancia().obtenerCursosLocales();
 		DefaultListModel<Curso> modelo = new DefaultListModel<Curso>();
 		
 		if (cursosDisponibles != null) {
@@ -118,6 +121,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
 		getContentPane().add(panelSur, BorderLayout.SOUTH);
 
 		JButton btnEmpezar = new JButton("Empezar");
+
 		btnEmpezar.setFont(new Font("Arial", Font.BOLD, 14));
 		btnEmpezar.setBackground(new Color(76, 175, 80));
 		btnEmpezar.setForeground(Color.WHITE);
@@ -139,8 +143,10 @@ public class VentanaCursosSinEmpezar extends JFrame {
 				Curso cursoSeleccionado = list.getSelectedValue();
 				if (cursoSeleccionado != null) {
 					// Aquí se añadiría el curso a los cursos activos del usuario
-					JOptionPane.showMessageDialog(null, "Iniciando curso: " + cursoSeleccionado.getNombre(), 
-							"Curso Seleccionado", JOptionPane.INFORMATION_MESSAGE);
+					CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia().iniciarCurso(cursoSeleccionado);
+					FlashcardTipoA flash = new FlashcardTipoA(cursoEnMarcha, 0, 0);
+					flash.setVisible(true);
+					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "Por favor, seleccione un curso.", 
 							"No hay selección", JOptionPane.WARNING_MESSAGE);
