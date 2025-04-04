@@ -28,17 +28,17 @@ public class CursoEnMarchaCellRenderer extends JPanel implements ListCellRendere
     private JPanel panelCentro;
 
     public CursoEnMarchaCellRenderer() {
-        setForeground(Color.GREEN);
+        setForeground(Color.BLUE);
         setBackground(new Color(240, 240, 240));
         setLayout(new BorderLayout(10, 10));
 
         // Inicialización de etiquetas
         CursoLabel = new JLabel();
-        CursoLabel.setFont(new Font("Lucida Console", Font.BOLD, 12));
+        CursoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         CursoLabel.setForeground(Color.BLACK);
         textoLabel = new JLabel();
         textoLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        textoLabel.setFont(new Font("Lucida Console", Font.BOLD, 12));
+        textoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         textoLabel.setForeground(Color.BLACK);
         imageLabel = new JLabel();
         imageLabel.setForeground(Color.GREEN);

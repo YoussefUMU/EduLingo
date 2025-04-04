@@ -55,7 +55,9 @@ public class CursoEnMarcha extends Curso {
        
     }
 
-
+    public Estrategia getEstrategia() {
+    	return this.estrategia;
+    }
 	public int getVidas() {
 		return vidas;
 	}
