@@ -29,6 +29,10 @@ public class TestPregunta extends Pregunta {
 		this.respuestaCorrecta = respuestaCorrecta;
 	}
 
+	public String getRespuestaCorrecta() {
+		return respuestaCorrecta;
+	}
+	
     @Override
     public boolean verificarRespuesta(String respuesta) {
         return respuestaCorrecta.equalsIgnoreCase(respuesta);

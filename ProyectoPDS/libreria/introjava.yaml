@@ -11,5 +11,6 @@ bloques:
           - "Un contenedor de datos"
           - "Un tipo de dato"
           - "Un lenguaje de programación"
+          - "Una clase"
         respuestaCorrecta: "Un contenedor de datos"
     

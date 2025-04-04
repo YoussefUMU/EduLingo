@@ -73,7 +73,6 @@ public class Usuario {
 	public void setFechaRegistro(LocalDate fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
 	}
-
 	 public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
 	        boolean coincidencia = cursosActivos.stream()
 	            .anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass()  // Comparar clases
