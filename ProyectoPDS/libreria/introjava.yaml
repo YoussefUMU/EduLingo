@@ -2,7 +2,7 @@ id: "curso-001"
 nombre: "Introducción a Java"
 autor: "Juan Pérez"
 descripcion: "Un curso básico de Java para principiantes."
-imagenCurso: "https://example.com/java-course.jpg"
+imagenCurso: "https://cdn-icons-png.flaticon.com/512/2000/2000860.png"
 bloques:
   - titulo: "Fundamentos"
     preguntas:

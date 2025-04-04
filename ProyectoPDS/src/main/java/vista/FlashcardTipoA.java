@@ -30,6 +30,7 @@ public class FlashcardTipoA extends JFrame {
     	pregunta = (TestPregunta) curso.getBloques().get(indBloque).getPreguntas().get(indPregunta);
     	vidas = curso.getVidas();
     	
+    	setSize(new Dimension(600, 600));
         getContentPane().setLayout(new BorderLayout(10, 10));
         //setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
        
