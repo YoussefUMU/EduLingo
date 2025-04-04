@@ -41,7 +41,7 @@ public class CursoEnMarchaCellRenderer extends JPanel implements ListCellRendere
         textoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         textoLabel.setForeground(Color.BLACK);
         imageLabel = new JLabel();
-        imageLabel.setForeground(Color.GREEN);
+        imageLabel.setForeground(Color.BLUE);
         imageLabel.setBackground(new Color(240, 240, 240));
         imageLabel.setFont(new Font("Lucida Console", Font.BOLD, 12));
 
@@ -74,7 +74,7 @@ public class CursoEnMarchaCellRenderer extends JPanel implements ListCellRendere
         try {
             URL imageUrl = null;
             //to do: este get tambien se deberia hacer desde el controlador
-            imageUrl = curso.getImagenCurso();
+            imageUrl =  new URL (curso.getImagenCurso());
             Image image = ImageIO.read(imageUrl);
             ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
             imageLabel.setIcon(imageIcon);

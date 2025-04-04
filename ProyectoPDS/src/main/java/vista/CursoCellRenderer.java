@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -40,7 +41,7 @@ public class CursoCellRenderer extends JPanel implements ListCellRenderer<Curso>
         textoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         textoLabel.setForeground(Color.BLACK);
         imageLabel = new JLabel();
-        imageLabel.setForeground(Color.GREEN);
+        imageLabel.setForeground(Color.BLUE);
         imageLabel.setBackground(new Color(240, 240, 240));
         imageLabel.setFont(new Font("Lucida Console", Font.BOLD, 12));
 
@@ -68,7 +69,13 @@ public class CursoCellRenderer extends JPanel implements ListCellRenderer<Curso>
         CursoLabel.setText(curso.getNombre());
         
         // Cargar la imagen del perfil
-        URL imageUrl = curso.getImagenCurso();
+        URL imageUrl = null;
+		try {
+			imageUrl = new URL(curso.getImagenCurso());
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         if (imageUrl != null) {
             try {
                 Image image = ImageIO.read(imageUrl);

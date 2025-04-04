@@ -10,7 +10,7 @@ public class Curso {
     private String autor;
     private String descripcion;
     private List<Bloque> bloques;
-    private URL imagenCurso;
+    private String imagenCurso;
     private String categoria;
     
     public Curso() {
@@ -23,6 +23,7 @@ public class Curso {
         this.descripcion = descripcion;
         this.categoria = categoria;
         this.bloques = new ArrayList<>();
+        this.imagenCurso = "https://cdn-icons-png.flaticon.com/512/2000/2000860.png";
         
         // ID temporal
         this.id = "TEMP_" + nombre.replaceAll("\\s+", "_").toLowerCase();
@@ -52,7 +53,7 @@ public class Curso {
     }
     
     // Constructor completo con URL para imagen
-    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, URL imagenCurso) {
+    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, String imagenCurso) {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
@@ -68,20 +69,6 @@ public class Curso {
         this.autor = autor;
         this.descripcion = descripcion;
         this.bloques = bloques != null ? bloques : new ArrayList<>();
-    }
-    
-    // Constructor alternativo que acepta la ruta de la imagen como String
-    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, String rutaImagen) {
-        this.id = id;
-        this.nombre = nombre;
-        this.autor = autor;
-        this.descripcion = descripcion;
-        this.bloques = bloques != null ? bloques : new ArrayList<>();
-        try {
-            this.imagenCurso = new URL(rutaImagen);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
     }
     
     public String getId() {
@@ -104,28 +91,16 @@ public class Curso {
         return bloques;
     }
     
-    public URL getImagenCurso() {
-        return imagenCurso;
-    }
-    
-    public void setImagenCurso(URL imagenCurso) {
-        this.imagenCurso = imagenCurso;
-    }
-    
-    public void setImagenCurso(String imagenCurso) {
-        try {
-            this.imagenCurso = new URL(imagenCurso);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-    
     public String getCategoria() {
         return categoria;
     }
     
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+    
+    public String getImagenCurso() {
+    	return this.imagenCurso;
     }
     
     @Override
