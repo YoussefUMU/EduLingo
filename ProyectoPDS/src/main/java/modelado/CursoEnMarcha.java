@@ -76,6 +76,10 @@ public class CursoEnMarcha extends Curso {
         System.out.println("¡Curso completado!");
     }
 
+    public Estrategia getEstrategia() {
+    	return this.estrategia;
+    }
+
     public int getVidas() {
         return vidas;
     }
