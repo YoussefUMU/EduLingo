@@ -2,6 +2,9 @@ package vista;
 
 import modelado.*;
 import javax.swing.*;
+import java.util.List;
+import controlador.ControladorPDS;
+
 import java.awt.*;
 
 /**
@@ -19,7 +22,7 @@ public class VentanaPrincipal extends JFrame {
     private JLabel saludoUsuario;
 
     public VentanaPrincipal() {
-        usuario = new Usuario("1", "Youssef", "youssef@example.com", "youssef_2004");
+        usuario = ControladorPDS.getUnicaInstancia().getSesionActual();
         inicializarInterfaz();
     }
 
@@ -64,10 +67,14 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private void cargarCursos() {
+    	List<Curso> cursos = ControladorPDS.getUnicaInstancia().obtenerCursosLocales();
+    	for (Curso curso: cursos) {
+    		comboCursosDisponibles.addItem(curso.getNombre());
+    	}
         // Simulación de carga de cursos desde JSON/YAML
-        comboCursosDisponibles.addItem("Curso de Geografía");
-        comboCursosDisponibles.addItem("Curso de Matemáticas");
-        comboCursosDisponibles.addItem("Curso de Programación");
+        //comboCursosDisponibles.addItem("Curso de Geografía");
+        //comboCursosDisponibles.addItem("Curso de Matemáticas");
+        //comboCursosDisponibles.addItem("Curso de Programación");
         
         // Simulación de cursos guardados (ya empezados)
         comboCursosGuardados.addItem("Curso de Geografía - Progreso 50%");

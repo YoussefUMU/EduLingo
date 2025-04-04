@@ -3,7 +3,6 @@ package modelado;
 import java.util.List;
 
 public class Bloque {
-    private final String id;
     private String titulo;
     private List<Pregunta> preguntas;
 
@@ -15,16 +14,13 @@ public class Bloque {
 		this.titulo = titulo;
 	}
 
-	public String getId() {
-		return id;
-	}
-
 	public void setPreguntas(List<Pregunta> preguntas) {
 		this.preguntas = preguntas;
 	}
 
-	public Bloque(String id, String titulo, List<Pregunta> preguntas) {
-        this.id = id;
+	public Bloque() {}
+	
+	public Bloque(String titulo, List<Pregunta> preguntas) {
         this.titulo = titulo;
         this.preguntas = preguntas;
     }

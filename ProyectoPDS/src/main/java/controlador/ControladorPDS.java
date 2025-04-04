@@ -1,8 +1,11 @@
 package controlador;
 
+import java.util.List;
+
 import modelado.Curso;
 import modelado.CursoEnMarcha;
 import modelado.Estrategia;
+import modelado.ManejadorCursos;
 import modelado.RepositorioUsuarios;
 import modelado.Usuario;
 
@@ -17,6 +20,9 @@ public class ControladorPDS {
 	
 	// Repositorio donde se almacenan los usuarios registrados en la aplicación
 	private RepositorioUsuarios repositorioUsuarios;
+	
+	
+	ManejadorCursos manejador = new ManejadorCursos();
 	
 	//Constructor
 	private ControladorPDS() {
@@ -74,5 +80,9 @@ public class ControladorPDS {
 	//En teoría el usuario debe seleccionar una estrategia. Esta función se ha creado para mostrar la funcionalidad básica del programa.
 	public void iniciarCurso(Curso curso) {
 		sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, CursoEnMarcha.ESTRATEGIA_PREDETERMINADA);
+	}
+	
+	public List<Curso> obtenerCursosLocales(){
+		return manejador.obtenerCursosLocales();
 	}
 }
