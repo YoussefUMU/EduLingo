@@ -10,7 +10,7 @@ public class Curso {
     private String autor;
     private String descripcion;
     private List<Bloque> bloques;
-    private URL imagenCurso;
+    private String imagenCurso;
     private String categoria;
     
     public Curso() {
@@ -56,9 +56,9 @@ public class Curso {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
-        this.descripcion = descripcion;
+        this.descripcion = descripcion; 
         this.bloques = bloques != null ? bloques : new ArrayList<>();
-        this.imagenCurso = imagenCurso;
+        this.imagenCurso = "/recursos/EdulingoRedimensionadad.png";
     }
     
     // Constructor básico sin imagen
@@ -70,19 +70,6 @@ public class Curso {
         this.bloques = bloques != null ? bloques : new ArrayList<>();
     }
     
-    // Constructor alternativo que acepta la ruta de la imagen como String
-    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, String rutaImagen) {
-        this.id = id;
-        this.nombre = nombre;
-        this.autor = autor;
-        this.descripcion = descripcion;
-        this.bloques = bloques != null ? bloques : new ArrayList<>();
-        try {
-            this.imagenCurso = new URL(rutaImagen);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
     
     public String getId() {
         return id;
@@ -104,21 +91,14 @@ public class Curso {
         return bloques;
     }
     
-    public URL getImagenCurso() {
+    public String getImagenCurso() {
         return imagenCurso;
     }
     
-    public void setImagenCurso(URL imagenCurso) {
+    public void setImagenCurso(String imagenCurso) {
         this.imagenCurso = imagenCurso;
     }
     
-    public void setImagenCurso(String imagenCurso) {
-        try {
-            this.imagenCurso = new URL(imagenCurso);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
     
     public String getCategoria() {
         return categoria;

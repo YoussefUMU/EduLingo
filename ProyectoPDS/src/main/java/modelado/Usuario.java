@@ -74,18 +74,19 @@ public class Usuario {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	 public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
-	        boolean coincidencia = cursosActivos.stream()
-	            .anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass()  // Comparar clases
-	                    && c.getNombre().equals(curso.getNombre())
-	                    && c.getDescripcion().equals(curso.getDescripcion()));
+	public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
+		boolean coincidencia = cursosActivos.stream()
+				.anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass() // Comparar clases
+						&& c.getNombre().equals(curso.getNombre())
+						&& c.getDescripcion().equals(curso.getDescripcion()));
 
-	        if (coincidencia==false) {
-	            cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia));
-	            return true;
-	        }
-	        return false;
-	    }
+		if (coincidencia == false) {
+			cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia));
+			return true;
+		}
+		return false;
+	}
+
 	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
 		this.cursosActivos.remove(cursoEnMarcha);
 		cursoEnMarcha.finalizar();

@@ -19,7 +19,7 @@ public class VentanaPrincipal extends JFrame {
     private JButton btnCursosActivos;
     private JButton btnCursosDisponibles;
     private JButton btnEstadisticas;
-    private JTextArea areaBienvenida;
+    private JTextArea areaBienvenida; 
 
     public VentanaPrincipal() {
         usuario = ControladorPDS.getUnicaInstancia().getSesionActual();

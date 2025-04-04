@@ -68,7 +68,7 @@ public class CursoCellRenderer extends JPanel implements ListCellRenderer<Curso>
         CursoLabel.setText(curso.getNombre());
         
         // Cargar la imagen del perfil
-        URL imageUrl = curso.getImagenCurso();
+        String imageUrl = curso.getImagenCurso();
         if (imageUrl != null) {
             try {
                 Image image = ImageIO.read(imageUrl);
