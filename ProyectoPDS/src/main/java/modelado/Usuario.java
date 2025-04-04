@@ -74,8 +74,10 @@ public class Usuario {
 		this.fechaRegistro = fechaRegistro;
 	}
 
-	public void agregarCurso(Curso curso, int vidas,Estrategia estrategia) {
-        cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia ));
+	public CursoEnMarcha agregarCurso(Curso curso, int vidas,Estrategia estrategia) {
+		CursoEnMarcha cursoEnMarcha;
+        cursosActivos.add(cursoEnMarcha = new CursoEnMarcha(curso, vidas, estrategia ));
+        return cursoEnMarcha;
     }
 
     public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
