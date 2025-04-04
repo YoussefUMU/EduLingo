@@ -15,7 +15,7 @@ public class Usuario {
 	private String correo;
 	private String contraseña;
 	private String nombreUsuario;
-	private LocalDate fechaRegistro;
+	private LocalDate fechaRegistro;  
 	private List<CursoEnMarcha> cursosActivos;
 	private Estadistica estadisticas;
 
@@ -73,18 +73,20 @@ public class Usuario {
 	public void setFechaRegistro(LocalDate fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
 	}
-	 public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
-	        boolean coincidencia = cursosActivos.stream()
-	            .anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass()  // Comparar clases
-	                    && c.getNombre().equals(curso.getNombre())
-	                    && c.getDescripcion().equals(curso.getDescripcion()));
+	public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
+		boolean coincidencia = cursosActivos.stream()
+				.anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass() // Comparar clases
+						&& c.getNombre().equals(curso.getNombre())
+						&& c.getDescripcion().equals(curso.getDescripcion()));
 
-	        if (coincidencia==false) {
-	            cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia));
-	            return true;
-	        }
-	        return false;
-	    }
+		if (coincidencia == false) {
+			cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia));
+			return true;
+		}
+		return false;
+	}
+
+
 	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
 		this.cursosActivos.remove(cursoEnMarcha);
 		cursoEnMarcha.finalizar();

@@ -137,7 +137,7 @@ public class VentanaCursosEnMarcha extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
-	public void mostrarVentana() {
+	public void mostrarVentana() { 
 		setVisible(true);
 	}
 }

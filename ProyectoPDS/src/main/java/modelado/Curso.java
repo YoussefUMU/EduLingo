@@ -31,7 +31,7 @@ public class Curso {
         // Autor por defecto
         this.autor = "Profesor";
     }
-
+  
     public void setId(String id) {
         this.id = id;
     }
@@ -57,9 +57,9 @@ public class Curso {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
-        this.descripcion = descripcion;
+        this.descripcion = descripcion; 
         this.bloques = bloques != null ? bloques : new ArrayList<>();
-        this.imagenCurso = imagenCurso;
+        this.imagenCurso = "/recursos/EdulingoRedimensionadad.png";
     }
     
     // Constructor básico sin imagen
@@ -71,6 +71,7 @@ public class Curso {
         this.bloques = bloques != null ? bloques : new ArrayList<>();
     }
     
+
     public String getId() {
         return id;
     }
@@ -91,6 +92,15 @@ public class Curso {
         return bloques;
     }
     
+    public String getImagenCurso() {
+        return imagenCurso;
+    }
+    
+    public void setImagenCurso(String imagenCurso) {
+        this.imagenCurso = imagenCurso;
+    }
+    
+   
     public String getCategoria() {
         return categoria;
     }
@@ -99,9 +109,6 @@ public class Curso {
         this.categoria = categoria;
     }
     
-    public String getImagenCurso() {
-    	return this.imagenCurso;
-    }
     
     @Override
     public String toString() {
