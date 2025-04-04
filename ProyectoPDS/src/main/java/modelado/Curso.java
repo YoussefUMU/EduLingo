@@ -1,7 +1,7 @@
 package modelado;
-
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Curso {
@@ -11,38 +11,79 @@ public class Curso {
     private String descripcion;
     private List<Bloque> bloques;
     private URL imagenCurso;
+    private String categoria;
     
-    public Curso() {}
+    public Curso() {
+        this.bloques = new ArrayList<>();
+    }
+    
+    // Constructor simple para la vista de cursos sin empezar
+    public Curso(String nombre, String descripcion, String categoria) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.categoria = categoria;
+        this.bloques = new ArrayList<>();
+        
+        // ID temporal
+        this.id = "TEMP_" + nombre.replaceAll("\\s+", "_").toLowerCase();
+        
+        // Autor por defecto
+        this.autor = "Profesor";
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public void setAutor(String autor) {
-		this.autor = autor;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public void setBloques(List<Bloque> bloques) {
-		this.bloques = bloques;
-	}
-
-	public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques) {
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+    
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
+    public void setBloques(List<Bloque> bloques) {
+        this.bloques = bloques;
+    }
+    
+    // Constructor completo con URL para imagen
+    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, URL imagenCurso) {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
         this.descripcion = descripcion;
-        this.bloques = bloques;
+        this.bloques = bloques != null ? bloques : new ArrayList<>();
+        this.imagenCurso = imagenCurso;
     }
-
-
+    
+    // Constructor básico sin imagen
+    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques) {
+        this.id = id;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.descripcion = descripcion;
+        this.bloques = bloques != null ? bloques : new ArrayList<>();
+    }
+    
+    // Constructor alternativo que acepta la ruta de la imagen como String
+    public Curso(String id, String nombre, String autor, String descripcion, List<Bloque> bloques, String rutaImagen) {
+        this.id = id;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.descripcion = descripcion;
+        this.bloques = bloques != null ? bloques : new ArrayList<>();
+        try {
+            this.imagenCurso = new URL(rutaImagen);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public String getId() {
         return id;
     }
@@ -62,20 +103,33 @@ public class Curso {
     public List<Bloque> getBloques() {
         return bloques;
     }
-
-	public URL getImagenCurso() {
-		return imagenCurso;
-	}
-
-	public void setImagenCurso(URL imagenCurso) {
-		this.imagenCurso = imagenCurso;
-	}
-	
-	public void setImagenCurso(String imagenCurso) {
-		try {
-			this.imagenCurso = new URL(imagenCurso);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-	}
+    
+    public URL getImagenCurso() {
+        return imagenCurso;
+    }
+    
+    public void setImagenCurso(URL imagenCurso) {
+        this.imagenCurso = imagenCurso;
+    }
+    
+    public void setImagenCurso(String imagenCurso) {
+        try {
+            this.imagenCurso = new URL(imagenCurso);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public String getCategoria() {
+        return categoria;
+    }
+    
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

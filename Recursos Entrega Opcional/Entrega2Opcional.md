@@ -32,7 +32,6 @@ Jesús Sánchez Cuadrado
 | **Creador** | - Añadir nuevos tipos de preguntas  <br>- Crear cursos  <br>- Compartir cursos creados |
 | **Consumidor** | - Realizar curso |
 | **Sistema** | - Ofrecer distintos tipos de estrategias  <br>- Guardar estado actual del curso  <br>- Restaurar estado previo del curso  <br>- Guardar las estadísticas de uso  <br>- Permitir la instalación de nuevos cursos en su biblioteca interna |
-
 ---
 
 ## Desarrollo de casos de uso  
@@ -112,14 +111,15 @@ Un usuario podrá importar cursos a si biblioteca interna.
 ---
 
 ## Modelado de dominio  
-![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/90fbfc3be5f7380470d30521d0d30e1a68d188ca/Recursos%20Entrega%20Opcional/modelado/Modelado.drawio.jpg)
+![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/502bc265b7a61bda6f40d6bd1c5a1b938e8dedad/Recursos%20Entrega%20Opcional/modelado/ModeladoDominioEntrega2.jpg)
 
-El modelo de dominio representa la relación entre **usuarios**, **cursos**, **preguntas** y **estrategias de aprendizaje**.  
+El modelo de dominio refleja las relaciones entre los **usuarios**, los **cursos**, los **bloques**, las **preguntas** y las **estrategias de aprendizaje**. 
 
-- Un **usuario** puede **crear, realizar y compartir cursos**.  
-- Los **cursos** contienen diferentes **preguntas** organizadas por tipo.  
-- Los **usuarios pueden seleccionar estrategias de aprendizaje** (como repetición o repaso espaciado) para mejorar la memorización.  
-- Cada curso **mantiene un estado**, permitiendo **reanudar el progreso en cualquier momento**.  
-- La aplicación **registra estadísticas** sobre el uso (como tiempo de estudio o rachas de actividad), ofreciendo un sistema flexible y escalable para el aprendizaje interactivo.  
+- Un **repositorio de usuarios** gestiona a los usuarios, quienes tienen atributos como id, nombre, correo, contraseña, y la fecha de registro.
+- Los **cursos** están compuestos por **bloques**, que organizan diferentes **preguntas**. Cada bloque tiene un título y puede contener varias preguntas, las cuales se organizan en tipos como **PreguntaTest** o **PreguntaRellenarHueco**.
+- Los **cursos en marcha** mantienen el progreso del curso, indicando el bloque actual y la pregunta actual.
+- Los usuarios pueden seleccionar estrategias de aprendizaje, implementadas mediante la interfaz Estrategia, entre estas estrategias 
+ se incluyen **RepeticiónEspaciada**, **Secuencial** y **Aleatorio**.
+- Además, el sistema tiene un componente de **estadísticas** que registra datos sobre el tiempo de uso y la mejor racha de los usuarios, permitiendo un seguimiento detallado del rendimiento de los mismos.  
 
 ---
