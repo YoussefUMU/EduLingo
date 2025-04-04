@@ -14,7 +14,7 @@ public class CursoEnMarcha extends Curso {
     
 
     public CursoEnMarcha(Curso curso,int vidas, Estrategia estrategia) {
-		super(curso.getId(), curso.getNombre(), curso.getDescripcion(), curso.getBloques());
+		super(curso.getId(), curso.getNombre(), curso.getAutor(), curso.getDescripcion(), curso.getBloques());
 		this.bloqueActual = 1;
 		this.preguntaActual = 1;
 		this.vidas = vidas;

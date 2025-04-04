@@ -4,6 +4,19 @@ import java.util.List;
 
 public class TestPregunta extends Pregunta {
     private List<String> opciones;
+    private String respuestaCorrecta;
+    
+	 public TestPregunta() {
+	    }
+	
+	
+
+ public TestPregunta(String enunciado, List<String> opciones, String respuestaCorrecta) {
+     super(enunciado);
+     this.opciones = opciones;
+     this.respuestaCorrecta = respuestaCorrecta;
+ }
+    
     public List<String> getOpciones() {
 		return opciones;
 	}
@@ -11,14 +24,10 @@ public class TestPregunta extends Pregunta {
 	public void setOpciones(List<String> opciones) {
 		this.opciones = opciones;
 	}
-
-	private String respuestaCorrecta;
-
-    public TestPregunta(String id, String enunciado, List<String> opciones, String respuestaCorrecta) {
-        super(id, enunciado);
-        this.opciones = opciones;
-        this.respuestaCorrecta = respuestaCorrecta;
-    }
+	
+	public void setRespuestaCorrecta(String respuestaCorrecta) {
+		this.respuestaCorrecta = respuestaCorrecta;
+	}
 
     @Override
     public boolean verificarRespuesta(String respuesta) {

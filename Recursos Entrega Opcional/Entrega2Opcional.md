@@ -1,6 +1,6 @@
-# Entrega 1 PDS
+# Entrega 2 PDS
 
-## Entregable de Prácticas 1  
+## Entregable de Prácticas 2  
 **Proceso de Desarrollo Software**
 
 ### Realizado por:  
@@ -16,8 +16,9 @@ Jesús Sánchez Cuadrado
 ## Índice  
 1. [Identificación de casos de uso](#identificación-de-casos-de-uso)  
 2. [Desarrollo de casos de uso](#desarrollo-de-casos-de-uso)  
-   - [Caso de Uso 1: Seleccionar la estrategia de aprendizaje](#caso-de-uso-1-seleccionar-la-estrategia-de-aprendizaje)  
-   - [Caso de Uso 2: Guardar las estadísticas de uso](#caso-de-uso-2-guardar-las-estadísticas-de-uso)  
+   - [Caso de Uso 1: Realizar Cueso](#caso-de-uso-1-seleccionar-la-estrategia-de-aprendizaje)  
+   - [Caso de Uso 2: Cancelar un curso en marcha](#caso-de-uso-2-guardar-las-estadísticas-de-uso)
+   - [Caso de Uso 3: Agregar un nuevo curso.](#)
 3. [Modelado de dominio](#modelado-de-dominio)  
 
 ---
@@ -67,7 +68,7 @@ Un usuario deberá poder realizar cursos creados por otros usuarios.
 - **5a** El ususario desa continuar con un curso ya empezado.
    - El ususario pulsa el botón *Continuar Cursos* de la Ventana Principal.
    - El usuario accede a la Ventana de cursos empezados.
-   - El ususario selecciona uno de sus Cursos empezados y pulsa el botón *Continuar*.
+   - El usuario selecciona uno de sus Cursos empezados y pulsa el botón *Continuar*.
    - Vuelve al punto 10.
 - **9a** El usuario ha seleccionado la misma estrategia en un curso que ya tenia empezado con esa estrategia.
    - El sistema le muestra un mensaje de error al usuario indicando que no puede hacer el mismo curso a la vez con la misma estrategia.
@@ -76,7 +77,7 @@ Un usuario deberá poder realizar cursos creados por otros usuarios.
 - **11a** El ususario ha gastado todas sus vidas.
   - Se le notifica al usuario que ha gastado todas sus vidas.
   - Se le notifica al ususaio que con la funcionalidad premium, tendrá vidas infinitas.
-  - El usuario tiene que volver el curso desde el principio.
+  - El usuario tiene que volver a hacer el curso desde el principio.
 ---
 
 ### Caso de Uso 2: Cancelar un curso en marcha

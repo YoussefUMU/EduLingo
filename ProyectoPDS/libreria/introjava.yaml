@@ -1,0 +1,15 @@
+id: "curso-001"
+nombre: "Introducción a Java"
+autor: "Juan Pérez"
+descripcion: "Un curso básico de Java para principiantes."
+imagenCurso: "https://example.com/java-course.jpg"
+bloques:
+  - titulo: "Fundamentos"
+    preguntas:
+      - enunciado: "Una variable es: "
+        opciones:
+          - "Un contenedor de datos"
+          - "Un tipo de dato"
+          - "Un lenguaje de programación"
+        respuestaCorrecta: "Un contenedor de datos"
+    
