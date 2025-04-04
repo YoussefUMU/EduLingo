@@ -27,17 +27,17 @@ public class CursoCellRenderer extends JPanel implements ListCellRenderer<Curso>
     private JPanel panelCentro;
 
     public CursoCellRenderer() {
-        setForeground(Color.GREEN);
+        setForeground(Color.BLUE);
         setBackground(new Color(240, 240, 240));
         setLayout(new BorderLayout(10, 10));
 
         // Inicialización de etiquetas
         CursoLabel = new JLabel();
-        CursoLabel.setFont(new Font("Lucida Console", Font.BOLD, 12));
+        CursoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         CursoLabel.setForeground(Color.BLACK);
         textoLabel = new JLabel();
         textoLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        textoLabel.setFont(new Font("Lucida Console", Font.BOLD, 12));
+        textoLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         textoLabel.setForeground(Color.BLACK);
         imageLabel = new JLabel();
         imageLabel.setForeground(Color.GREEN);
@@ -58,31 +58,34 @@ public class CursoCellRenderer extends JPanel implements ListCellRenderer<Curso>
         add(imageLabel, BorderLayout.WEST);
         add(panelCentro, BorderLayout.CENTER);
     }
-
     @Override
     public Component getListCellRendererComponent(JList<? extends Curso> list, Curso curso, int index,
             boolean isSelected, boolean cellHasFocus) {
         // Set the text
-    	textoLabel.setText(curso.getDescripcion());
+        textoLabel.setText(curso.getDescripcion());
         
-    	// Set user
-    	CursoLabel.setText(curso.getNombre());
-    	
+        // Set user
+        CursoLabel.setText(curso.getNombre());
+        
         // Cargar la imagen del perfil
-        try {
-            URL imageUrl = null;
-            imageUrl = curso.getImagenCurso();
-            Image image = ImageIO.read(imageUrl);
-            ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
-            imageLabel.setIcon(imageIcon);
-        } catch (IOException e) {
-            e.printStackTrace();
-            imageLabel.setIcon(null); // Default to no image if there was an issue
+        URL imageUrl = curso.getImagenCurso();
+        if (imageUrl != null) {
+            try {
+                Image image = ImageIO.read(imageUrl);
+                ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+                imageLabel.setIcon(imageIcon);
+            } catch (IOException e) {
+                e.printStackTrace();
+                imageLabel.setIcon(null); // Default to no image if there was an issue
+            }
+        } else {
+            // Establecer un icono por defecto o dejar sin icono
+            imageLabel.setIcon(null);
         }
 
         // Configuración de colores y borde en función de la selección
         Color borderColor = new Color(0, 255, 0); // Verde
-        setBorder(new LineBorder(borderColor, 1)); // Borde verde de 2 píxeles
+        setBorder(new LineBorder(borderColor, 1)); // Borde verde de 1 píxel
         
         textoLabel.setFont(new Font("Lucida Console", Font.BOLD, 11));
         CursoLabel.setFont(new Font("Lucida Console", Font.BOLD, 11));
