@@ -67,6 +67,14 @@ public class ControladorPDS {
 		return true;
 	}
 	
+	public boolean cerrarSesion () {
+		if(sesionActual != null) {
+			sesionActual = null;
+			return true;
+		}
+		return false;
+	}
+	
 	// Método para devolver el usuario conectado
 	public Usuario getSesionActual() {
 		return sesionActual;
