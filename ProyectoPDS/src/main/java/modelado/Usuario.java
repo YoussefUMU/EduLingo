@@ -18,10 +18,11 @@ public class Usuario {
 	private String contraseña;
 	private String nombreUsuario;
 	private LocalDate fechaRegistro;  
+	private LocalDate fechaNacimiento;
 	private List<CursoEnMarcha> cursosActivos;
 	private Estadistica estadisticas;
-
-	public Usuario(String id, String nombre, String contraseña, String correo, String nombreUsuario) {
+	
+	public Usuario(String id, String nombre, String contraseña, String correo, String nombreUsuario, LocalDate fechaNacimiento) {
 		this.id = id;
 		this.nombre = nombre;
 		this.contraseña = contraseña;
@@ -31,9 +32,10 @@ public class Usuario {
 		this.cursosActivos = new ArrayList<>();
 
 		this.estadisticas = new Estadistica();
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public Usuario(String nombre, String contraseña, String correo, String nombreUsuario) {
+	public Usuario(String nombre, String contraseña, String correo, String nombreUsuario, LocalDate FechaNacimiento) {
 		this.id = "";
 		this.nombre = nombre;
 		this.contraseña = contraseña;
@@ -42,6 +44,7 @@ public class Usuario {
 		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
 		this.estadisticas = new Estadistica();
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public Usuario(String nombre, String correo, String nombreUsuario) {
@@ -85,6 +88,15 @@ public class Usuario {
 	public void setFechaRegistro(LocalDate fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
 	}
+	
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
 	public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
 		boolean coincidencia = cursosActivos.stream()
 				.anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass() // Comparar clases

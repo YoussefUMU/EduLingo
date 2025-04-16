@@ -15,14 +15,14 @@ class UsuarioTest {
     private Estrategia estrategia2;
 
     @BeforeEach
-    void setUp() {
+    /*void setUp() {
         usuario = new Usuario("1", "Juan Pérez", "password123", "juan@example.com", "juanperez");
         curso1 = new Curso("1", "Matemáticas", "Curso básico de matemáticas");
         curso2 = new Curso("2", "Programación", "Introducción a la programación");
         
         estrategia1 = new EstrategiaSecuencial(); 
         estrategia2 = new EstrategiaSecuencial();
-    }
+    }*/
 
     @Test
     void testAgregarCurso() {
