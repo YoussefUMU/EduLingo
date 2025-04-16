@@ -123,15 +123,15 @@ public class VentanaCursosEnMarcha extends JFrame {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200, 80)));
         
-        JList<Curso> list = new JList<Curso>();
+        JList<CursoEnMarcha> list = new JList<CursoEnMarcha>();
         list.setCellRenderer(new ModernCursoCellRenderer());
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setBackground(new Color(248, 248, 248, 180));
         list.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         
         // Obtener los cursos del usuario actual
-        List<CursoEnMarcha> cursosUser = ControladorPDS.getUnicaInstancia().getSesionActual().getCursosActivos();
-        DefaultListModel<Curso> modelo = new DefaultListModel<Curso>();
+        List<CursoEnMarcha> cursosUser = ControladorPDS.getUnicaInstancia().getCursosActivosSesionActual();
+        DefaultListModel<CursoEnMarcha> modelo = new DefaultListModel<CursoEnMarcha>();
         
         if (cursosUser != null) {
             for (CursoEnMarcha curso : cursosUser) {
@@ -158,10 +158,10 @@ public class VentanaCursosEnMarcha extends JFrame {
         btnContinuar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Curso cursoSeleccionado = list.getSelectedValue();
+                CursoEnMarcha cursoSeleccionado = list.getSelectedValue();
                 if (cursoSeleccionado != null) {
                     // Aquí se abriría la ventana del curso seleccionado
-                    JOptionPane.showMessageDialog(null, "Abriendo curso: " + cursoSeleccionado.getNombre(), 
+                    JOptionPane.showMessageDialog(null, "Abriendo curso: " + ControladorPDS.getUnicaInstancia().getNombreCursoEnMarcha(cursoSeleccionado), 
                             "Curso Seleccionado", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Por favor, seleccione un curso.", 
