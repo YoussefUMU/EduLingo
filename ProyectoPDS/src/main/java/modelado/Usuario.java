@@ -44,6 +44,16 @@ public class Usuario {
 		this.estadisticas = new Estadistica();
 	}
 
+	public Usuario(String nombre, String correo, String nombreUsuario) {
+		this.id = "";
+		this.nombre = nombre;
+		this.contraseña = "1234";
+		this.correo = correo;
+		this.nombreUsuario = nombreUsuario;
+		this.fechaRegistro = LocalDate.now();
+		this.cursosActivos = new ArrayList<>();
+		this.estadisticas = new Estadistica();
+	}
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}

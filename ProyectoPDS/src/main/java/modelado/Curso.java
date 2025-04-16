@@ -66,48 +66,46 @@ public class Curso {
         this.descripcion = descripcion;
         this.bloques = bloques != null ? bloques : new ArrayList<>();
     }
-    
 
-    public String getId() {
-        return id;
-    }
-    
-    public String getNombre() {
-        return nombre;
-    }
-    
-    public String getAutor() {
-        return autor;
-    }
-    
-    public String getDescripcion() {
-        return descripcion;
-    }
-    
-    public List<Bloque> getBloques() {
-        return bloques;
-    }
-    
-    public String getImagenCurso() {
-        return imagenCurso;
-    }
-    
-    public void setImagenCurso(String imagenCurso) {
-        this.imagenCurso = imagenCurso;
-    }
-    
-   
-    public String getCategoria() {
-        return categoria;
-    }
-    
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-    
-    
-    @Override
-    public String toString() {
-        return nombre;
-    }
+
+	public String getId() {
+		return id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getAutor() {
+		return autor;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public List<Bloque> getBloques() {
+		return bloques;
+	}
+
+	public String getImagenCurso() {
+		return imagenCurso;
+	}
+
+	public void setImagenCurso(String imagenCurso) {
+		this.imagenCurso = imagenCurso;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+	@Override
+	public String toString() {
+		return nombre;
+	}
 }
