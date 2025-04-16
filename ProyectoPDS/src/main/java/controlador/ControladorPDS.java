@@ -22,7 +22,7 @@ public class ControladorPDS {
 	private RepositorioUsuarios repositorioUsuarios;
 	
 	
-	ManejadorCursos manejador = new ManejadorCursos();
+	 private ManejadorCursos manejador = new ManejadorCursos();
 	
 	//Constructor
 	private ControladorPDS() {
@@ -93,5 +93,17 @@ public class ControladorPDS {
 	
 	public List<Curso> obtenerCursosLocales(){
 		return manejador.obtenerCursosLocales();
+	}
+	
+	public String getNombreCursoEnMarcha(CursoEnMarcha curso) {
+		return curso.getCurso().getNombre();
+	}
+	
+	public String getDescripcionCursoEnMarcha(CursoEnMarcha curso) {
+		return curso.getCurso().getDescripcion();
+	}
+	
+	public List<CursoEnMarcha> getCursosActivosSesionActual() {
+		return this.sesionActual.getCursosActivos();
 	}
 }

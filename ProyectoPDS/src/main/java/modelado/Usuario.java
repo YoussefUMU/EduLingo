@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import controlador.ControladorPDS;
+
 /**
  * Clase que representa a un usuario de la plataforma de aprendizaje.
  */
@@ -76,8 +78,8 @@ public class Usuario {
 	public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
 		boolean coincidencia = cursosActivos.stream()
 				.anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass() // Comparar clases
-						&& c.getNombre().equals(curso.getNombre())
-						&& c.getDescripcion().equals(curso.getDescripcion()));
+						&& ControladorPDS.getUnicaInstancia().getNombreCursoEnMarcha(c).equals(curso.getNombre())
+						&& ControladorPDS.getUnicaInstancia().getDescripcionCursoEnMarcha(c).equals(curso.getDescripcion()));
 
 		if (coincidencia == false) {
 			cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia));
@@ -97,7 +99,7 @@ public class Usuario {
 	}
 
 	public Optional<CursoEnMarcha> obtenerCursoEnMarcha(String cursoId) {
-		return cursosActivos.stream().filter(c -> c.getId().equals(cursoId)).findFirst();
+		return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(cursoId)).findFirst();
 	}
 
 	public void iniciarCurso(String cursoId) {

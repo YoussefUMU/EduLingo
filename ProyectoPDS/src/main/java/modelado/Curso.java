@@ -24,9 +24,6 @@ public class Curso {
         this.bloques = new ArrayList<>();
         this.imagenCurso = "https://cdn-icons-png.flaticon.com/512/2000/2000860.png";
         
-        // ID temporal
-        this.id = "TEMP_" + nombre.replaceAll("\\s+", "_").toLowerCase();
-        
         // Autor por defecto
         this.autor = "Profesor";
     }

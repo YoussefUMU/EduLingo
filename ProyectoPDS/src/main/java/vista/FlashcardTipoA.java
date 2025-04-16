@@ -27,7 +27,7 @@ public class FlashcardTipoA extends JFrame {
 
     public FlashcardTipoA(CursoEnMarcha curso, int indBloque, int indPregunta) {
     	//curso.getBloqueActual();
-    	pregunta = (TestPregunta) curso.getBloques().get(indBloque).getPreguntas().get(indPregunta);
+    	pregunta = (TestPregunta) curso.getCurso().getBloques().get(indBloque).getPreguntas().get(indPregunta);
     	vidas = curso.getVidas();
     	
     	setSize(new Dimension(600, 600));
