@@ -426,9 +426,7 @@ public class VentanaPrincipal extends JFrame {
 		panelAccesos.add(crearBotonAccesoRapido("Explorar", "\uD83D\uDD0E", "Descubre nuevos cursos",
 				e -> abrirVentanaCursosDisponibles()));
 		panelAccesos.add(crearBotonAccesoRapido("Comunidad", "\uD83D\uDC65", "Conéctate con otros estudiantes",
-				e -> JOptionPane.showMessageDialog(this,
-						"Función de comunidad en desarrollo. ¡Próximamente disponible!", "Comunidad Edulingo",
-						JOptionPane.INFORMATION_MESSAGE)));
+			    e -> abrirVentanaComunidad()));
 
 		panel.add(panelAccesos, BorderLayout.SOUTH);
 
@@ -1240,5 +1238,32 @@ public class VentanaPrincipal extends JFrame {
 		// ventana
 		getContentPane().addMouseListener(adaptador);
 		getContentPane().addMouseMotionListener(adaptador);
+	}
+	private void abrirVentanaComunidad() {
+	    // Si estamos usando el gestor de paneles para cambiar entre contenidos
+	    PanelComunidad panelComunidad = new PanelComunidad(usuario);
+	    
+	    // Si no existe ya un panel de comunidad en el gestor de paneles, lo añadimos
+	    if (!existePanelEnGestor("comunidad")) {
+	        panelContenido.add(panelComunidad, "comunidad");
+	    }
+	    
+	    // Mostrar el panel de comunidad
+	    gestorPaneles.show(panelContenido, "comunidad");
+	    
+	    // Opcional: Si usas un panel de asistente, puedes ocultarlo o mostrarlo según necesites
+	    if (panelAsistente != null) {
+	        panelAsistente.setVisible(false);
+	    }
+	}
+
+	// Método auxiliar para verificar si un panel ya existe en el gestor
+	private boolean existePanelEnGestor(String nombre) {
+	    for (Component c : panelContenido.getComponents()) {
+	        if (c.getName() != null && c.getName().equals(nombre)) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 }
