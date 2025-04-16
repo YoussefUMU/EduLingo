@@ -2,6 +2,7 @@ package modelado;
 
 
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,8 @@ public class RepositorioUsuarios {
     
     private RepositorioUsuarios() {
     	usuarios = new HashMap<String, Usuario>();
-    	Usuario usuarioE = new Usuario("Ramón", "1234", "ramon@um.es", "ramonPRO");
+    	LocalDate cumple = LocalDate.of(2004, 12, 03);
+    	Usuario usuarioE = new Usuario("Ramón", "1234", "ramon@um.es", "ramonPRO",cumple);
     	usuarios.put(usuarioE.getNombreUsuario(), usuarioE);
     }
     

@@ -1,5 +1,6 @@
 package controlador;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import modelado.Curso;
@@ -42,8 +43,8 @@ public class ControladorPDS {
 	 * existe.
 	 * 
 	 */
-	public boolean registrarUsuario(String nombre, String contraseña, String correo, String nombreUsuario) {
-		Usuario usuario = new Usuario(nombre, contraseña, correo, nombreUsuario);
+	public boolean registrarUsuario(String nombre, String contraseña, String correo, String nombreUsuario, LocalDate FechaNacimiento) {
+		Usuario usuario = new Usuario(nombre, contraseña, correo, nombreUsuario, FechaNacimiento);
 		if (repositorioUsuarios.getUsuario(usuario.getNombre()) != null) {
 			return false;
 		}

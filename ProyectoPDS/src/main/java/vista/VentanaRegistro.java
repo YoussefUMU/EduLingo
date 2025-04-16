@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import modelado.Usuario;
 
@@ -250,10 +252,9 @@ public class VentanaRegistro extends JFrame {
                 String usuario = textFieldUsuario.getText();
                 String contraseña = new String(passwordField1.getPassword());
                 String confirmarContraseña = new String(passwordField2.getPassword());
-                Date cumpleaños = (Date) spinnerCumpleaños.getValue();
-
+                LocalDate cumpleaños = ((Date) spinnerCumpleaños.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 if (validarCampos(nombre, apellidos, correo, usuario, contraseña, confirmarContraseña)) {
-                    boolean registrado = controlador.registrarUsuario(usuario, contraseña, correo, nombre + " " + apellidos);
+                    boolean registrado = controlador.registrarUsuario(nombre + " " + apellidos, contraseña, correo, usuario, cumpleaños);
                     if (registrado) {
                         JOptionPane.showMessageDialog(null, "Usuario registrado con éxito.");
                         transicionAVentanaLogin();
