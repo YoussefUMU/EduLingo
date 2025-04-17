@@ -37,4 +37,21 @@ public class Bloque {
 	public List<Pregunta> getPreguntas() {
 		return preguntas;
 	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+
+	    Bloque bloque = (Bloque) obj;
+
+	    return titulo != null ? titulo.equals(bloque.titulo) : bloque.titulo == null;
+	}
+
+	@Override
+	public int hashCode() {
+	    return titulo != null ? titulo.hashCode() : 0;
+	}
+
 }

@@ -24,4 +24,20 @@ public abstract class Pregunta {
 	public void setEnunciado(String enunciado) {
 		this.enunciado = enunciado;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+
+	    Pregunta pregunta = (Pregunta) obj;
+
+	    return numPregunta == pregunta.numPregunta;
+	}
+
+	@Override
+	public int hashCode() {
+	    return Integer.hashCode(numPregunta);
+	}
+
 }
