@@ -11,8 +11,8 @@ public class TestPregunta extends Pregunta {
 	
 	
 
- public TestPregunta(String enunciado, List<String> opciones, String respuestaCorrecta) {
-     super(enunciado);
+ public TestPregunta(int numPregunta,String enunciado, List<String> opciones, String respuestaCorrecta) {
+     super(numPregunta, enunciado);
      this.opciones = opciones;
      this.respuestaCorrecta = respuestaCorrecta;
  }

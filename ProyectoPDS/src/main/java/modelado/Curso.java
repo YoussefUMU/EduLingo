@@ -87,6 +87,10 @@ public class Curso {
 	public List<Bloque> getBloques() {
 		return bloques;
 	}
+	
+	public Bloque getBloqueEspecifico(int index) {
+		return this.bloques.get(index);
+	}
 
 	public String getImagenCurso() {
 		return imagenCurso;

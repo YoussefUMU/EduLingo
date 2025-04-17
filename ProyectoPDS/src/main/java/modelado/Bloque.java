@@ -26,8 +26,12 @@ public class Bloque {
 		this.preguntas = preguntas;
 	}
 
-	public Pregunta obtenerPregunta(int indice) {
-		return preguntas.get(indice);
+	public Pregunta obtenerPregunta(int numPregunta) {
+		for(Pregunta P: preguntas) {
+			if(P.getNumPregunta()==numPregunta) {
+				return P;
+			}
+		}return null;
 	}
 
 	public List<Pregunta> getPreguntas() {

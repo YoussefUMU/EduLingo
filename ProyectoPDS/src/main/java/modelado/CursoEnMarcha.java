@@ -1,5 +1,8 @@
 package modelado;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CursoEnMarcha {
 
 	public static final int VIDAS_PREDETERMINADAS = 5;
@@ -10,7 +13,9 @@ public class CursoEnMarcha {
 	private int preguntaActual;
 	private int vidas;
 	private Estrategia estrategia;
- 
+	private List<Bloque> BloquesCompletos;
+	private List<Pregunta> PreguntasCompletas;
+	
 	public CursoEnMarcha(Curso curso) {
 		this(curso, VIDAS_PREDETERMINADAS, ESTRATEGIA_PREDETERMINADA);
 	}
@@ -21,6 +26,8 @@ public class CursoEnMarcha {
 		this.vidas = vidas;
 		this.estrategia = estrategia;
 		this.curso = curso;
+		this.BloquesCompletos = new ArrayList<Bloque>();
+		this.PreguntasCompletas = new ArrayList<Pregunta>();
 	}
 
 	public void avanzarPregunta() {
@@ -28,13 +35,16 @@ public class CursoEnMarcha {
 		if (bloqueActualObj == null) {
 			return; // Protección contra NullPointerException
 		}
-
-		if (preguntaActual < bloqueActualObj.getPreguntas().size() - 1) {
-			preguntaActual++;
+		
+		Pregunta siguientePregunta = this.obtenerSiguientePregunta(preguntaActual);
+		if (siguientePregunta != null) {
+			this.PreguntasCompletas.add(this.getPreguntaActual());
+			this.preguntaActual = siguientePregunta.getNumPregunta();
 		} else {
 			preguntaActual = 0;
 			Bloque siguienteBloque = obtenerSiguienteBloque(bloqueActual);
 			if (siguienteBloque != null) {
+				this.BloquesCompletos.add(bloqueActualObj);
 				bloqueActual = this.curso.getBloques().indexOf(siguienteBloque);
 			} else {
 				finalizar();
@@ -52,23 +62,28 @@ public class CursoEnMarcha {
 			return null;
 		}
 
-		Bloque bloque = this.curso.getBloques().get(bloqueActual);
+		Bloque bloque = this.getBloqueActual();
 		if (preguntaActual < 0 || preguntaActual >= bloque.getPreguntas().size()) {
 			return null;
 		}
 
-		return bloque.getPreguntas().get(preguntaActual);
+		return bloque.obtenerPregunta(preguntaActual);
 	}
 
 	public Bloque getBloqueActual() {
 		if (bloqueActual < 0 || bloqueActual >= this.curso.getBloques().size()) {
 			return null;
 		}
-		return this.curso.getBloques().get(bloqueActual);
+		return this.curso.getBloqueEspecifico(bloqueActual);
 	}
 
 	public Bloque obtenerSiguienteBloque(int actual) {
-		return estrategia.siguiente(this.curso.getBloques(), actual);
+		return estrategia.siguienteBloque(this.curso.getBloques(), actual, this.BloquesCompletos);
+		
+	}
+	
+	public Pregunta obtenerSiguientePregunta(int actual) {
+		return estrategia.siguientePregunta(this.getBloqueActual(), actual , PreguntasCompletas);
 	}
 
 	public void finalizar() {
@@ -100,17 +115,17 @@ public class CursoEnMarcha {
 		return this.curso;
 	}
 
-	public void setBloqueActual(int bloqueActual) {
+	/*public void setBloqueActual(int bloqueActual) {
 		if (bloqueActual >= 0 && bloqueActual < this.curso.getBloques().size()) {
 			this.bloqueActual = bloqueActual;
 			this.preguntaActual = 0; // Reiniciar la pregunta al cambiar de bloque
 		}
-	}
+	}*/
 
-	public void setPreguntaActual(int preguntaActual) {
+	/*public void setPreguntaActual(int preguntaActual) {
 		Bloque bloque = getBloqueActual();
 		if (bloque != null && preguntaActual >= 0 && preguntaActual < bloque.getPreguntas().size()) {
 			this.preguntaActual = preguntaActual;
 		}
-	}
+	}*/
 }
