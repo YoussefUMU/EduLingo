@@ -1,42 +1,55 @@
 package modelado;
 
 import java.util.List;
+import java.util.Objects;
 
-public class PreguntaArrastrar extends Pregunta{
-
-    private String enunciado;
-    private String[] fragmentos;
-    private List<String> opciones;
+public class PreguntaArrastrar extends Pregunta {
+    private String textoCompleto;
+    private List<String> huecos;
     private List<Integer> ordenCorrecto;
 
-    // Constructor
     public PreguntaArrastrar() {
-        // Initialize with some default values if necessary
+        super();
+    }
+    
+    public PreguntaArrastrar(String enunciado, String textoCompleto, List<String> huecos) {
+        super(enunciado);
+        this.textoCompleto = textoCompleto;
+        this.huecos = huecos;
     }
 
-    // Getters and Setters
-    public String getEnunciado() {
-        return enunciado;
+    @Override
+    public boolean verificarRespuesta(String respuesta) {
+        if (ordenCorrecto == null) return false;
+        
+        try {
+            String[] respuestas = respuesta.split(",");
+            if (respuestas.length != ordenCorrecto.size()) return false;
+            
+            for (int i = 0; i < respuestas.length; i++) {
+                int indice = Integer.parseInt(respuestas[i]);
+                if (indice != ordenCorrecto.get(i)) return false;
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public void setEnunciado(String enunciado) {
-        this.enunciado = enunciado;
+    public String getTextoCompleto() {
+        return textoCompleto;
     }
 
-    public String[] getFragmentos() {
-        return fragmentos;
+    public void setTextoCompleto(String textoCompleto) {
+        this.textoCompleto = textoCompleto;
     }
 
-    public void setFragmentos(String[] fragmentos) {
-        this.fragmentos = fragmentos;
+    public List<String> getHuecos() {
+        return huecos;
     }
 
-    public List<String> getOpciones() {
-        return opciones;
-    }
-
-    public void setOpciones(List<String> opciones) {
-        this.opciones = opciones;
+    public void setHuecos(List<String> huecos) {
+        this.huecos = huecos;
     }
 
     public List<Integer> getOrdenCorrecto() {
@@ -46,10 +59,4 @@ public class PreguntaArrastrar extends Pregunta{
     public void setOrdenCorrecto(List<Integer> ordenCorrecto) {
         this.ordenCorrecto = ordenCorrecto;
     }
-
-	@Override
-	public boolean verificarRespuesta(String respuesta) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

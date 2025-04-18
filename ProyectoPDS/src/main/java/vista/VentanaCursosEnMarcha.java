@@ -241,7 +241,7 @@ class ModernCursoCellRenderer extends DefaultListCellRenderer {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_DEFAULT); // ← Cambiado
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_DEFAULT);
 
                 Color startColor = isSelected ? new Color(100, 181, 246) : new Color(255, 255, 255);
                 Color endColor = isSelected ? new Color(41, 121, 255) : new Color(240, 240, 240);
@@ -254,24 +254,26 @@ class ModernCursoCellRenderer extends DefaultListCellRenderer {
                 g2d.setStroke(new BasicStroke(1.5f));
                 g2d.drawRoundRect(5, 5, getWidth() - 10, getHeight() - 10, 15, 15);
             }
-
         };
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
-        panel.setBorder(BorderFactory.createEmptyBorder(12, 18, 12, 18));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
         JLabel lblTitle = new JLabel(curso.getNombre());
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
         lblTitle.setForeground(isSelected ? Color.WHITE : new Color(33, 33, 33));
+        lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel lblDescription = new JLabel("<html><div style='width:200px'>" + curso.getDescripcion() + "</div></html>");
+        JLabel lblDescription = new JLabel("<html><div style='width:350px'>" + curso.getDescripcion() + "</div></html>");
         lblDescription.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblDescription.setForeground(isSelected ? new Color(240, 240, 240) : new Color(100, 100, 100));
+        lblDescription.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel lblCategory = new JLabel(curso.getCategoria());
+        JLabel lblCategory = new JLabel(curso.getCategoria() != null ? curso.getCategoria() : "General");
         lblCategory.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         lblCategory.setForeground(isSelected ? new Color(255, 255, 200) : new Color(100, 100, 100));
+        lblCategory.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         panel.add(lblTitle);
         panel.add(Box.createVerticalStrut(4));
@@ -279,8 +281,9 @@ class ModernCursoCellRenderer extends DefaultListCellRenderer {
         panel.add(Box.createVerticalStrut(4));
         panel.add(lblDescription);
 
-        panel.setPreferredSize(new Dimension(250, 90)); // Altura fija sugerida
-        panel.setMinimumSize(new Dimension(250, 90));
+        // Aumentar el tamaño del panel
+        panel.setPreferredSize(new Dimension(400, 110)); // Mayor altura y ancho
+        panel.setMinimumSize(new Dimension(400, 110));
 
         return panel;
     }
