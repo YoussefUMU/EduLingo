@@ -222,9 +222,7 @@ public class VentanaPrincipal extends JFrame {
 		});
 
 		itemPremium.addActionListener(e -> {
-			JOptionPane.showMessageDialog(this,
-					"¡Mejora a Edulingo Premium para acceder a cursos exclusivos y sin anuncios!", "Edulingo Premium",
-					JOptionPane.INFORMATION_MESSAGE);
+				abrirPremium();
 		});
 
 		itemRangos.addActionListener(e -> {
@@ -1256,6 +1254,24 @@ public class VentanaPrincipal extends JFrame {
 	        panelAsistente.setVisible(false);
 	    }
 	}
+	
+	private void abrirPremium() {
+	    // Si estamos usando el gestor de paneles para cambiar entre contenidos
+	    PanelPremium panelPremium = new PanelPremium();
+	    
+	    // Si no existe ya un panel de comunidad en el gestor de paneles, lo añadimos
+	    if (!existePanelEnGestor("premium")) {
+	        panelContenido.add(panelPremium, "premium");
+	    }
+	    
+	    // Mostrar el panel de comunidad
+	    gestorPaneles.show(panelContenido, "premium");
+	    
+	    // Opcional: Si usas un panel de asistente, puedes ocultarlo o mostrarlo según necesites
+	    if (panelAsistente != null) {
+	        panelAsistente.setVisible(false);
+	    }
+	}
 
 	// Método auxiliar para verificar si un panel ya existe en el gestor
 	private boolean existePanelEnGestor(String nombre) {
@@ -1265,5 +1281,31 @@ public class VentanaPrincipal extends JFrame {
 	        }
 	    }
 	    return false;
+	}
+	/**
+	 * Actualiza la interfaz según el estado premium del usuario
+	 */
+	public void actualizarEstadoPremium() {
+	    boolean esPremium = ControladorPDS.getUnicaInstancia().esPremium();
+	    
+	    // Actualizar saludo con corona para usuarios premium
+	    if (esPremium) {
+	        saludoUsuario.setText("¡Hola, " + usuario.getNombreUsuario() + "! 👑");
+	    } else {
+	        saludoUsuario.setText("¡Hola, " + usuario.getNombreUsuario() + "!");
+	    }
+
+	    
+	    // Si hay un panel premium abierto, actualizar su información
+	    if (existePanelEnGestor("premium")) {
+	        Component[] components = panelContenido.getComponents();
+	        for (Component c : components) {
+	            if (c instanceof PanelPremium) {
+	                ((PanelPremium) c).actualizarInfoSuscripcion();
+	                break;
+	            }
+	        }
+	    }
+	   
 	}
 }

@@ -107,4 +107,75 @@ public class ControladorPDS {
 	public List<CursoEnMarcha> getCursosActivosSesionActual() {
 		return this.sesionActual.getCursosActivos();
 	}
+	
+	// Añadir estos métodos al ControladorPDS.java
+
+	/**
+	 * Activa la suscripción premium para el usuario que tiene la sesión activa
+	 * @param tipoPlan Tipo de plan (mensual, anual)
+	 * @return true si se activó correctamente, false en caso contrario
+	 */
+	public boolean activarPremium(String tipoPlan) {
+	    if (sesionActual == null) {
+	        return false;
+	    }
+	    
+	    try {
+	        sesionActual.activarPremium(tipoPlan);
+	        return true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	/**
+	 * Cancela la suscripción premium del usuario que tiene la sesión activa
+	 * @return true si se canceló correctamente, false en caso contrario
+	 */
+	public boolean cancelarPremium() {
+	    if (sesionActual == null) {
+	        return false;
+	    }
+	    
+	    try {
+	        sesionActual.cancelarPremium();
+	        return true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	/**
+	 * Verifica si el usuario de la sesión actual tiene suscripción premium activa
+	 * @return true si el usuario tiene premium activo, false en caso contrario
+	 */
+	public boolean esPremium() {
+	    return sesionActual != null && sesionActual.esPremium();
+	}
+
+	/**
+	 * Verifica si el usuario tiene el beneficio de vidas infinitas
+	 * @return true si el usuario tiene vidas infinitas, false en caso contrario
+	 */
+	public boolean tieneVidasInfinitas() {
+	    return sesionActual != null && sesionActual.tieneVidasInfinitas();
+	}
+
+	/**
+	 * Verifica si el usuario tiene el beneficio de acceso a cursos adicionales
+	 * @return true si el usuario tiene acceso a cursos adicionales, false en caso contrario
+	 */
+	public boolean tieneCursosAdicionales() {
+	    return sesionActual != null && sesionActual.tieneCursosAdicionales();
+	}
+
+	/**
+	 * Verifica si el usuario tiene el beneficio de no ver anuncios
+	 * @return true si el usuario no debe ver anuncios, false en caso contrario
+	 */
+	public boolean sinAnuncios() {
+	    return sesionActual != null && sesionActual.sinAnuncios();
+	}
 }

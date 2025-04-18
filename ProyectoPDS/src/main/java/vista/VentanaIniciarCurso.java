@@ -284,7 +284,7 @@ public class VentanaIniciarCurso extends JFrame {
                 dispose();
 
                 CursoEnMarcha cursoEnMarcha = controlador.ControladorPDS.getUnicaInstancia().iniciarCurso(cursoSeleccionado);
-                FlashcardTipoA flashcard = new FlashcardTipoA(cursoEnMarcha, 0, 0); // Parámetros ejemplo
+                FlashCardTipoA flashcard = new FlashCardTipoA(cursoEnMarcha, 0, 0); // Parámetros ejemplo
                 flashcard.setVisible(true);
             }
         });

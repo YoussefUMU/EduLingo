@@ -200,7 +200,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
                                 // Iniciar el curso y abrir ventana de flashcards
                                 CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia().iniciarCurso(cursoSeleccionado);
                                 dispose();
-                                FlashcardTipoA flash = new FlashcardTipoA(cursoEnMarcha, 0, 0);
+                                FlashCardTipoA flash = new FlashCardTipoA(cursoEnMarcha, 0, 0);
                                 flash.setVisible(true);
                             }
                             setOpacity(Math.max(0, alpha));
