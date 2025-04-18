@@ -91,7 +91,11 @@ public class FlashCardTipoC extends JFrame {
         panelMetricas.setOpaque(false);
         
         // Contador de vidas
-        contadorVidas = new JLabel("❤ " + vidas);
+        if(!ControladorPDS.getUnicaInstancia().tieneVidasInfinitas()) {
+            contadorVidas = new JLabel("❤ " + vidas);
+        } else {
+            contadorVidas = new JLabel("♾️❤");
+        }
         contadorVidas.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
         contadorVidas.setForeground(colorRojo);
         
