@@ -49,8 +49,7 @@ public class FlashCardTipoC extends JFrame {
 
 		// Obtener información desde la PreguntaArrastrar
 		try {
-			PreguntaArrastrar preguntaArrastrar = (PreguntaArrastrar) curso.getCurso().getBloques().get(indBloque)
-					.getPreguntas().get(indPregunta);
+			PreguntaArrastrar preguntaArrastrar = (PreguntaArrastrar) curso.getPreguntaActual();
 
 			// Usar los datos de la pregunta
 			this.textoCompleto = preguntaArrastrar.getTextoCompleto();
@@ -168,7 +167,7 @@ public class FlashCardTipoC extends JFrame {
 		panelPregunta.setOpaque(false);
 		panelPregunta.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
 
-		preguntaLabel = new JLabel("Arrastra las palabras a los huecos correctos", SwingConstants.CENTER);
+		preguntaLabel = new JLabel("B"+curso.getBloqueActualIndex()+"."+curso.getPreguntaActualIndex()+"."+curso.getPreguntaActual().getEnunciado(), SwingConstants.CENTER);
 		preguntaLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		preguntaLabel.setForeground(new Color(60, 60, 60));
 

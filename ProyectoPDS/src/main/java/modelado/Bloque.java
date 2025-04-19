@@ -29,6 +29,7 @@ public class Bloque {
 	public Pregunta obtenerPregunta(int numPregunta) {
 		for(Pregunta P: preguntas) {
 			if(P.getNumPregunta()==numPregunta) {
+				System.out.println(P.getEnunciado());
 				return P;
 			}
 		}return null;

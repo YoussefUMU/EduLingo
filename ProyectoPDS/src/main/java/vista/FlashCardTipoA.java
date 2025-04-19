@@ -30,9 +30,9 @@ public class FlashCardTipoA extends JFrame {
 
 	public FlashCardTipoA(CursoEnMarcha curso, int indBloque, int indPregunta) {
 		this.cursoEnMarcha = curso; // Añadir esta línea
-		pregunta = (TestPregunta) curso.getCurso().getBloques().get(indBloque).getPreguntas().get(indPregunta);
+		pregunta = (TestPregunta) curso.getPreguntaActual();
 		vidas = curso.getVidas();
-		pregunta = (TestPregunta) curso.getCurso().getBloques().get(indBloque).getPreguntas().get(indPregunta);
+		pregunta = (TestPregunta) curso.getPreguntaActual();
 		vidas = curso.getVidas();
 
 		setSize(new Dimension(700, 650));
@@ -119,7 +119,7 @@ public class FlashCardTipoA extends JFrame {
 		panelPregunta.setOpaque(false);
 		panelPregunta.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
 
-		preguntaLabel = new JLabel(pregunta.getEnunciado(), SwingConstants.CENTER);
+		preguntaLabel = new JLabel("B"+curso.getBloqueActualIndex()+"."+curso.getPreguntaActualIndex()+"."+ pregunta.getEnunciado(), SwingConstants.CENTER);
 		preguntaLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		preguntaLabel.setForeground(new Color(60, 60, 60));
 

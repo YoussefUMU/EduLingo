@@ -234,7 +234,7 @@ public class VentanaCursosEnMarcha extends JFrame {
 class ModernCursoCellRenderer extends DefaultListCellRenderer {
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        Curso curso = (Curso) value;
+        CursoEnMarcha curso = (CursoEnMarcha) value;
 
         JPanel panel = new JPanel() {
             @Override
@@ -260,17 +260,17 @@ class ModernCursoCellRenderer extends DefaultListCellRenderer {
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
-        JLabel lblTitle = new JLabel(curso.getNombre());
+        JLabel lblTitle = new JLabel(curso.getCurso().getNombre());
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
         lblTitle.setForeground(isSelected ? Color.WHITE : new Color(33, 33, 33));
         lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel lblDescription = new JLabel("<html><div style='width:350px'>" + curso.getDescripcion() + "</div></html>");
+        JLabel lblDescription = new JLabel("<html><div style='width:350px'>" + curso.getCurso().getDescripcion() + "</div></html>");
         lblDescription.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblDescription.setForeground(isSelected ? new Color(240, 240, 240) : new Color(100, 100, 100));
         lblDescription.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel lblCategory = new JLabel(curso.getCategoria() != null ? curso.getCategoria() : "General");
+        JLabel lblCategory = new JLabel(curso.getCurso().getCategoria() != null ? curso.getCurso().getCategoria() : "General");
         lblCategory.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         lblCategory.setForeground(isSelected ? new Color(255, 255, 200) : new Color(100, 100, 100));
         lblCategory.setAlignmentX(Component.LEFT_ALIGNMENT);
