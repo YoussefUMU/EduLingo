@@ -7,7 +7,7 @@ public class CursoEnMarcha {
 
 	public static final int VIDAS_PREDETERMINADAS = 5;
 	public static final Estrategia ESTRATEGIA_PREDETERMINADA = new EstrategiaSecuencial();
-	
+
 	private Curso curso;
 	private int bloqueActual;
 	private int preguntaActual;
@@ -15,7 +15,7 @@ public class CursoEnMarcha {
 	private Estrategia estrategia;
 	private List<Bloque> BloquesCompletos;
 	private List<Pregunta> PreguntasCompletas;
-	
+
 	public CursoEnMarcha(Curso curso) {
 		this(curso, VIDAS_PREDETERMINADAS, ESTRATEGIA_PREDETERMINADA);
 	}
@@ -35,13 +35,22 @@ public class CursoEnMarcha {
 		if (bloqueActualObj == null) {
 			return; // Protección contra NullPointerException
 		}
-		
+
 		Pregunta siguientePregunta = this.obtenerSiguientePregunta(preguntaActual);
 		if (siguientePregunta != null) {
-			this.PreguntasCompletas.add(this.getPreguntaActual());
+			// añadimos la pregunta vieja a preguntas completas
+			Pregunta actual = this.getPreguntaActual();
+			if (!PreguntasCompletas.contains(actual)) {
+				PreguntasCompletas.add(actual);
+			}
+
+			// actualizamos pregunta actual
 			this.preguntaActual = siguientePregunta.getNumPregunta();
 		} else {
 			preguntaActual = 0;
+			// Reseteamos la lista de preguntas completas
+			this.PreguntasCompletas = new ArrayList<Pregunta>();
+
 			Bloque siguienteBloque = obtenerSiguienteBloque(bloqueActual);
 			if (siguienteBloque != null) {
 				this.BloquesCompletos.add(bloqueActualObj);
@@ -79,11 +88,11 @@ public class CursoEnMarcha {
 
 	public Bloque obtenerSiguienteBloque(int actual) {
 		return estrategia.siguienteBloque(this.curso.getBloques(), actual, this.BloquesCompletos);
-		
+
 	}
-	
+
 	public Pregunta obtenerSiguientePregunta(int actual) {
-		return estrategia.siguientePregunta(this.getBloqueActual(), actual , PreguntasCompletas);
+		return estrategia.siguientePregunta(this.getBloqueActual(), actual, PreguntasCompletas);
 	}
 
 	public void finalizar() {
@@ -110,22 +119,22 @@ public class CursoEnMarcha {
 	public int getPreguntaActualIndex() {
 		return preguntaActual;
 	}
-	
+
 	public Curso getCurso() {
 		return this.curso;
 	}
 
-	/*public void setBloqueActual(int bloqueActual) {
-		if (bloqueActual >= 0 && bloqueActual < this.curso.getBloques().size()) {
-			this.bloqueActual = bloqueActual;
-			this.preguntaActual = 0; // Reiniciar la pregunta al cambiar de bloque
-		}
-	}*/
+	/*
+	 * public void setBloqueActual(int bloqueActual) { if (bloqueActual >= 0 &&
+	 * bloqueActual < this.curso.getBloques().size()) { this.bloqueActual =
+	 * bloqueActual; this.preguntaActual = 0; // Reiniciar la pregunta al cambiar de
+	 * bloque } }
+	 */
 
-	/*public void setPreguntaActual(int preguntaActual) {
-		Bloque bloque = getBloqueActual();
-		if (bloque != null && preguntaActual >= 0 && preguntaActual < bloque.getPreguntas().size()) {
-			this.preguntaActual = preguntaActual;
-		}
-	}*/
+	/*
+	 * public void setPreguntaActual(int preguntaActual) { Bloque bloque =
+	 * getBloqueActual(); if (bloque != null && preguntaActual >= 0 &&
+	 * preguntaActual < bloque.getPreguntas().size()) { this.preguntaActual =
+	 * preguntaActual; } }
+	 */
 }

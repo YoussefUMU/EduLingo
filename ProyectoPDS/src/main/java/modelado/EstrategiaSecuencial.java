@@ -11,11 +11,10 @@ public class EstrategiaSecuencial implements Estrategia {
 	@Override
 	public Pregunta siguientePregunta(Bloque Bactual, int Pactual, List<Pregunta> preguntasCompletas) {
 		List<Pregunta> preguntas = Bactual.getPreguntas();
-		Pregunta actual = preguntas.get(Pactual);
 		
-		if(!actual.equals(preguntas.get(preguntas.size() - 1))) {
+		if(Pactual != (preguntas.size()-1)) {
 			for(Pregunta P: preguntas) {
-				if(P.getNumPregunta() == actual.getNumPregunta()+1) {
+				if(P.getNumPregunta() == (Pactual+1)) {
 					return P;
 				}
 			}
