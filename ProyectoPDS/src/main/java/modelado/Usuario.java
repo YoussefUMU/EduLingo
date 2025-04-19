@@ -105,7 +105,7 @@ public class Usuario {
 						&& ControladorPDS.getUnicaInstancia().getNombreCursoEnMarcha(c).equals(curso.getNombre())
 						&& ControladorPDS.getUnicaInstancia().getDescripcionCursoEnMarcha(c).equals(curso.getDescripcion()));
 
-		if (coincidencia == false) {
+		if (!coincidencia) {
 			cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia));
 			return true;
 		}
