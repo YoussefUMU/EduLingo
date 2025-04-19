@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import modelado.CursoEnMarcha;
+import modelado.Pregunta;
 import modelado.PreguntaArrastrar;
 import modelado.PreguntaImagen;
 import modelado.TestPregunta;
@@ -32,7 +33,7 @@ public class AdaptadorPreguntas {
      * @return La ventana de flashcard creada
      */
     public static JFrame crearFlashCard(CursoEnMarcha cursoEnMarcha, int indBloque, int indPregunta) {
-        Object preguntaActual = cursoEnMarcha.getCurso().getBloques().get(indBloque).getPreguntas().get(indPregunta);
+        Pregunta preguntaActual = cursoEnMarcha.getPreguntaActual();
         
         if (preguntaActual instanceof TestPregunta) {
             // Crear FlashCard Tipo A para preguntas de opción múltiple
@@ -62,7 +63,7 @@ public class AdaptadorPreguntas {
      */
     private static JFrame crearFlashCardTipoB(CursoEnMarcha cursoEnMarcha, int indBloque, int indPregunta) {
         // Obtener la pregunta del tipo imagen
-        PreguntaImagen pregunta = (PreguntaImagen) cursoEnMarcha.getCurso().getBloques().get(indBloque).getPreguntas().get(indPregunta);
+        PreguntaImagen pregunta = (PreguntaImagen) cursoEnMarcha.getPreguntaActual();
         
         // Crear JFrame para contener el panel
         JFrame frame = new JFrame("Pregunta con Imágenes");
@@ -75,7 +76,7 @@ public class AdaptadorPreguntas {
         panel.setVidas(cursoEnMarcha.getVidas());
         
         // Configurar la pregunta
-        panel.setPregunta(pregunta.getEnunciado());
+        panel.setPregunta("B"+cursoEnMarcha.getBloqueActualIndex()+"."+cursoEnMarcha.getPreguntaActualIndex()+"."+pregunta.getEnunciado());
         
         // Configurar imágenes y textos
         List<String> imagenes = pregunta.getImagenes();

@@ -22,7 +22,7 @@ public class CursoEnMarcha {
 
 	public CursoEnMarcha(Curso curso, int vidas, Estrategia estrategia) {
 		this.bloqueActual = 0; // Empezar en el primer bloque (índice 0)
-		this.preguntaActual = 0; // Empezar en la primera pregunta (índice 0)
+		this.preguntaActual = 1; // Empezar en la primera pregunta (índice 0)
 		this.vidas = vidas;
 		this.estrategia = estrategia;
 		this.curso = curso;
@@ -47,7 +47,7 @@ public class CursoEnMarcha {
 			// actualizamos pregunta actual
 			this.preguntaActual = siguientePregunta.getNumPregunta();
 		} else {
-			preguntaActual = 0;
+			this.preguntaActual = 1;
 			// Reseteamos la lista de preguntas completas
 			this.PreguntasCompletas = new ArrayList<Pregunta>();
 
@@ -67,15 +67,14 @@ public class CursoEnMarcha {
 	}
 
 	public Pregunta getPreguntaActual() {
-		if (bloqueActual < 0 || bloqueActual >= this.curso.getBloques().size()) {
+		/*if (bloqueActual < 0 || bloqueActual >= this.curso.getBloques().size()) {
 			return null;
 		}
 
-		Bloque bloque = this.getBloqueActual();
 		if (preguntaActual < 0 || preguntaActual >= bloque.getPreguntas().size()) {
 			return null;
-		}
-
+		}*/
+		Bloque bloque = this.getBloqueActual();
 		return bloque.obtenerPregunta(preguntaActual);
 	}
 

@@ -7,8 +7,8 @@ categoria: "Programación"
 bloques:
   - titulo: "Fundamentos de Java"
     preguntas:
-      # Preguntas Tipo A (TestPregunta - Opción múltiple)
       - tipo: "test"
+        numPregunta: 1
         enunciado: "¿Qué es una variable en Java?"
         opciones:
           - "Un contenedor de datos"
@@ -16,8 +16,9 @@ bloques:
           - "Un lenguaje de programación"
           - "Una clase"
         respuestaCorrecta: "Un contenedor de datos"
-      
+
       - tipo: "test"
+        numPregunta: 2
         enunciado: "¿Cuál es el método principal de una aplicación Java?"
         opciones:
           - "public static void main(String[] args)"
@@ -25,8 +26,9 @@ bloques:
           - "static void start(String[] args)"
           - "public main(String args[])"
         respuestaCorrecta: "public static void main(String[] args)"
-      
+
       - tipo: "test"
+        numPregunta: 3
         enunciado: "¿Qué significa JVM?"
         opciones:
           - "Java Virtual Machine"
@@ -34,11 +36,11 @@ bloques:
           - "Just Virtual Memory"
           - "Java Visual Module"
         respuestaCorrecta: "Java Virtual Machine"
-  
+
   - titulo: "Programación Orientada a Objetos"
     preguntas:
-      # Preguntas Tipo B (Con imágenes)
       - tipo: "imagen"
+        numPregunta: 1
         enunciado: "Selecciona la imagen que representa la herencia en POO:"
         imagenes:
           - "https://cdn-icons-png.flaticon.com/512/2936/2936630.png"
@@ -49,8 +51,9 @@ bloques:
           - "Encapsulamiento"
           - "Polimorfismo"
         imagenCorrecta: 0
-      
+
       - tipo: "imagen"
+        numPregunta: 2
         enunciado: "Identifica la imagen que muestra un diagrama de clase correcto:"
         imagenes:
           - "https://cdn-icons-png.flaticon.com/512/2936/2936633.png"
@@ -61,11 +64,11 @@ bloques:
           - "Diagrama B"
           - "Diagrama C"
         imagenCorrecta: 1
-      
+
   - titulo: "Estructuras de Control"
     preguntas:
-      # Preguntas Tipo C (Arrastrar palabras)
       - tipo: "arrastrar"
+        numPregunta: 1
         enunciado: "Completa la siguiente frase arrastrando las palabras correctas:"
         textoCompleto: "En Java, el bucle for se utiliza cuando sabemos el número de iteraciones, mientras que el bucle while se utiliza cuando la condición de terminación depende de una expresión booleana."
         huecos: 
@@ -73,8 +76,9 @@ bloques:
           - "número de iteraciones"
           - "while"
           - "expresión booleana"
-          
+
       - tipo: "arrastrar"
+        numPregunta: 2
         enunciado: "Completa el código Java arrastrando las palabras correctas:"
         textoCompleto: "public class Ejemplo { public static void main(String[] args) { int contador = 0; while (contador < 10) { System.out.println(contador); contador++; } } }"
         huecos:
@@ -84,10 +88,11 @@ bloques:
           - "while"
           - "System.out.println"
           - "contador++"
-          
+
   - titulo: "Excepciones y Errores"
     preguntas:
       - tipo: "test"
+        numPregunta: 1
         enunciado: "¿Qué bloque se utiliza para manejar excepciones en Java?"
         opciones:
           - "try-catch"
@@ -95,8 +100,9 @@ bloques:
           - "for-in"
           - "switch-case"
         respuestaCorrecta: "try-catch"
-      
+
       - tipo: "arrastrar"
+        numPregunta: 2
         enunciado: "Completa el código para manejo de excepciones:"
         textoCompleto: "try { int resultado = 10 / 0; } catch (ArithmeticException e) { System.out.println(\"División por cero\"); } finally { System.out.println(\"Este bloque siempre se ejecuta\"); }"
         huecos:
@@ -104,8 +110,9 @@ bloques:
           - "catch"
           - "ArithmeticException"
           - "finally"
-          
+
       - tipo: "imagen"
+        numPregunta: 3
         enunciado: "Selecciona la imagen que muestra la jerarquía correcta de excepciones en Java:"
         imagenes:
           - "https://cdn-icons-png.flaticon.com/512/2936/2936636.png"
