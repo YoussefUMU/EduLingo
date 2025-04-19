@@ -11,8 +11,8 @@ public class PreguntaImagen extends Pregunta {
         super();
     }
     
-    public PreguntaImagen(String enunciado, List<String> imagenes, List<String> textos, int imagenCorrecta) {
-        super(enunciado);
+    public PreguntaImagen(int numPregunta,String enunciado, List<String> imagenes, List<String> textos, int imagenCorrecta) {
+        super(numPregunta,enunciado);
         this.imagenes = imagenes;
         this.textos = textos;
         this.imagenCorrecta = imagenCorrecta;

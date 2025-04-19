@@ -12,8 +12,8 @@ public class PreguntaArrastrar extends Pregunta {
         super();
     }
     
-    public PreguntaArrastrar(String enunciado, String textoCompleto, List<String> huecos) {
-        super(enunciado);
+    public PreguntaArrastrar(int numPregunta,String enunciado, String textoCompleto, List<String> huecos) {
+        super(numPregunta,enunciado);
         this.textoCompleto = textoCompleto;
         this.huecos = huecos;
     }
