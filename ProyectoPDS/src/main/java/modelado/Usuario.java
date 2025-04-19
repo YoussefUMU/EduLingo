@@ -21,6 +21,8 @@ public class Usuario {
 	private LocalDate fechaNacimiento;
 	private List<CursoEnMarcha> cursosActivos;
 	private Estadistica estadisticas;
+	private Premium premium;
+
 	
 	public Usuario(String id, String nombre, String contraseña, String correo, String nombreUsuario, LocalDate fechaNacimiento) {
 		this.id = id;
@@ -162,5 +164,51 @@ public class Usuario {
 
 	public LocalDate getFechaRegistro() {
 		return fechaRegistro;
+	}
+
+	public boolean esPremium() {
+	    return premium != null && premium.estaActivo();
+	}
+
+	public void activarPremium(String tipoPlan) {
+	    if (premium == null) {
+	        premium = new Premium(tipoPlan);
+	    } else {
+	        // Si ya tenía premium pero estaba inactivo, renovarlo
+	        if (!premium.estaActivo()) {
+	            if ("anual".equalsIgnoreCase(tipoPlan)) {
+	                premium.renovar(12);
+	            } else {
+	                premium.renovar(1);
+	            }
+	        }
+	    }
+	}
+
+	public void cancelarPremium() {
+	    if (premium != null) {
+	        premium.cancelar();
+	    }
+	}
+
+	public Premium getPremium() {
+	    return premium;
+	}
+
+	public void setPremium(Premium premium) {
+	    this.premium = premium;
+	}
+
+	// Estos métodos ayudan a determinar si el usuario tiene ciertos beneficios premium
+	public boolean tieneVidasInfinitas() {
+	    return esPremium() && premium.isVidasInfinitas();
+	}
+
+	public boolean tieneCursosAdicionales() {
+	    return esPremium() && premium.isCursosAdicionales();
+	}
+
+	public boolean sinAnuncios() {
+	    return esPremium() && premium.isSinAnuncios();
 	}
 }
