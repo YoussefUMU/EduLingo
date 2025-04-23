@@ -4,12 +4,13 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import controlador.ControladorPDS;
+import modelado.CursoEnMarcha;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FlashCardTipoB extends JPanel {
+public class FlashCardTipoB extends JFrame {
 
     private JProgressBar barraTiempo;
     private JLabel preguntaLabel;
@@ -31,20 +32,45 @@ public class FlashCardTipoB extends JPanel {
     private Timer temporizador;
     private Runnable accionCorrecta;
     private Runnable accionIncorrecta;
+    private CursoEnMarcha cursoEnMarcha;
+    private Point dragPoint;
 
-    public FlashCardTipoB() {
-        setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        setOpaque(false);
+    public FlashCardTipoB(CursoEnMarcha curso, int indBloque, int indPregunta) {
+        this.cursoEnMarcha = curso;
+        this.vidas = curso.getVidas();
+        
+        setSize(new Dimension(700, 650));
+        setLocationRelativeTo(null);
+        setUndecorated(true); // Eliminar bordes de ventana
 
-        // Panel superior con temporizador y título
+        // Panel principal con gradiente
+        JPanel panelPrincipal = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                int w = getWidth();
+                int h = getHeight();
+                Color color1 = new Color(240, 248, 255); // Azul muy claro en la parte superior
+                Color color2 = new Color(230, 240, 250); // Azul más oscuro abajo
+                GradientPaint gp = new GradientPaint(0, 0, color1, 0, h, color2);
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, w, h);
+            }
+        };
+        panelPrincipal.setBorder(new CompoundBorder(new LineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+        setContentPane(panelPrincipal);
+
+        // Panel superior
         JPanel panelSuperior = new JPanel(new BorderLayout(10, 10));
         panelSuperior.setOpaque(false);
-        
+
         // Panel de control superior
         JPanel panelControl = new JPanel(new BorderLayout(5, 0));
         panelControl.setOpaque(false);
-        
+
         // Barra de progreso con estilo mejorado
         barraTiempo = new JProgressBar(0, 100);
         barraTiempo.setValue(100);
@@ -59,7 +85,7 @@ public class FlashCardTipoB extends JPanel {
         panelMetricas.setOpaque(false);
         
         // Contador de vidas
-        if(!ControladorPDS.getUnicaInstancia().tieneVidasInfinitas()) {
+        if (!ControladorPDS.getUnicaInstancia().tieneVidasInfinitas()) {
             contadorVidas = new JLabel("❤ " + vidas);
         } else {
             contadorVidas = new JLabel("♾️❤");
@@ -67,7 +93,27 @@ public class FlashCardTipoB extends JPanel {
         contadorVidas.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
         contadorVidas.setForeground(new Color(244, 67, 54));
         
+        // Botón cerrar
+        JButton btnCerrar = new JButton("×");
+        btnCerrar.setFont(new Font("Arial", Font.BOLD, 20));
+        btnCerrar.setForeground(new Color(120, 120, 120));
+        btnCerrar.setBorderPainted(false);
+        btnCerrar.setContentAreaFilled(false);
+        btnCerrar.setFocusPainted(false);
+        btnCerrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCerrar.addActionListener(e -> {
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "¿Seguro que deseas salir? Perderás el progreso de esta pregunta.", "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION);
+            if (respuesta == JOptionPane.YES_OPTION) {
+                dispose();
+                new VentanaPrincipal().setVisible(true);
+            }
+        });
+        
         panelMetricas.add(contadorVidas);
+        panelMetricas.add(Box.createHorizontalStrut(15));
+        panelMetricas.add(btnCerrar);
         
         panelControl.add(barraTiempo, BorderLayout.CENTER);
         panelControl.add(panelMetricas, BorderLayout.EAST);
@@ -77,7 +123,7 @@ public class FlashCardTipoB extends JPanel {
         panelPregunta.setOpaque(false);
         panelPregunta.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         
-        preguntaLabel = new JLabel("Selecciona la imagen correcta", SwingConstants.CENTER);
+        preguntaLabel = new JLabel("B" + curso.getBloqueActualIndex() + "." + curso.getPreguntaActualIndex() + "." + curso.getPreguntaActual().getEnunciado(), SwingConstants.CENTER);
         preguntaLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         preguntaLabel.setForeground(new Color(60, 60, 60));
         
@@ -86,9 +132,9 @@ public class FlashCardTipoB extends JPanel {
         panelSuperior.add(panelControl, BorderLayout.NORTH);
         panelSuperior.add(panelPregunta, BorderLayout.CENTER);
         
-        add(panelSuperior, BorderLayout.NORTH);
+        panelPrincipal.add(panelSuperior, BorderLayout.NORTH);
 
-        // Panel de opciones con imágenes
+        // Panel central con opciones de imágenes
         JPanel panelOpciones = new JPanel(new GridLayout(1, 3, 15, 0));
         panelOpciones.setOpaque(false);
         panelOpciones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -128,7 +174,10 @@ public class FlashCardTipoB extends JPanel {
         panelOpciones.add(opcion2Panel);
         panelOpciones.add(opcion3Panel);
 
-        add(panelOpciones, BorderLayout.CENTER);
+        panelPrincipal.add(panelOpciones, BorderLayout.CENTER);
+
+        // Habilitar arrastre de ventana
+        habilitarArrastreVentana();
     }
     
     private JPanel crearPanelOpcion() {
@@ -174,13 +223,37 @@ public class FlashCardTipoB extends JPanel {
         return panel;
     }
     
+    private void habilitarArrastreVentana() {
+        AtomicInteger posX = new AtomicInteger(0);
+        AtomicInteger posY = new AtomicInteger(0);
+
+        getContentPane().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                posX.set(e.getX());
+                posY.set(e.getY());
+            }
+        });
+
+        getContentPane().addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                setLocation(getLocation().x + e.getX() - posX.get(), getLocation().y + e.getY() - posY.get());
+            }
+        });
+    }
+    
     public void setVidas(int vidas) {
         this.vidas = vidas;
         actualizarContadorVidas();
     }
     
     public void actualizarContadorVidas() {
-        contadorVidas.setText("❤ " + vidas);
+        if (!ControladorPDS.getUnicaInstancia().tieneVidasInfinitas()) {
+            contadorVidas.setText("❤ " + vidas);
+        } else {
+            contadorVidas.setText("♾️❤");
+        }
     }
     
     public void configurarAcciones(Runnable accionCorrecta, Runnable accionIncorrecta) {
@@ -221,10 +294,10 @@ public class FlashCardTipoB extends JPanel {
                     timer.setRepeats(false);
                     timer.start();
                 } else {
-                	if (!ControladorPDS.getUnicaInstancia().tieneVidasInfinitas()) {
-                	    vidas--;
-                	    actualizarContadorVidas();
-                	}
+                    if (!ControladorPDS.getUnicaInstancia().tieneVidasInfinitas()) {
+                        vidas--;
+                        actualizarContadorVidas();
+                    }
                     mostrarAnimacionError(panel);
                     
                     // Ejecutar acción de respuesta incorrecta

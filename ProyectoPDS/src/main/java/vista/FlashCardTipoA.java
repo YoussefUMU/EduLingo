@@ -180,8 +180,6 @@ public class FlashCardTipoA extends JFrame {
 
 		// Iniciar temporizador (20 segundos)
 		iniciarTemporizador(20000, () -> {
-			JOptionPane.showMessageDialog(this, "¡Se acabó el tiempo!", "Tiempo agotado",
-					JOptionPane.INFORMATION_MESSAGE);
 			vidas--;
 			actualizarContadorVidas();
 			evaluar("");
