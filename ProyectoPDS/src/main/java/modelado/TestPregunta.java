@@ -2,6 +2,13 @@ package modelado;
 
 import java.util.List;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "preguntas_test")
+@DiscriminatorValue("TEST")
 public class TestPregunta extends Pregunta {
     private List<String> opciones;
     private String respuestaCorrecta;

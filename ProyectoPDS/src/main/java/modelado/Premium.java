@@ -2,15 +2,29 @@ package modelado;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
 /**
  * Clase que representa una suscripción premium de un usuario.
  * Incluye la fecha de inicio, la fecha de fin y los beneficios disponibles.
  */
+@Entity
 public class Premium {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+	
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private boolean activo;
     private String tipoPlan; // "mensual", "anual", etc.
+    
+	@OneToOne(mappedBy = "premium")
+    private Usuario usuario;
     
     // Beneficios específicos que puede tener un usuario premium
     private boolean vidasInfinitas;

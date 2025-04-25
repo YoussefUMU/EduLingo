@@ -3,15 +3,29 @@ package modelado;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+@Entity
 public class Curso {
+	@Id
     private String id;
     private String nombre;
     private String autor;
     private String descripcion;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "curso_id")
     private List<Bloque> bloques;
     private String imagenCurso;
     private String categoria;
-    
+    @OneToOne(mappedBy="curso")
+    private CursoEnMarcha cursoEnMarcha;
     public Curso() {
         this.bloques = new ArrayList<>();
     }
@@ -111,5 +125,10 @@ public class Curso {
 	@Override
 	public String toString() {
 		return nombre;
+	}
+
+	public void setCursoEnMarcha(CursoEnMarcha cursoEnMarcha) {
+		this.cursoEnMarcha = cursoEnMarcha;
+		
 	}
 }

@@ -3,29 +3,67 @@ package modelado;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CursoEnMarcha {
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
+@Entity
+@Table(name = "cursos_en_marcha")
+public class CursoEnMarcha {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 	public static final int VIDAS_PREDETERMINADAS = 5;
 	public static final Estrategia ESTRATEGIA_PREDETERMINADA = new EstrategiaSecuencial();
-
+	public static final TipoEstrategia TIPO_ESTRATEGIA_PREDETERMINADA = TipoEstrategia.SECUENCIAL;
+	
+	@OneToOne(cascade= { CascadeType.PERSIST, CascadeType.REMOVE })
+	@JoinColumn(unique=true)
 	private Curso curso;
 	private int bloqueActual;
 	private int preguntaActual;
 	private int vidas;
-	private Estrategia estrategia;
+	@Transient
+	private Estrategia estrategia;		//No implementa bien la persistencia debido a que es una interfaz.
+	
+	private TipoEstrategia tipoEstrategia; //Utilizamos este enumerado para la persistencia. Estrategia no es persistente, por lo que el getter mirará si existe y si no, crea una nueva a partir del enumerado.
+	
+	@OneToMany(cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@JoinColumn(name="curso_en_marcha_id")
 	private List<Bloque> BloquesCompletos;
+	@OneToMany(cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@JoinColumn(name="curso_en_marcha_id")
 	private List<Pregunta> PreguntasCompletas;
+	@ManyToOne
+	@JoinColumn(name="usuario_id")
+	private Usuario usuario;
 
+	public CursoEnMarcha() {
+		
+	}
+	
 	public CursoEnMarcha(Curso curso) {
-		this(curso, VIDAS_PREDETERMINADAS, ESTRATEGIA_PREDETERMINADA);
+		this(curso, VIDAS_PREDETERMINADAS, ESTRATEGIA_PREDETERMINADA, TIPO_ESTRATEGIA_PREDETERMINADA);
+		this.curso.setCursoEnMarcha(this);
 	}
 
-	public CursoEnMarcha(Curso curso, int vidas, Estrategia estrategia) {
+	public CursoEnMarcha(Curso curso, int vidas, Estrategia estrategia, TipoEstrategia tipoEstrategia) {
 		this.bloqueActual = 0; // Empezar en el primer bloque (índice 0)
 		this.preguntaActual = 1; // Empezar en la primera pregunta (índice 0)
 		this.vidas = vidas;
 		this.estrategia = estrategia;
+		this.tipoEstrategia = tipoEstrategia;
 		this.curso = curso;
+		this.curso.setCursoEnMarcha(this);
 		this.BloquesCompletos = new ArrayList<Bloque>();
 		this.PreguntasCompletas = new ArrayList<Pregunta>();
 	}
@@ -86,12 +124,12 @@ public class CursoEnMarcha {
 	}
 
 	public Bloque obtenerSiguienteBloque(int actual) {
-		return estrategia.siguienteBloque(this.curso.getBloques(), actual, this.BloquesCompletos);
+		return getEstrategia().siguienteBloque(this.curso.getBloques(), actual, this.BloquesCompletos);
 
 	}
 
 	public Pregunta obtenerSiguientePregunta(int actual) {
-		return estrategia.siguientePregunta(this.getBloqueActual(), actual, PreguntasCompletas);
+		return getEstrategia().siguientePregunta(this.getBloqueActual(), actual, PreguntasCompletas);
 	}
 
 	public void finalizar() {
@@ -100,7 +138,21 @@ public class CursoEnMarcha {
 	}
 
 	public Estrategia getEstrategia() {
+		if (estrategia == null)
+			estrategia = generarEstrategia();
 		return this.estrategia;
+	}
+
+	private Estrategia generarEstrategia() {
+		switch (tipoEstrategia) {
+			case ALEATORIA:
+				return new EstrategiaAleatoria();
+			case ESPACIADA:
+				return new EstrategiaEspaciada();
+			case SECUENCIAL:
+			default:
+				return new EstrategiaSecuencial();
+		}
 	}
 
 	public int getVidas() {
@@ -123,12 +175,19 @@ public class CursoEnMarcha {
 		return this.curso;
 	}
 
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 	/*
 	 * public void setBloqueActual(int bloqueActual) { if (bloqueActual >= 0 &&
 	 * bloqueActual < this.curso.getBloques().size()) { this.bloqueActual =
 	 * bloqueActual; this.preguntaActual = 0; // Reiniciar la pregunta al cambiar de
 	 * bloque } }
 	 */
+
+	public TipoEstrategia getTipoEstrategia() {
+		return tipoEstrategia;
+	}
 
 	/*
 	 * public void setPreguntaActual(int preguntaActual) { Bloque bloque =

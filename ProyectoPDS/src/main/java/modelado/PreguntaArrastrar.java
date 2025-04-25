@@ -3,6 +3,13 @@ package modelado;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "preguntas_arrastrar")
+@DiscriminatorValue("ARRASTRAR")
 public class PreguntaArrastrar extends Pregunta {
     private String textoCompleto;
     private List<String> huecos;

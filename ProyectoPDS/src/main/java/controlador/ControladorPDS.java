@@ -11,6 +11,7 @@ import modelado.EstrategiaEspaciada;
 import modelado.EstrategiaSecuencial;
 import modelado.ManejadorCursos;
 import modelado.RepositorioUsuarios;
+import modelado.TipoEstrategia;
 import modelado.Usuario;
 
 public class ControladorPDS {
@@ -51,7 +52,7 @@ public class ControladorPDS {
 		if (repositorioUsuarios.getUsuario(usuario.getNombre()) != null) {
 			return false;
 		}
-		repositorioUsuarios.addUsuario(usuario);
+		repositorioUsuarios.guardarUsuario(usuario);
 		return true;
 	}
 	
@@ -85,8 +86,9 @@ public class ControladorPDS {
 	}
 	
 	// Nuevo método para iniciar curso con una estrategia específica
-	public CursoEnMarcha iniciarCursoE(Curso curso, Estrategia estrategia) {
-		sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, estrategia);
+	public CursoEnMarcha iniciarCursoE(Curso curso, Estrategia estrategia, TipoEstrategia tipoEstrategia) {
+		if (sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, estrategia, tipoEstrategia))
+			repositorioUsuarios.agregarCurso(sesionActual.getId(), sesionActual.obtenerCursoEnMarcha(curso.getId()).get());
 		return sesionActual.obtenerCursoEnMarcha(curso.getId()).get();
 	}
 	

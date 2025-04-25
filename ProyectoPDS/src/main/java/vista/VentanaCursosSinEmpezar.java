@@ -18,6 +18,7 @@ import modelado.Estrategia;
 import modelado.EstrategiaAleatoria;
 import modelado.EstrategiaEspaciada;
 import modelado.EstrategiaSecuencial;
+import modelado.TipoEstrategia;
 import controlador.ControladorPDS;
 
 public class VentanaCursosSinEmpezar extends JFrame {
@@ -225,7 +226,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
                                 ((Timer)e.getSource()).stop();
                                 // Iniciar el curso con la estrategia seleccionada
                                 Estrategia estrategiaSeleccionada = obtenerEstrategiaSeleccionada();
-                                CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia().iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada);
+                                CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia().iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada, obtenerTipoEstrategiaSeleccionada());
                                 dispose();
                                 
                                 // Usar el adaptador para crear la flashcard apropiada
@@ -292,6 +293,19 @@ public class VentanaCursosSinEmpezar extends JFrame {
         }
     }
 
+    private TipoEstrategia obtenerTipoEstrategiaSeleccionada() {
+        String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
+        switch (estrategiaSeleccionada) {
+            case "Aleatoria":
+                return TipoEstrategia.ALEATORIA;
+            case "Espaciada":
+                return TipoEstrategia.ESPACIADA;
+            case "Secuencial":
+            default:
+                return TipoEstrategia.SECUENCIAL;
+        }
+    }
+    
     private void importarCursosYAML() {
         // Crear un diálogo para seleccionar carpeta
         JFileChooser fileChooser = new JFileChooser();

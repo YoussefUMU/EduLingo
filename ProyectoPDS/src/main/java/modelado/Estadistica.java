@@ -1,9 +1,21 @@
 package modelado;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+
 /**
  * Clase que almacena las estadísticas de uso de un usuario.
  */
+@Entity
 public class Estadistica {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
     private int tiempoUso; // Tiempo en segundos
     private int mejorRacha; // Cantidad de días consecutivos usando la aplicación
     private int preguntasRespondidas;
@@ -12,10 +24,16 @@ public class Estadistica {
     private int sesionesEstudio;
     private int ultimoInicioSesion; // Timestamp para cálculo de rachas
 
+    
+    
+    @OneToOne(mappedBy = "estadisticas")
+    private Usuario usuario;
+	
     /**
      * Constructor por defecto que inicializa todas las estadísticas a cero.
      */
     public Estadistica() {
+    	id = (long) 50;
         this.tiempoUso = 0;
         this.mejorRacha = 0;
         this.preguntasRespondidas = 0;
@@ -127,4 +145,9 @@ public class Estadistica {
     public void setUltimoInicioSesion(int ultimoInicioSesion) {
         this.ultimoInicioSesion = ultimoInicioSesion;
     }
+
+	public void setUsuario(Usuario usuario2) {
+		usuario = usuario2;
+		
+	}
 }
