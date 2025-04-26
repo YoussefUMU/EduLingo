@@ -423,7 +423,7 @@ public class FlashCardTipoC extends JFrame {
 
 			// Reiniciar el temporizador
 			iniciarTemporizador(30000, () -> {
-				vidas--;
+				//vidas--;
 				actualizarContadorVidas();
 				verificarRespuestas();
 			});
