@@ -91,7 +91,7 @@ public class ControladorPDS {
 	
 	//En teoría el usuario debe seleccionar una estrategia. Esta función se ha creado para mostrar la funcionalidad básica del programa.
 	public CursoEnMarcha iniciarCurso(Curso curso) {
-		sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, /*CursoEnMarcha.ESTRATEGIA_PREDETERMINADA*/new EstrategiaSecuencial());
+		sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, /*CursoEnMarcha.ESTRATEGIA_PREDETERMINADA*/new EstrategiaAleatoria());
 		return sesionActual.obtenerCursoEnMarcha(curso.getId()).get();
 	}
 	
