@@ -72,14 +72,8 @@ public class FlashCardTipoC extends JFrame {
 			Collections.shuffle(this.opciones);
 
 		} catch (Exception e) {
-			// En caso de error, usar datos de prueba
-			crearDatosPrueba();
 		}
 
-		// Verificar si tenemos datos válidos para continuar
-		if (textoCompleto == null || huecos == null || huecos.length == 0 || opciones == null || opciones.isEmpty()) {
-			crearDatosPrueba();
-		}
 
 		vidas = curso.getVidas();
 
@@ -252,38 +246,10 @@ public class FlashCardTipoC extends JFrame {
 
 		// Iniciar temporizador (30 segundos)
 		iniciarTemporizador(45000, () -> {
-			JOptionPane.showMessageDialog(this, "¡Se acabó el tiempo!", "Tiempo agotado",
-					JOptionPane.INFORMATION_MESSAGE);
 			vidas--;
 			actualizarContadorVidas();
 			verificarRespuestas();
 		});
-	}
-
-	private void crearDatosPrueba() {
-		// Crear datos de ejemplo para la flashcard
-		textoCompleto = "Java es un lenguaje de programación orientado a objetos creado por James Gosling.";
-		huecos = new String[] { "lenguaje", "programación", "objetos", "James Gosling" };
-
-		// Inicializar la lista de opciones si es null
-		if (opciones == null) {
-			opciones = new ArrayList<>();
-		} else {
-			opciones.clear();
-		}
-
-		// Añadir los huecos como opciones
-		for (String hueco : huecos) {
-			opciones.add(hueco);
-		}
-
-		// Añadir algunas opciones incorrectas
-		opciones.add("Sun Microsystems");
-		opciones.add("aplicaciones");
-		opciones.add("compilado");
-
-		// Mezclar las opciones
-		Collections.shuffle(opciones);
 	}
 
 	private void crearPanelDeHuecos() {

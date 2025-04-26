@@ -65,18 +65,12 @@ public class AdaptadorPreguntas {
         // Obtener la pregunta del tipo imagen
         PreguntaImagen pregunta = (PreguntaImagen) cursoEnMarcha.getPreguntaActual();
         
-        // Crear JFrame para contener el panel
-        JFrame frame = new JFrame("Pregunta con Imágenes");
-        frame.setSize(700, 650);
-        frame.setLocationRelativeTo(null);
-        frame.setUndecorated(true);
-        
-        // Crear el panel de tipo B
-        FlashCardTipoB panel = new FlashCardTipoB();
-        panel.setVidas(cursoEnMarcha.getVidas());
+        // Crear el JFrame de tipo B
+        FlashCardTipoB frame = new FlashCardTipoB(cursoEnMarcha, indBloque, indPregunta);
         
         // Configurar la pregunta
-        panel.setPregunta("B"+cursoEnMarcha.getBloqueActualIndex()+"."+cursoEnMarcha.getPreguntaActualIndex()+"."+pregunta.getEnunciado());
+        frame.setPregunta("B"+cursoEnMarcha.getBloqueActualIndex()+"."+cursoEnMarcha.getPreguntaActualIndex()+"."+pregunta.getEnunciado());
+        frame.setVidas(cursoEnMarcha.getVidas());
         
         // Configurar imágenes y textos
         List<String> imagenes = pregunta.getImagenes();
@@ -99,12 +93,12 @@ public class AdaptadorPreguntas {
                     
                     // Si falla, intentar como recurso
                     if (imagen.getIconWidth() <= 0) {
-                        imagen = new ImageIcon(panel.getClass().getResource(imagenURL));
+                        imagen = new ImageIcon(frame.getClass().getResource(imagenURL));
                     }
                     
                     // Si sigue fallando, usar una imagen por defecto
                     if (imagen.getIconWidth() <= 0) {
-                        imagen = new ImageIcon(panel.getClass().getResource("/recursos/pregunta_img.png"));
+                        imagen = new ImageIcon(frame.getClass().getResource("/recursos/pregunta_img.png"));
                         // Si no hay recurso predeterminado, crear una imagen con texto
                         if (imagen.getIconWidth() <= 0) {
                             BufferedImage bufferedImage = new BufferedImage(
@@ -121,7 +115,7 @@ public class AdaptadorPreguntas {
                     
                     // Redimensionar la imagen para que se ajuste mejor
                     Image img = imagen.getImage().getScaledInstance(150, 100, Image.SCALE_SMOOTH);
-                    panel.setImagenOpcion(i, new ImageIcon(img));
+                    frame.setImagenOpcion(i, new ImageIcon(img));
                 } else {
                     // URL vacía, crear imagen con texto
                     BufferedImage bufferedImage = new BufferedImage(
@@ -132,10 +126,10 @@ public class AdaptadorPreguntas {
                     g2d.setColor(Color.BLACK);
                     g2d.drawString("Imagen " + (i+1), 70, 75);
                     g2d.dispose();
-                    panel.setImagenOpcion(i, new ImageIcon(bufferedImage));
+                    frame.setImagenOpcion(i, new ImageIcon(bufferedImage));
                 }
                 
-                panel.setTextoOpcion(i, textos.get(i));
+                frame.setTextoOpcion(i, textos.get(i));
             } catch (Exception e) {
                 // En caso de error, crear una imagen con texto
                 BufferedImage bufferedImage = new BufferedImage(
@@ -146,8 +140,8 @@ public class AdaptadorPreguntas {
                 g2d.setColor(Color.BLACK);
                 g2d.drawString("Error: " + e.getMessage(), 20, 75);
                 g2d.dispose();
-                panel.setImagenOpcion(i, new ImageIcon(bufferedImage));
-                panel.setTextoOpcion(i, textos.get(i));
+                frame.setImagenOpcion(i, new ImageIcon(bufferedImage));
+                frame.setTextoOpcion(i, textos.get(i));
             }
         }
         
@@ -157,37 +151,37 @@ public class AdaptadorPreguntas {
         // Configurar acciones para cada opción
         for (int i = 0; i < 3; i++) {
             final int index = i;
-            panel.configurarOpcion(i, i == imagenCorrecta);
+            frame.configurarOpcion(i, i == imagenCorrecta);
         }
         
         // Configurar acciones para respuestas correctas e incorrectas
-        panel.configurarAcciones(
-        	    // Acción para respuesta correcta - Eliminamos el mensaje de diálogo
-        	    () -> {
-        	        // Actualizar vidas en el curso en marcha
-        	        cursoEnMarcha.setVidas(panel.getVidas());
-        	        
-        	        // Avanzar a la siguiente pregunta sin mensaje interruptor
-        	        NavegadorPreguntas.avanzarSiguientePregunta(cursoEnMarcha, frame);
-        	    },
-        	    // Acción para respuesta incorrecta cuando se acaban las vidas
-        	    () -> {
-        	        JOptionPane.showMessageDialog(frame, 
-        	            "Se te han acabado las vidas. La respuesta correcta era la opción " + (imagenCorrecta + 1),
-        	            "Fin del ejercicio", 
-        	            JOptionPane.ERROR_MESSAGE);
-        	        frame.dispose();
-        	        new VentanaPrincipal().setVisible(true);
-        	    }
-        	);
+        frame.configurarAcciones(
+            // Acción para respuesta correcta - Eliminamos el mensaje de diálogo
+            () -> {
+                // Actualizar vidas en el curso en marcha
+                cursoEnMarcha.setVidas(frame.getVidas());
+                
+                // Avanzar a la siguiente pregunta sin mensaje interruptor
+                NavegadorPreguntas.avanzarSiguientePregunta(cursoEnMarcha, frame);
+            },
+            // Acción para respuesta incorrecta cuando se acaban las vidas
+            () -> {
+                JOptionPane.showMessageDialog(frame, 
+                    "Se te han acabado las vidas. La respuesta correcta era la opción " + (imagenCorrecta + 1),
+                    "Fin del ejercicio", 
+                    JOptionPane.ERROR_MESSAGE);
+                frame.dispose();
+                new VentanaPrincipal().setVisible(true);
+            }
+        );
         
         // Iniciar temporizador
-        panel.iniciarTemporizador(20000, () -> {
+        frame.iniciarTemporizador(20000, () -> {
             JOptionPane.showMessageDialog(frame, 
                 "¡Se acabó el tiempo!", 
                 "Tiempo agotado", 
                 JOptionPane.INFORMATION_MESSAGE);
-            cursoEnMarcha.setVidas(panel.getVidas() - 1);
+            cursoEnMarcha.setVidas(frame.getVidas() - 1);
             if (cursoEnMarcha.getVidas() <= 0) {
                 JOptionPane.showMessageDialog(frame, 
                     "Se te han acabado las vidas.", 
@@ -198,7 +192,6 @@ public class AdaptadorPreguntas {
             }
         });
         
-        frame.add(panel);
         return frame;
     }
 }

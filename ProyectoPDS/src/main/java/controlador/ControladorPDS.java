@@ -84,14 +84,10 @@ public class ControladorPDS {
 		return sesionActual;
 	}
 	
-	//Tras seleccionar un curso, lo convierte en un curso en marcha
-	public void iniciarCurso(Curso curso, Estrategia estrategia) {
+	// Nuevo método para iniciar curso con una estrategia específica
+	public CursoEnMarcha iniciarCursoE(Curso curso, Estrategia estrategia) {
 		sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, estrategia);
-	}
-	
-	//En teoría el usuario debe seleccionar una estrategia. Esta función se ha creado para mostrar la funcionalidad básica del programa.
-	public CursoEnMarcha iniciarCurso(Curso curso) {
-		sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, /*CursoEnMarcha.ESTRATEGIA_PREDETERMINADA*/new EstrategiaAleatoria());
+
 		return sesionActual.obtenerCursoEnMarcha(curso.getId()).get();
 	}
 	
@@ -172,13 +168,5 @@ public class ControladorPDS {
 	 */
 	public boolean tieneCursosAdicionales() {
 	    return sesionActual != null && sesionActual.tieneCursosAdicionales();
-	}
-
-	/**
-	 * Verifica si el usuario tiene el beneficio de no ver anuncios
-	 * @return true si el usuario no debe ver anuncios, false en caso contrario
-	 */
-	public boolean sinAnuncios() {
-	    return sesionActual != null && sesionActual.sinAnuncios();
 	}
 }

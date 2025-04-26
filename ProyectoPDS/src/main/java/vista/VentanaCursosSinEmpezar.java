@@ -14,12 +14,17 @@ import javax.swing.border.EmptyBorder;
 
 import modelado.Curso;
 import modelado.CursoEnMarcha;
+import modelado.Estrategia;
+import modelado.EstrategiaAleatoria;
+import modelado.EstrategiaEspaciada;
+import modelado.EstrategiaSecuencial;
 import controlador.ControladorPDS;
 
 public class VentanaCursosSinEmpezar extends JFrame {
     private JPanel panelContenidoScroll;
     private JPanel mainPanel;
     private Point dragPoint;
+    private JComboBox<String> comboEstrategias; // Nuevo: ComboBox para estrategias
 
     public VentanaCursosSinEmpezar() {
         initialize();
@@ -170,10 +175,31 @@ public class VentanaCursosSinEmpezar extends JFrame {
         panelCentroContenedor.add(scrollPane, BorderLayout.CENTER);
 
         // Panel inferior con botones centrados y grandes
-        JPanel panelSur = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JPanel panelSur = new JPanel(new BorderLayout());
         panelSur.setOpaque(false);
         panelSur.setBorder(new EmptyBorder(10, 15, 20, 15));
         getContentPane().add(panelSur, BorderLayout.SOUTH);
+
+        // Nuevo: Panel para la selección de estrategia
+        JPanel panelEstrategia = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelEstrategia.setOpaque(false);
+        
+        JLabel lblEstrategia = new JLabel("Estrategia de aprendizaje:");
+        lblEstrategia.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblEstrategia.setForeground(Color.WHITE);
+        
+        comboEstrategias = new JComboBox<>(new String[] {"Secuencial", "Aleatoria", "Espaciada"});
+        comboEstrategias.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        comboEstrategias.setPreferredSize(new Dimension(150, 30));
+        
+        panelEstrategia.add(lblEstrategia);
+        panelEstrategia.add(comboEstrategias);
+        
+        panelSur.add(panelEstrategia, BorderLayout.NORTH);
+
+        // Panel de botones
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setOpaque(false);
 
         JButton btnEmpezar = createAnimatedButton("Empezar", new Color(76, 175, 80));
         JButton btnCancelar = createAnimatedButton("Volver", new Color(220, 50, 50));
@@ -184,8 +210,6 @@ public class VentanaCursosSinEmpezar extends JFrame {
         btnCancelar.setPreferredSize(botonDimension);
 
         // Agregar acciones a los botones
-     // En la clase VentanaCursosSinEmpezar, modificar el método actionPerformed del botón Empezar:
-
         btnEmpezar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -199,8 +223,9 @@ public class VentanaCursosSinEmpezar extends JFrame {
                             alpha -= 0.05f;
                             if (alpha <= 0) {
                                 ((Timer)e.getSource()).stop();
-                                // Iniciar el curso y abrir la ventana adecuada según el tipo de pregunta
-                                CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia().iniciarCurso(cursoSeleccionado);
+                                // Iniciar el curso con la estrategia seleccionada
+                                Estrategia estrategiaSeleccionada = obtenerEstrategiaSeleccionada();
+                                CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia().iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada);
                                 dispose();
                                 
                                 // Usar el adaptador para crear la flashcard apropiada
@@ -244,11 +269,27 @@ public class VentanaCursosSinEmpezar extends JFrame {
             }
         });
 
-        panelSur.add(btnEmpezar);
-        panelSur.add(btnCancelar);
+        panelBotones.add(btnEmpezar);
+        panelBotones.add(btnCancelar);
+        
+        panelSur.add(panelBotones, BorderLayout.CENTER);
         
         // Centrar la ventana en la pantalla
         setLocationRelativeTo(null);
+    }
+
+    // Método para obtener la estrategia seleccionada
+    private Estrategia obtenerEstrategiaSeleccionada() {
+        String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
+        switch (estrategiaSeleccionada) {
+            case "Aleatoria":
+                return new EstrategiaAleatoria();
+            case "Espaciada":
+                return new EstrategiaEspaciada();
+            case "Secuencial":
+            default:
+                return new EstrategiaSecuencial();
+        }
     }
 
     private void importarCursosYAML() {
