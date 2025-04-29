@@ -163,6 +163,15 @@ public class VentanaCursosEnMarcha extends JFrame {
                     // Aquí se abriría la ventana del curso seleccionado
                     JOptionPane.showMessageDialog(null, "Abriendo curso: " + ControladorPDS.getUnicaInstancia().getNombreCursoEnMarcha(cursoSeleccionado), 
                             "Curso Seleccionado", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    JFrame flashCard = AdaptadorPreguntas.crearFlashCard(cursoSeleccionado, cursoSeleccionado.getBloqueActualIndex(), cursoSeleccionado.getPreguntaActualIndex());
+                    if (flashCard != null) {
+                        flashCard.setVisible(true);
+                        
+                    } else {
+                        // En caso de error, volver a la ventana principal
+                        new VentanaPrincipal().setVisible(true);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Por favor, seleccione un curso.", 
                             "No hay selección", JOptionPane.WARNING_MESSAGE);
