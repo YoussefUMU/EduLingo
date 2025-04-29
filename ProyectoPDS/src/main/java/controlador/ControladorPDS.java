@@ -92,6 +92,11 @@ public class ControladorPDS {
 		}return null;
 	}
 	
+	//Nuevo metodo para finalizar un curso
+	public void finalizarCursoEnMarcha(CursoEnMarcha curso) {
+		this.sesionActual.finalizarCurso(curso);
+	}
+	
 	public List<Curso> obtenerCursosLocales(){
 		return manejador.obtenerCursosLocales();
 	}
