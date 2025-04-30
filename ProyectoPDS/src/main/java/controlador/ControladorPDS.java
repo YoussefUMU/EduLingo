@@ -86,8 +86,15 @@ public class ControladorPDS {
 	
 	// Nuevo método para iniciar curso con una estrategia específica
 	public CursoEnMarcha iniciarCursoE(Curso curso, Estrategia estrategia) {
-		sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, estrategia);
-		return sesionActual.obtenerCursoEnMarcha(curso.getId()).get();
+		boolean b = sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, estrategia);
+		if(b) {
+			return sesionActual.obtenerCursoEnMarcha(curso, estrategia).get();
+		}return null;
+	}
+	
+	//Nuevo metodo para finalizar un curso
+	public void finalizarCursoEnMarcha(CursoEnMarcha curso) {
+		this.sesionActual.finalizarCurso(curso);
 	}
 	
 	public List<Curso> obtenerCursosLocales(){

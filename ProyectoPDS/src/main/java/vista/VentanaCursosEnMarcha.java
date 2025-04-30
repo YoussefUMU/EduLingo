@@ -160,15 +160,42 @@ public class VentanaCursosEnMarcha extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 CursoEnMarcha cursoSeleccionado = list.getSelectedValue();
                 if (cursoSeleccionado != null) {
-                    // Aquí se abriría la ventana del curso seleccionado
-                    JOptionPane.showMessageDialog(null, "Abriendo curso: " + ControladorPDS.getUnicaInstancia().getNombreCursoEnMarcha(cursoSeleccionado), 
-                            "Curso Seleccionado", JOptionPane.INFORMATION_MESSAGE);
+                    // Usamos un timer para aplicar la animación de desvanecimiento
+                    final Timer timer = new Timer(10, new ActionListener() {
+                        float alpha = 1.0f;
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            alpha -= 0.05f;
+                            if (alpha <= 0) {
+                                // Para la animación y cerramos la ventana actual
+                                ((Timer)e.getSource()).stop();
+                                dispose();
+
+                                // Creamos la flashcard usando el adaptador con los índices actuales
+                                JFrame flashCard = AdaptadorPreguntas.crearFlashCard(
+                                        cursoSeleccionado,
+                                        cursoSeleccionado.getBloqueActualIndex(),
+                                        cursoSeleccionado.getPreguntaActualIndex()
+                                );
+
+                                if (flashCard != null) {
+                                    flashCard.setVisible(true);
+                                } else {
+                                    // En caso de error, se muestra la ventana principal
+                                    new VentanaPrincipal().setVisible(true);
+                                }
+                            }
+                            setOpacity(Math.max(0, alpha));
+                        }
+                    });
+                    timer.start();
                 } else {
                     JOptionPane.showMessageDialog(null, "Por favor, seleccione un curso.", 
                             "No hay selección", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
+
         
         btnCancelar.addActionListener(new ActionListener() {
             @Override

@@ -126,6 +126,11 @@ public class Usuario {
 		return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(cursoId)).findFirst();
 	}
 
+	public Optional<CursoEnMarcha> obtenerCursoEnMarcha(Curso curso, Estrategia estrategia) {
+		return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(curso.getId()) && 
+				c.getEstrategia().getClass().equals(estrategia.getClass())).findFirst();
+	}
+	
 	public void iniciarCurso(String cursoId) {
 		obtenerCursoEnMarcha(cursoId).ifPresent(CursoEnMarcha::reiniciarCurso);
 	}
