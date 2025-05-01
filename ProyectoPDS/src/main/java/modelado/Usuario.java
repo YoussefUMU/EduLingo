@@ -36,9 +36,9 @@ public class Usuario {
 	private LocalDate fechaNacimiento;
 	@OneToMany(mappedBy="usuario", cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	private List<CursoEnMarcha> cursosActivos;
-	//@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
-	//@JoinColumn(unique=true)
-	//private Estadistica estadisticas;			//ya lo meteré
+	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
+	@JoinColumn(unique=true)
+	private Estadistica estadisticas;			//ya lo meteré
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
 	private Premium premium;

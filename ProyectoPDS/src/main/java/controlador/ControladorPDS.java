@@ -170,4 +170,12 @@ public class ControladorPDS {
 	public boolean tieneCursosAdicionales() {
 	    return sesionActual != null && sesionActual.tieneCursosAdicionales();
 	}
+	
+	/**
+	 * Actualiza un curso en marcha en la base de datos
+	 */
+	
+	public void actualizarCursoEnMarcha(CursoEnMarcha cursoEnMarcha) {
+		repositorioUsuarios.actualizarCurso(cursoEnMarcha);
+	}
 }

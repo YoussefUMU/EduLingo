@@ -144,6 +144,7 @@ public class FlashCardTipoC extends JFrame {
 					"¿Seguro que deseas salir? Perderás el progreso de esta pregunta.", "Confirmar salida",
 					JOptionPane.YES_NO_OPTION);
 			if (respuesta == JOptionPane.YES_OPTION) {
+				ControladorPDS.getUnicaInstancia().actualizarCursoEnMarcha(cursoEnMarcha);
 				dispose();
 				new VentanaPrincipal().setVisible(true);
 			}
