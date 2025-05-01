@@ -2,6 +2,8 @@ package vista;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import controlador.ControladorPDS;
 import modelado.CursoEnMarcha;
 
 /**
@@ -43,7 +45,7 @@ public class NavegadorPreguntas {
                 "Curso completado", JOptionPane.INFORMATION_MESSAGE);
             
             // Finalizar el curso en el modelo
-            cursoEnMarcha.finalizar();
+            ControladorPDS.getUnicaInstancia().finalizarCursoEnMarcha(cursoEnMarcha);
             
             ventanaActual.dispose();
             new VentanaPrincipal().setVisible(true);
