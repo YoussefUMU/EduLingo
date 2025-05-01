@@ -30,35 +30,24 @@ public class Usuario {
 		this.contraseña = contraseña;
 		this.correo = correo;
 		this.nombreUsuario = nombreUsuario;
-		this.fechaRegistro = LocalDate.now();
+		this.fechaRegistro = LocalDate.of(2025, 04, 25);
 		this.cursosActivos = new ArrayList<>();
-
 		this.estadisticas = new Estadistica();
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public Usuario(String nombre, String contraseña, String correo, String nombreUsuario, LocalDate FechaNacimiento) {
+	public Usuario(String nombre, String contraseña, String correo, String nombreUsuario, LocalDate fechaNacimiento) {
 		this.id = "";
 		this.nombre = nombre;
 		this.contraseña = contraseña;
 		this.correo = correo;
 		this.nombreUsuario = nombreUsuario;
-		this.fechaRegistro = LocalDate.now();
+		this.fechaRegistro = LocalDate.of(2025, 04, 25);
 		this.cursosActivos = new ArrayList<>();
 		this.estadisticas = new Estadistica();
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public Usuario(String nombre, String correo, String nombreUsuario) {
-		this.id = "";
-		this.nombre = nombre;
-		this.contraseña = "1234";
-		this.correo = correo;
-		this.nombreUsuario = nombreUsuario;
-		this.fechaRegistro = LocalDate.now();
-		this.cursosActivos = new ArrayList<>();
-		this.estadisticas = new Estadistica();
-	}
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}
@@ -110,12 +99,6 @@ public class Usuario {
 			return true;
 		}
 		return false;
-	}
-
-
-	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
-		this.cursosActivos.remove(cursoEnMarcha);
-		cursoEnMarcha.finalizar();
 	}
 
 	public List<CursoEnMarcha> obtenerCursosActivos() {
@@ -216,4 +199,102 @@ public class Usuario {
 	public boolean sinAnuncios() {
 	    return esPremium() && premium.isSinAnuncios();
 	}
+	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
+        Curso curso = cursoEnMarcha.getCurso();
+        
+        // Registrar curso completado en estadísticas
+        if (estadisticas.registrarCursoCompletado(curso.getId(), curso.getCategoria())) {
+            // Comprobar si se han desbloqueado nuevos logros
+            String[] nuevosLogros = GestorLogros.comprobarLogros(this);
+            
+            // Si se han desbloqueado logros, mostrar notificación
+            if (nuevosLogros.length > 0) {
+                mostrarNotificacionLogros(nuevosLogros);
+            }
+        }
+        
+        // Eliminar de cursos activos
+        this.cursosActivos.remove(cursoEnMarcha);
+        cursoEnMarcha.finalizar();
+    }
+    
+    /**
+     * Muestra una notificación al usuario sobre los logros desbloqueados
+     */
+    private void mostrarNotificacionLogros(String[] logrosIds) {
+        StringBuilder mensaje = new StringBuilder("¡Has desbloqueado ");
+        
+        if (logrosIds.length == 1) {
+            mensaje.append("un nuevo logro: ")
+                   .append(GestorLogros.getInfoLogro(logrosIds[0]).getTitulo());
+        } else {
+            mensaje.append("nuevos logros: ");
+            for (int i = 0; i < logrosIds.length; i++) {
+                if (i > 0) {
+                    mensaje.append(i == logrosIds.length - 1 ? " y " : ", ");
+                }
+                mensaje.append(GestorLogros.getInfoLogro(logrosIds[i]).getTitulo());
+            }
+        }
+        mensaje.append("!");
+        
+        // Mostrar mensaje
+        javax.swing.JOptionPane.showMessageDialog(null, 
+                mensaje.toString(), 
+                "¡Logros Desbloqueados!", 
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * Obtiene el nivel actual del usuario
+     */
+    public int getNivel() {
+        return estadisticas.getNivelActual();
+    }
+    
+    /**
+     * Obtiene el porcentaje de progreso en el nivel actual
+     */
+    public int getPorcentajeNivel() {
+        return estadisticas.getPorcentajeNivel();
+    }
+    
+    /**
+     * Obtiene el rango actual del usuario basado en su nivel
+     */
+    public String getRango() {
+        int nivel = getNivel();
+        
+        if (nivel >= 10) return "Maestro del Conocimiento";
+        if (nivel >= 5) return "Experto Junior";
+        if (nivel >= 3) return "Estudiante Constante";
+        return "Aprendiz Entusiasta";
+    }
+    
+    /**
+     * Registra una respuesta a una pregunta y actualiza estadísticas
+     */
+    public void registrarRespuestaPregunta(boolean correcta) {
+        estadisticas.registrarPreguntaRespondida(correcta);
+        
+        // Comprobar nuevos logros
+        String[] nuevosLogros = GestorLogros.comprobarLogros(this);
+        if (nuevosLogros.length > 0) {
+            mostrarNotificacionLogros(nuevosLogros);
+        }
+    }
+    
+    /**
+     * Obtiene la lista de IDs de logros desbloqueados
+     */
+    public List<String> getLogrosDesbloqueados() {
+        return estadisticas.getLogrosDesbloqueados();
+    }
+    
+    /**
+     * Verifica si un logro está desbloqueado
+     */
+    public boolean tieneLogroDesbloqueado(String idLogro) {
+        return estadisticas.esLogroDesbloqueado(idLogro);
+    }
 }
