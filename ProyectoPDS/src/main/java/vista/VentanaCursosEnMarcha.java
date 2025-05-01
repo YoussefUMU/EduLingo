@@ -13,6 +13,8 @@ import javax.swing.border.EmptyBorder;
 
 import modelado.Curso;
 import modelado.CursoEnMarcha;
+import modelado.EstrategiaAleatoria;
+import modelado.EstrategiaSecuencial;
 import controlador.ControladorPDS;
 
 public class VentanaCursosEnMarcha extends JFrame {
@@ -274,10 +276,26 @@ class ModernCursoCellRenderer extends DefaultListCellRenderer {
         lblCategory.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         lblCategory.setForeground(isSelected ? new Color(255, 255, 200) : new Color(100, 100, 100));
         lblCategory.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        String estrategia = null;
+        if(curso.getEstrategia() instanceof EstrategiaSecuencial) {
+        	estrategia = "Estrategia - Secuencial";
+        } else if (curso.getEstrategia() instanceof EstrategiaAleatoria) {
+        	estrategia = "Estrategia - Aleatoria";
+        } else {
+        	estrategia = "Estrategia - Espaciada";
+        }
+        
+        JLabel lblEstrategia = new JLabel(estrategia);
+        lblEstrategia.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblEstrategia.setForeground(isSelected ? new Color(255, 255, 200) : new Color(100, 100, 100));
+        lblEstrategia.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         panel.add(lblTitle);
         panel.add(Box.createVerticalStrut(4));
         panel.add(lblCategory);
+        panel.add(Box.createVerticalStrut(4));
+        panel.add(lblEstrategia);
         panel.add(Box.createVerticalStrut(4));
         panel.add(lblDescription);
 

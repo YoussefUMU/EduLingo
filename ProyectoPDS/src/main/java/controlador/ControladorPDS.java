@@ -1,7 +1,10 @@
 package controlador;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import modelado.Curso;
 import modelado.CursoEnMarcha;
@@ -106,7 +109,6 @@ public class ControladorPDS {
 		return this.sesionActual.getCursosActivos();
 	}
 	
-	// Añadir estos métodos al ControladorPDS.java
 
 	/**
 	 * Activa la suscripción premium para el usuario que tiene la sesión activa
@@ -145,6 +147,21 @@ public class ControladorPDS {
 	    }
 	}
 
+	/***
+	 * Método para obtener un mapa asociando la categoría del curso con el número de cursos que tiene activos un usuario
+	 * @return mapa categoría curso - número de cursoa
+	 */
+	
+	public Map<String, Integer> numCursosActivos() {
+	    List<CursoEnMarcha> cursosActivos = getCursosActivosSesionActual();
+	    
+	    Map<String, Integer> resultado = cursosActivos.stream()
+	        .collect(Collectors.groupingBy(
+	            curso -> curso.getCurso().getCategoria(),
+	            Collectors.summingInt(curso -> 1)
+	        ));
+	    return resultado;
+	}
 	/**
 	 * Verifica si el usuario de la sesión actual tiene suscripción premium activa
 	 * @return true si el usuario tiene premium activo, false en caso contrario

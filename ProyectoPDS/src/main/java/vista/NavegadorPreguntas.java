@@ -36,7 +36,6 @@ public class NavegadorPreguntas {
                 esFinal = true;
             }
         }
-        
         if (esFinal) {
             // Hemos terminado el curso
             JOptionPane.showMessageDialog(ventanaActual, 

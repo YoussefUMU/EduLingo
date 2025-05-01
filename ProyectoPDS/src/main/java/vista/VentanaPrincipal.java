@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import controlador.ControladorPDS;
 
@@ -395,21 +396,31 @@ public class VentanaPrincipal extends JFrame {
 		// Panel central con contenido
 		JPanel panelCentroContenido = new JPanel(new GridLayout(1, 2, 20, 0));
 		panelCentroContenido.setOpaque(false);
-
+		String actividadReciente = "";
+		ArrayList<String> listaCategorias = new ArrayList<>();
+		for(String categoria : ControladorPDS.getUnicaInstancia().numCursosActivos().keySet()) {
+			actividadReciente = "Has iniciado " + ControladorPDS.getUnicaInstancia().numCursosActivos().get(categoria) + " cursos de la categoria " + categoria; 
+			listaCategorias.add(actividadReciente);
+		}
+		listaCategorias.add("Tienes una racha actual de " + usuario.getEstadisticas().getMejorRacha() + " días");
+	
 		// Panel de resumen de actividad
 		JPanel panelResumen = crearPanelCartas("Mi actividad reciente",
-				new String[] { "Has completado 3 lecciones de Programación Java en la última semana",
-						"Tienes una racha actual de " + usuario.getEstadisticas().getMejorRacha() + " días",
-						"Tu nivel actual es: Aprendiz entusiasta",
-						"Próxima meta: 30 minutos de estudio diario durante 7 días" },
+				listaCategorias,
 				new Color(33, 150, 243, 50));
 
 		// Panel de cursos recomendados
+		//TODO únicamente mostrar en recomendados cursos no activos
+		ArrayList<String> listaRecomendados = new ArrayList<>();
+		for(Curso curso : ControladorPDS.getUnicaInstancia().obtenerCursosLocales()) {
+			listaRecomendados.add(curso.getNombre() + " - " + curso.getCategoria());
+		}
+		
+		
 		JPanel panelRecomendados = crearPanelCartas("Recomendados para ti",
-				new String[] { "Curso avanzado de Programación Orientada a Objetos", "Fundamentos de Bases de Datos",
-						"Patrones de Diseño en Java", "Desarrollo de Interfaces Gráficas con Swing" },
+				listaRecomendados,
 				new Color(76, 175, 80, 50));
-
+		 
 		panelCentroContenido.add(panelResumen);
 		panelCentroContenido.add(panelRecomendados);
 		panel.add(panelCentroContenido, BorderLayout.CENTER);
@@ -431,7 +442,7 @@ public class VentanaPrincipal extends JFrame {
 		return panel;
 	}
 
-	private JPanel crearPanelCartas(String titulo, String[] items, Color colorFondo) {
+	private JPanel crearPanelCartas(String titulo, ArrayList<String> items, Color colorFondo) {
 		JPanel panel = new JPanel(new BorderLayout(0, 10));
 		panel.setOpaque(false);
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
