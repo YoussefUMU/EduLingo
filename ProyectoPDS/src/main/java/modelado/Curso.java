@@ -15,7 +15,9 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Curso {
 	@Id
-    private String id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id_db;
+	private String id;
     private String nombre;
     private String autor;
     private String descripcion;
@@ -24,8 +26,8 @@ public class Curso {
     private List<Bloque> bloques;
     private String imagenCurso;
     private String categoria;
-    @OneToOne(mappedBy="curso")
-    private CursoEnMarcha cursoEnMarcha;
+   // @OneToMany(mappedBy="curso")
+    //private CursoEnMarcha cursoEnMarcha;
     public Curso() {
         this.bloques = new ArrayList<>();
     }
@@ -86,6 +88,10 @@ public class Curso {
 		return id;
 	}
 
+	public Long getIdDB() {
+		return id_db;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -128,7 +134,7 @@ public class Curso {
 	}
 
 	public void setCursoEnMarcha(CursoEnMarcha cursoEnMarcha) {
-		this.cursoEnMarcha = cursoEnMarcha;
+		//this.cursoEnMarcha = cursoEnMarcha;
 		
 	}
 }

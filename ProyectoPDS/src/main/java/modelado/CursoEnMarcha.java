@@ -26,8 +26,7 @@ public class CursoEnMarcha {
 	public static final Estrategia ESTRATEGIA_PREDETERMINADA = new EstrategiaSecuencial();
 	public static final TipoEstrategia TIPO_ESTRATEGIA_PREDETERMINADA = TipoEstrategia.SECUENCIAL;
 	
-	@OneToOne(cascade= { CascadeType.PERSIST, CascadeType.REMOVE })
-	@JoinColumn(unique=true)
+	@OneToOne
 	private Curso curso;
 	private int bloqueActual;
 	private int preguntaActual;

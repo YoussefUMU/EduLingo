@@ -84,15 +84,22 @@ public class RepositorioUsuarios {
     public void agregarCurso(Long id, CursoEnMarcha cursoEnMarcha) {
         EntityManager em = emf.createEntityManager();
         Usuario usuario = em.find(Usuario.class, id);
-
+        Curso curso = null;
+        if (cursoEnMarcha.getCurso().getIdDB() != null) {
+        	curso = em.find(Curso.class, cursoEnMarcha.getCurso().getIdDB());	//Como varios Cursos en Marcha comparten el mismo atributo Curso, es necesario manejar su persistencia por separado.
+             
+        }
         try {
-        	
             em.getTransaction().begin();
-
+            
+            if (curso != null) {
+            	//em.merge(curso);
+            }
+            else {
+            	em.persist(cursoEnMarcha.getCurso());
+            }
             cursoEnMarcha.setUsuario(usuario); 
             usuario.getCursosActivos().add(cursoEnMarcha);
-            em.persist(cursoEnMarcha);
-            em.merge(cursoEnMarcha);
             
             em.getTransaction().commit();
         } catch (Exception e) {
