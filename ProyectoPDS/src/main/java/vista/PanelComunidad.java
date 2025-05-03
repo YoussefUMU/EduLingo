@@ -29,9 +29,6 @@ public class PanelComunidad extends JPanel {
         this.usuarioActual = usuario;
         this.listaComentarios = new ArrayList<>();
         
-        // Datos de prueba
-        inicializarDatosPrueba();
-        
         setLayout(new BorderLayout(10, 10));
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -45,33 +42,6 @@ public class PanelComunidad extends JPanel {
         add(panelSuperior, BorderLayout.NORTH);
         add(panelComentarios, BorderLayout.CENTER);
         add(panelPublicacion, BorderLayout.SOUTH);
-    }
-    
-    private void inicializarDatosPrueba() {
-        // Crear algunos comentarios de ejemplo para mostrar
-        listaComentarios.add(new Comentario(
-            new Usuario("Laura Martínez", "laura@ejemplo.com", "contraseña"),
-            "Me encanta la interfaz de la aplicación, muy intuitiva y agradable. ¿Han pensado en añadir temas oscuros?",
-            "Sugerencia",
-            new Date(System.currentTimeMillis() - 86400000))); // 1 día atrás
-            
-        listaComentarios.add(new Comentario(
-            new Usuario("Carlos Ruiz", "carlos@ejemplo.com", "contraseña"),
-            "Tuve problemas para iniciar sesión hoy. La aplicación muestra un error cuando uso caracteres especiales en la contraseña.",
-            "Problema",
-            new Date(System.currentTimeMillis() - 43200000))); // 12 horas atrás
-            
-        listaComentarios.add(new Comentario(
-            new Usuario("Ana Gómez", "ana@ejemplo.com", "contraseña"),
-            "Las lecciones de francés son excelentes pero estaría bien tener más ejercicios de pronunciación.",
-            "Crítica",
-            new Date(System.currentTimeMillis() - 3600000))); // 1 hora atrás
-            
-        listaComentarios.add(new Comentario(
-            usuarioActual,
-            "¿Alguien sabe si van a añadir más idiomas próximamente? Me gustaría estudiar italiano.",
-            "Sugerencia",
-            new Date()));
     }
     
     private JPanel crearPanelSuperior() {

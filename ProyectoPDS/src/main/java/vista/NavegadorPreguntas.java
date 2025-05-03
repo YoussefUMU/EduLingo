@@ -21,6 +21,9 @@ public class NavegadorPreguntas {
         int bloqueActual = cursoEnMarcha.getBloqueActualIndex();
         int preguntaActual = cursoEnMarcha.getPreguntaActualIndex();
         
+        // Registrar respuesta correcta
+        ControladorPDS.getUnicaInstancia().registrarRespuestaPregunta(true);
+        
         // Avanzamos a la siguiente pregunta en el curso
         cursoEnMarcha.avanzarPregunta();
         
@@ -45,7 +48,7 @@ public class NavegadorPreguntas {
                 "¡Felicidades! Has completado este curso con éxito.", 
                 "Curso completado", JOptionPane.INFORMATION_MESSAGE);
             
-            // Finalizar el curso en el modelo
+            // Finalizar el curso en el modelo (actualiza XP y verifica logros)
             ControladorPDS.getUnicaInstancia().finalizarCursoEnMarcha(cursoEnMarcha);
             
             ventanaActual.dispose();
