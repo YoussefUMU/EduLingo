@@ -18,6 +18,7 @@ import modelado.Estrategia;
 import modelado.EstrategiaAleatoria;
 import modelado.EstrategiaEspaciada;
 import modelado.EstrategiaSecuencial;
+import modelado.TipoEstrategia;
 import controlador.ControladorPDS;
 
 public class VentanaCursosSinEmpezar extends JFrame {
@@ -215,10 +216,11 @@ public class VentanaCursosSinEmpezar extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Curso cursoSeleccionado = list.getSelectedValue();
                 if (cursoSeleccionado != null) {
+
                     // Iniciar el curso con la estrategia seleccionada
                     Estrategia estrategiaSeleccionada = obtenerEstrategiaSeleccionada();
                     CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia()
-                            .iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada);
+                            .iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada, obtenerTipoEstrategiaSeleccionada());
 
                     if (cursoEnMarcha == null) {
                         // Si cursoEnMarcha es nulo, mostramos el mensaje de error SIN cerrar la ventana ni hacer animaciones
@@ -304,6 +306,19 @@ public class VentanaCursosSinEmpezar extends JFrame {
         }
     }
 
+    private TipoEstrategia obtenerTipoEstrategiaSeleccionada() {
+        String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
+        switch (estrategiaSeleccionada) {
+            case "Aleatoria":
+                return TipoEstrategia.ALEATORIA;
+            case "Espaciada":
+                return TipoEstrategia.ESPACIADA;
+            case "Secuencial":
+            default:
+                return TipoEstrategia.SECUENCIAL;
+        }
+    }
+    
     private void importarCursosYAML() {
         // Crear un diálogo para seleccionar carpeta
         JFileChooser fileChooser = new JFileChooser();
