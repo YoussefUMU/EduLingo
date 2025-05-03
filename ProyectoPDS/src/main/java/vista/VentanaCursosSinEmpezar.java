@@ -18,6 +18,7 @@ import modelado.Estrategia;
 import modelado.EstrategiaAleatoria;
 import modelado.EstrategiaEspaciada;
 import modelado.EstrategiaSecuencial;
+import modelado.ManejadorCursos;
 import modelado.TipoEstrategia;
 import controlador.ControladorPDS;
 
@@ -25,7 +26,9 @@ public class VentanaCursosSinEmpezar extends JFrame {
     private JPanel panelContenidoScroll;
     private JPanel mainPanel;
     private Point dragPoint;
-    private JComboBox<String> comboEstrategias; // Nuevo: ComboBox para estrategias
+    private JComboBox<String> comboEstrategias;
+    private JList<Curso> listaCursos; // Añadido para mantener referencia a la lista
+    private DefaultListModel<Curso> modeloCursos; // Añadido para mantener referencia al modelo
 
     public VentanaCursosSinEmpezar() {
         initialize();
@@ -35,8 +38,8 @@ public class VentanaCursosSinEmpezar extends JFrame {
         setTitle("Edulingo - Explorar Cursos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(new Dimension(650, 600));
-        setUndecorated(true); // Quitamos bordes de ventana para un diseño más moderno
-        setShape(new RoundRectangle2D.Double(0, 0, 650, 600, 15, 15)); // Bordes redondeados
+        setUndecorated(true);
+        setShape(new RoundRectangle2D.Double(0, 0, 650, 600, 15, 15));
         
         // Panel principal con gradiente
         mainPanel = new JPanel() {
@@ -47,8 +50,8 @@ public class VentanaCursosSinEmpezar extends JFrame {
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 int w = getWidth();
                 int h = getHeight();
-                Color color1 = new Color(66, 133, 244); // Azul claro
-                Color color2 = new Color(15, 76, 129);  // Azul oscuro
+                Color color1 = new Color(66, 133, 244);
+                Color color2 = new Color(15, 76, 129);
                 GradientPaint gp = new GradientPaint(0, 0, color1, 0, h, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, w, h);
@@ -94,7 +97,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
         // Etiqueta de título con animación de aparición gradual
         JLabel lblNewLabel = new JLabel("CURSOS DISPONIBLES");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setForeground(new Color(255, 255, 255, 0)); // Inicialmente transparente
+        lblNewLabel.setForeground(new Color(255, 255, 255, 0));
         lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
         panelNorte.add(lblNewLabel, BorderLayout.CENTER);
         
@@ -126,7 +129,6 @@ public class VentanaCursosSinEmpezar extends JFrame {
                 importarCursosYAML();
             }
         });
-    
         
         panelBotonesSuperior.add(btnImportarYAML);
         panelNorte.add(panelBotonesSuperior, BorderLayout.SOUTH);
@@ -148,30 +150,25 @@ public class VentanaCursosSinEmpezar extends JFrame {
         scrollPane.setOpaque(false);
         
         // Lista de cursos con un renderer personalizado
-        JList<Curso> list = new JList<Curso>();
-        list.setCellRenderer(new ModernCursoCellRenderer());
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setOpaque(false);
+        listaCursos = new JList<Curso>(); // Usar la variable de instancia
+        listaCursos.setCellRenderer(new ModernCursoCellRenderer());
+        listaCursos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaCursos.setOpaque(false);
         
         // Obtener los cursos disponibles
         List<Curso> cursosDisponibles = ControladorPDS.getUnicaInstancia().obtenerCursosLocales();
-        DefaultListModel<Curso> modelo = new DefaultListModel<Curso>();
+        modeloCursos = new DefaultListModel<Curso>(); // Usar la variable de instancia
         
         if (cursosDisponibles != null && !cursosDisponibles.isEmpty()) {
             for (Curso curso : cursosDisponibles) {
-                modelo.addElement(curso);
+                modeloCursos.addElement(curso);
             }
-        } else {
-            // Datos de ejemplo para visualización
-            modelo.addElement(new Curso("Curso de Programación Java", "Aprende Java desde cero", "Programación"));
-            modelo.addElement(new Curso("Curso de Diseño UX/UI", "Diseño de interfaces de usuario", "Diseño"));
-            modelo.addElement(new Curso("Curso de Matemáticas", "Matemáticas para ingeniería", "Ciencias"));
         }
         
-        list.setModel(modelo);
-        list.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        listaCursos.setModel(modeloCursos);
+        listaCursos.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         
-        panelContenidoScroll.add(list);
+        panelContenidoScroll.add(listaCursos);
         scrollPane.setPreferredSize(new Dimension(500, 400));
         panelCentroContenedor.add(scrollPane, BorderLayout.CENTER);
 
@@ -181,7 +178,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
         panelSur.setBorder(new EmptyBorder(10, 15, 20, 15));
         getContentPane().add(panelSur, BorderLayout.SOUTH);
 
-        // Nuevo: Panel para la selección de estrategia
+        // Panel para la selección de estrategia
         JPanel panelEstrategia = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelEstrategia.setOpaque(false);
         
@@ -214,7 +211,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
         btnEmpezar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Curso cursoSeleccionado = list.getSelectedValue();
+                Curso cursoSeleccionado = listaCursos.getSelectedValue(); // Usar la variable de instancia
                 if (cursoSeleccionado != null) {
 
                     // Iniciar el curso con la estrategia seleccionada
@@ -223,14 +220,11 @@ public class VentanaCursosSinEmpezar extends JFrame {
                             .iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada, obtenerTipoEstrategiaSeleccionada());
 
                     if (cursoEnMarcha == null) {
-                        // Si cursoEnMarcha es nulo, mostramos el mensaje de error SIN cerrar la ventana ni hacer animaciones
                         JOptionPane.showMessageDialog(null, 
                                 "No puede empezar un curso dos veces con la misma estrategia.", 
                                 "Error", 
                                 JOptionPane.ERROR_MESSAGE);
-                        // No hacemos nada más
                     } else {
-                        // Si cursoEnMarcha NO es nulo, hacemos la animación de desvanecimiento y cerramos
                         final Timer timer = new Timer(10, new ActionListener() {
                             float alpha = 1.0f;
                             @Override
@@ -240,12 +234,10 @@ public class VentanaCursosSinEmpezar extends JFrame {
                                     ((Timer)e.getSource()).stop();
                                     dispose();
                                     
-                                    // Usar el adaptador para crear la flashcard apropiada
                                     JFrame flashCard = AdaptadorPreguntas.crearFlashCard(cursoEnMarcha, 0, 0);
                                     if (flashCard != null) {
                                         flashCard.setVisible(true);
                                     } else {
-                                        // En caso de error, volver a la ventana principal
                                         new VentanaPrincipal().setVisible(true);
                                     }
                                 }
@@ -260,11 +252,9 @@ public class VentanaCursosSinEmpezar extends JFrame {
             }
         });
 
-        
         btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Animación de transición
                 final Timer timer = new Timer(10, new ActionListener() {
                     float alpha = 1.0f;
                     @Override
@@ -288,10 +278,8 @@ public class VentanaCursosSinEmpezar extends JFrame {
         
         panelSur.add(panelBotones, BorderLayout.CENTER);
         
-        // Centrar la ventana en la pantalla
         setLocationRelativeTo(null);
     }
-
     // Método para obtener la estrategia seleccionada
     private Estrategia obtenerEstrategiaSeleccionada() {
         String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
@@ -320,54 +308,82 @@ public class VentanaCursosSinEmpezar extends JFrame {
     }
     
     private void importarCursosYAML() {
-        // Crear un diálogo para seleccionar carpeta
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Seleccionar carpeta de archivos YAML");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fileChooser.setDialogTitle("Seleccionar archivos YAML");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setMultiSelectionEnabled(true);
+        
+        // Filtro para archivos YAML
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".yaml") || 
+                       f.getName().toLowerCase().endsWith(".yml");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Archivos YAML (*.yaml, *.yml)";
+            }
+        });
+        
+        // Configurar directorio inicial
         File libreriaFolder = new File(System.getProperty("user.dir"), "libreria");
         if (libreriaFolder.exists() && libreriaFolder.isDirectory()) {
             fileChooser.setCurrentDirectory(libreriaFolder);
         }
-        // Panel personalizado para mostrar información
-        JPanel accessoryPanel = new JPanel();
-        accessoryPanel.setLayout(new BoxLayout(accessoryPanel, BoxLayout.Y_AXIS));
-        accessoryPanel.setBorder(BorderFactory.createTitledBorder("Información"));
         
-        JLabel infoLabel = new JLabel("<html><body width='200px'>" +
-                "Seleccione la carpeta 'libreria' que contiene<br>" +
-                "archivos YAML de cursos para importar.<br><br>" +
-                "Los archivos deben tener extensión .yaml o .yml</body></html>");
-        accessoryPanel.add(infoLabel);
-        
-        fileChooser.setAccessory(accessoryPanel);
-        
-        // Mostrar el diálogo
         int result = fileChooser.showOpenDialog(this);
         
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFolder = fileChooser.getSelectedFile();
+            File[] selectedFiles = fileChooser.getSelectedFiles();
             
-            // Verificar si la carpeta es válida
-            if (selectedFolder != null && selectedFolder.isDirectory()) {
-                // Aquí implementaríamos la lógica para procesar los archivos YAML
-                // Por ahora, mostraremos un mensaje de simulación
-                File[] yamlFiles = selectedFolder.listFiles();
+            if (selectedFiles != null && selectedFiles.length > 0) {
+                int cursosAñadidos = 0;
+                ManejadorCursos manejador = new ManejadorCursos();
                 
-                if (yamlFiles != null && yamlFiles.length > 0) {
-                    // Aquí llamaríamos al controlador para procesar los archivos
-                    // ControladorPDS.getUnicaInstancia().importarCursosYAML(yamlFiles);
-                    
-                    // Mostrar diálogo de éxito con animación
-                    mostrarDialogoImportacion(yamlFiles.length);
-                } else {
-                    mostrarMensajeError("No se encontraron archivos YAML en la carpeta seleccionada.");
+                for (File file : selectedFiles) {
+                    try {
+                        // Parsear el archivo YAML
+                        Curso nuevoCurso = manejador.parseYAML(file.toPath());
+                        
+                        // Verificar si el curso ya existe en la lista
+                        boolean cursoExiste = false;
+                        for (int i = 0; i < modeloCursos.getSize(); i++) {
+                            Curso cursoExistente = modeloCursos.getElementAt(i);
+                            if (cursoExistente.getId().equals(nuevoCurso.getId())) {
+                                cursoExiste = true;
+                                break;
+                            }
+                        }
+                        
+                        // Si no existe, añadirlo
+                        if (!cursoExiste) {
+                            modeloCursos.addElement(nuevoCurso);
+                            cursosAñadidos++;
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error al procesar archivo: " + file.getName());
+                        e.printStackTrace();
+                    }
                 }
+                
+                // Actualizar la lista
+                listaCursos.setModel(modeloCursos);
+                
+                // Mostrar resultado
+                if (cursosAñadidos > 0) {
+                    mostrarDialogoImportacion(cursosAñadidos);
+                } else {
+                    mostrarMensajeError("No se añadieron nuevos cursos. Es posible que ya existieran en la lista.");
+                }
+            } else {
+                mostrarMensajeError("No se seleccionaron archivos.");
             }
         }
     }
     
-    private void mostrarDialogoImportacion(int numArchivos) {
-        // Crear un JDialog personalizado con animación
+    private void mostrarDialogoImportacion(int numCursos) {
         JDialog dialog = new JDialog(this, "Importación Exitosa", true);
         dialog.setSize(300, 200);
         dialog.setLocationRelativeTo(this);
@@ -382,8 +398,8 @@ public class VentanaCursosSinEmpezar extends JFrame {
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 int w = getWidth();
                 int h = getHeight();
-                Color color1 = new Color(76, 175, 80); // Verde
-                Color color2 = new Color(27, 94, 32); // Verde oscuro
+                Color color1 = new Color(76, 175, 80);
+                Color color2 = new Color(27, 94, 32);
                 GradientPaint gp = new GradientPaint(0, 0, color1, 0, h, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, w, h);
@@ -393,7 +409,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
         
         JLabel messageLabel = new JLabel("<html><div style='text-align: center;'>" +
                 "¡Importación exitosa!<br><br>" +
-                "Se han importado " + numArchivos + " archivos YAML.</div></html>");
+                "Se han añadido " + numCursos + " cursos nuevos.</div></html>");
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         messageLabel.setForeground(Color.WHITE);
         messageLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -402,7 +418,6 @@ public class VentanaCursosSinEmpezar extends JFrame {
         JButton okButton = createAnimatedButton("Aceptar", new Color(255, 255, 255, 100));
         okButton.setForeground(Color.WHITE);
         
-        // Panel para el botón
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setOpaque(false);
         buttonPanel.add(okButton);
@@ -456,9 +471,21 @@ public class VentanaCursosSinEmpezar extends JFrame {
         // Mostrar mensaje de error
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
-
+    
+    private Estrategia obtenerEstrategiaSeleccionada() {
+        String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
+        switch (estrategiaSeleccionada) {
+            case "Aleatoria":
+                return new EstrategiaAleatoria();
+            case "Espaciada":
+                return new EstrategiaEspaciada();
+            case "Secuencial":
+            default:
+                return new EstrategiaSecuencial();
+        }
+    }
+    
     private void setupWindowMovement() {
-        // Eventos para movimiento de la ventana
         MouseAdapter ma = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -559,17 +586,14 @@ public class VentanaCursosSinEmpezar extends JFrame {
             panel.add(Box.createVerticalStrut(4));
             panel.add(lblDescription);
 
-            // Aumentar el tamaño del panel
-            panel.setPreferredSize(new Dimension(400, 110)); // Mayor altura y ancho
+            panel.setPreferredSize(new Dimension(400, 110));
             panel.setMinimumSize(new Dimension(400, 110));
 
             return panel;
         }
     }
 
-
     public void mostrarVentana() {
-        // Animación de aparición gradual
         setOpacity(0.0f);
         setVisible(true);
         
