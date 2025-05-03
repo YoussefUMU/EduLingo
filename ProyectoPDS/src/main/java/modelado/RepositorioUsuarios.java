@@ -87,7 +87,7 @@ public class RepositorioUsuarios {
         Curso curso = null;
         if (cursoEnMarcha.getCurso().getIdDB() != null) {
         	curso = em.find(Curso.class, cursoEnMarcha.getCurso().getIdDB());	//Como varios Cursos en Marcha comparten el mismo atributo Curso, es necesario manejar su persistencia por separado.
-             
+            																	//Creo que lo anterior es obsoleto, ya no se comparte el mismo curso.
         }
         try {
             em.getTransaction().begin();
@@ -127,4 +127,24 @@ public class RepositorioUsuarios {
             em.close();
         }
     }
+
+	public void cancelarPremium(Long id) {
+		EntityManager em = emf.createEntityManager();
+        Usuario usuario = em.find(Usuario.class, id);
+        try {
+            em.getTransaction().begin();
+            
+            usuario.cancelarPremium();
+            
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+		
+	}
 }
