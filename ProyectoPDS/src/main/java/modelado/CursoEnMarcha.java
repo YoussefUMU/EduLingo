@@ -3,6 +3,7 @@ package modelado;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import controlador.ControladorPDS;
 
 @Entity
 @Table(name = "cursos_en_marcha")
@@ -66,6 +68,14 @@ public class CursoEnMarcha {
 		this.BloquesCompletos = new ArrayList<Bloque>();
 		this.PreguntasCompletas = new ArrayList<Pregunta>();
 	}
+    /**
+     * Registra una respuesta a una pregunta
+     * @param correcta Si la respuesta fue correcta
+     */
+    public void registrarRespuesta(boolean correcta) {
+        ControladorPDS.getUnicaInstancia().registrarRespuestaPregunta(correcta);
+    }
+
 
 	public void avanzarPregunta() {
 		Bloque bloqueActualObj = getBloqueActual();
@@ -134,6 +144,8 @@ public class CursoEnMarcha {
 	public void finalizar() {
 		// Implementar lógica para finalizar el curso
 		System.out.println("¡Curso completado!");
+        ControladorPDS.getUnicaInstancia().getEstadisticas().registrarActividad();
+
 	}
 
 	public Estrategia getEstrategia() {

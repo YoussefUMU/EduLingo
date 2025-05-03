@@ -2,6 +2,8 @@ package vista;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import controlador.ControladorPDS;
 import modelado.CursoEnMarcha;
 
 /**
@@ -18,6 +20,9 @@ public class NavegadorPreguntas {
         // Guardamos la referencia del bloque y pregunta actuales
         int bloqueActual = cursoEnMarcha.getBloqueActualIndex();
         int preguntaActual = cursoEnMarcha.getPreguntaActualIndex();
+        
+        // Registrar respuesta correcta
+        ControladorPDS.getUnicaInstancia().registrarRespuestaPregunta(true);
         
         // Avanzamos a la siguiente pregunta en el curso
         cursoEnMarcha.avanzarPregunta();
@@ -43,8 +48,8 @@ public class NavegadorPreguntas {
                 "¡Felicidades! Has completado este curso con éxito.", 
                 "Curso completado", JOptionPane.INFORMATION_MESSAGE);
             
-            // Finalizar el curso en el modelo
-            cursoEnMarcha.finalizar();
+            // Finalizar el curso en el modelo (actualiza XP y verifica logros)
+            ControladorPDS.getUnicaInstancia().finalizarCursoEnMarcha(cursoEnMarcha);
             
             ventanaActual.dispose();
             new VentanaPrincipal().setVisible(true);

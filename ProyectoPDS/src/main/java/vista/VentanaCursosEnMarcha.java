@@ -13,6 +13,8 @@ import javax.swing.border.EmptyBorder;
 
 import modelado.Curso;
 import modelado.CursoEnMarcha;
+import modelado.EstrategiaAleatoria;
+import modelado.EstrategiaSecuencial;
 import controlador.ControladorPDS;
 
 public class VentanaCursosEnMarcha extends JFrame {
@@ -160,15 +162,42 @@ public class VentanaCursosEnMarcha extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 CursoEnMarcha cursoSeleccionado = list.getSelectedValue();
                 if (cursoSeleccionado != null) {
-                    // Aquí se abriría la ventana del curso seleccionado
-                    JOptionPane.showMessageDialog(null, "Abriendo curso: " + ControladorPDS.getUnicaInstancia().getNombreCursoEnMarcha(cursoSeleccionado), 
-                            "Curso Seleccionado", JOptionPane.INFORMATION_MESSAGE);
+                    // Usamos un timer para aplicar la animación de desvanecimiento
+                    final Timer timer = new Timer(10, new ActionListener() {
+                        float alpha = 1.0f;
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            alpha -= 0.05f;
+                            if (alpha <= 0) {
+                                // Para la animación y cerramos la ventana actual
+                                ((Timer)e.getSource()).stop();
+                                dispose();
+
+                                // Creamos la flashcard usando el adaptador con los índices actuales
+                                JFrame flashCard = AdaptadorPreguntas.crearFlashCard(
+                                        cursoSeleccionado,
+                                        cursoSeleccionado.getBloqueActualIndex(),
+                                        cursoSeleccionado.getPreguntaActualIndex()
+                                );
+
+                                if (flashCard != null) {
+                                    flashCard.setVisible(true);
+                                } else {
+                                    // En caso de error, se muestra la ventana principal
+                                    new VentanaPrincipal().setVisible(true);
+                                }
+                            }
+                            setOpacity(Math.max(0, alpha));
+                        }
+                    });
+                    timer.start();
                 } else {
                     JOptionPane.showMessageDialog(null, "Por favor, seleccione un curso.", 
                             "No hay selección", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
+
         
         btnCancelar.addActionListener(new ActionListener() {
             @Override
@@ -274,10 +303,26 @@ class ModernCursoCellRenderer extends DefaultListCellRenderer {
         lblCategory.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         lblCategory.setForeground(isSelected ? new Color(255, 255, 200) : new Color(100, 100, 100));
         lblCategory.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        String estrategia = null;
+        if(curso.getEstrategia() instanceof EstrategiaSecuencial) {
+        	estrategia = "Estrategia - Secuencial";
+        } else if (curso.getEstrategia() instanceof EstrategiaAleatoria) {
+        	estrategia = "Estrategia - Aleatoria";
+        } else {
+        	estrategia = "Estrategia - Espaciada";
+        }
+        
+        JLabel lblEstrategia = new JLabel(estrategia);
+        lblEstrategia.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblEstrategia.setForeground(isSelected ? new Color(255, 255, 200) : new Color(100, 100, 100));
+        lblEstrategia.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         panel.add(lblTitle);
         panel.add(Box.createVerticalStrut(4));
         panel.add(lblCategory);
+        panel.add(Box.createVerticalStrut(4));
+        panel.add(lblEstrategia);
         panel.add(Box.createVerticalStrut(4));
         panel.add(lblDescription);
 

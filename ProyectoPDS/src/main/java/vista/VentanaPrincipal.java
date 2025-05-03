@@ -8,7 +8,11 @@ import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import controlador.ControladorPDS;
 
 /**
@@ -27,6 +31,8 @@ public class VentanaPrincipal extends JFrame {
 	private JTextPane textoAsistente;
 	private JPanel panelAsistente;
 	private Timer timerAsistente;
+    private Timer timerActualizacionTiempo;
+    private JLabel lblTiempoTotal;
 	private String[] consejosDia = { "¡Recuerda practicar al menos 15 minutos cada día para mantener tu racha!",
 			"Los estudios muestran que estudiar antes de dormir mejora la retención",
 			"Prueba a usar la técnica Pomodoro: 25 minutos de estudio, 5 de descanso",
@@ -36,10 +42,25 @@ public class VentanaPrincipal extends JFrame {
 			"El aprendizaje espaciado es más efectivo que el intensivo en maratones",
 			"Los errores son parte fundamental del aprendizaje, ¡no temas cometerlos!" };
 
-	public VentanaPrincipal() {
-		usuario = ControladorPDS.getUnicaInstancia().getSesionActual();
-		inicializarInterfaz();
-	}
+    public VentanaPrincipal() {
+        usuario = ControladorPDS.getUnicaInstancia().getSesionActual();
+        inicializarInterfaz();
+        
+        // Iniciar timer para actualizar el tiempo de uso cada minuto
+        timerActualizacionTiempo = new Timer(60000, e -> {
+            actualizarContadorTiempo();
+        });
+        timerActualizacionTiempo.start();
+        
+        // Añadir listener de cierre de ventana para actualizar tiempo
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ControladorPDS.getUnicaInstancia().cerrarSesion();
+                timerActualizacionTiempo.stop();
+            }
+        });
+    }
 
 	private void inicializarInterfaz() {
 		setTitle("Edulingo - Plataforma de Aprendizaje");
@@ -326,10 +347,36 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private JPanel crearPanelBienvenida() {
-		JPanel panel = new JPanel(new BorderLayout(20, 20));
-		panel.setOpaque(false);
-		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
+	    JPanel panel = new JPanel(new BorderLayout(20, 20));
+	    panel.setOpaque(false);
+	    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	    int nivel = ControladorPDS.getUnicaInstancia().getNivelUsuario();
+	    int porcentaje = ControladorPDS.getUnicaInstancia().getPorcentajeNivel();
+	    String rango = ControladorPDS.getUnicaInstancia().getRangoUsuario();
+	    
+	    // Mostrar el nivel y rango del usuario
+	    JPanel panelNivel = new JPanel(new BorderLayout(10, 5));
+	    panelNivel.setOpaque(false);
+	    panelNivel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+	    
+	    JLabel lblRango = new JLabel("Rango: " + rango);
+	    lblRango.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
+	    
+	    JLabel lblNivel = new JLabel("Nivel " + nivel);
+	    lblNivel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
+	    
+	    JProgressBar barraProgreso = new JProgressBar(0, 100);
+	    barraProgreso.setValue(porcentaje);
+	    barraProgreso.setStringPainted(true);
+	    barraProgreso.setString(porcentaje + "%");
+	    barraProgreso.setForeground(new Color(76, 175, 80));
+	    
+	    panelNivel.add(lblRango, BorderLayout.WEST);
+	    panelNivel.add(lblNivel, BorderLayout.EAST);
+	    panelNivel.add(barraProgreso, BorderLayout.SOUTH);
+	    
+	    // Añadir el panel de nivel
+	    panel.add(panelNivel, BorderLayout.SOUTH);
 		// Panel superior con imagen destacada
 		JPanel panelImagen = new JPanel(new BorderLayout());
 		panelImagen.setOpaque(false);
@@ -395,21 +442,31 @@ public class VentanaPrincipal extends JFrame {
 		// Panel central con contenido
 		JPanel panelCentroContenido = new JPanel(new GridLayout(1, 2, 20, 0));
 		panelCentroContenido.setOpaque(false);
-
+		String actividadReciente = "";
+		ArrayList<String> listaCategorias = new ArrayList<>();
+		for(String categoria : ControladorPDS.getUnicaInstancia().numCursosActivos().keySet()) {
+			actividadReciente = "Has iniciado " + ControladorPDS.getUnicaInstancia().numCursosActivos().get(categoria) + " cursos de la categoria " + categoria; 
+			listaCategorias.add(actividadReciente);
+		}
+		listaCategorias.add("Tienes una racha actual de " + usuario.getEstadisticas().getMejorRacha() + " días");
+	
 		// Panel de resumen de actividad
 		JPanel panelResumen = crearPanelCartas("Mi actividad reciente",
-				new String[] { "Has completado 3 lecciones de Programación Java en la última semana",
-						"Tienes una racha actual de " + usuario.getEstadisticas().getMejorRacha() + " días",
-						"Tu nivel actual es: Aprendiz entusiasta",
-						"Próxima meta: 30 minutos de estudio diario durante 7 días" },
+				listaCategorias,
 				new Color(33, 150, 243, 50));
 
 		// Panel de cursos recomendados
+		//TODO únicamente mostrar en recomendados cursos no activos
+		ArrayList<String> listaRecomendados = new ArrayList<>();
+		for(Curso curso : ControladorPDS.getUnicaInstancia().obtenerCursosLocales()) {
+			listaRecomendados.add(curso.getNombre() + " - " + curso.getCategoria());
+		}
+		
+		
 		JPanel panelRecomendados = crearPanelCartas("Recomendados para ti",
-				new String[] { "Curso avanzado de Programación Orientada a Objetos", "Fundamentos de Bases de Datos",
-						"Patrones de Diseño en Java", "Desarrollo de Interfaces Gráficas con Swing" },
+				listaRecomendados,
 				new Color(76, 175, 80, 50));
-
+		 
 		panelCentroContenido.add(panelResumen);
 		panelCentroContenido.add(panelRecomendados);
 		panel.add(panelCentroContenido, BorderLayout.CENTER);
@@ -431,7 +488,7 @@ public class VentanaPrincipal extends JFrame {
 		return panel;
 	}
 
-	private JPanel crearPanelCartas(String titulo, String[] items, Color colorFondo) {
+	private JPanel crearPanelCartas(String titulo, ArrayList<String> items, Color colorFondo) {
 		JPanel panel = new JPanel(new BorderLayout(0, 10));
 		panel.setOpaque(false);
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -595,10 +652,10 @@ public class VentanaPrincipal extends JFrame {
 		textoAsistente.setText(estiloHTML);
 	}
 
-	private JPanel crearPanelEstadisticas() {
-		JPanel panel = new JPanel(new BorderLayout(20, 20));
-		panel.setOpaque(false);
-		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    private JPanel crearPanelEstadisticas() {
+        JPanel panel = new JPanel(new BorderLayout(20, 20));
+        panel.setOpaque(false);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 		// Panel superior con título y descripción
 		JPanel panelTitulo = new JPanel(new BorderLayout());
@@ -621,15 +678,16 @@ public class VentanaPrincipal extends JFrame {
 		panelTitulo.add(btnVolver, BorderLayout.EAST);
 
 		// Panel central con tarjetas de estadísticas
-		JPanel panelTarjetas = new JPanel(new GridLayout(2, 2, 15, 15));
-		panelTarjetas.setOpaque(false);
+        JPanel panelTarjetas = new JPanel(new GridLayout(2, 2, 15, 15));
+        panelTarjetas.setOpaque(false);
 
 		// Obtener estadísticas del usuario
 		Estadistica stats = usuario.getEstadisticas();
 
 		// Tarjeta de tiempo de uso
-		JPanel tarjetaTiempo = crearTarjetaEstadistica("Tiempo total dedicado", formatearTiempo(stats.getTiempoUso()),
-				new Color(66, 133, 244, 50), "\u23F1");
+        JPanel tarjetaTiempo = crearTarjetaEstadistica("Tiempo total dedicado", 
+                formatearTiempo(stats.getTiempoUso()),
+                new Color(66, 133, 244, 50), "\u23F1");
 
 		// Tarjeta de racha
 		JPanel tarjetaRacha = crearTarjetaEstadistica("Mejor racha", stats.getMejorRacha() + " días",
@@ -730,47 +788,52 @@ public class VentanaPrincipal extends JFrame {
 		return panel;
 	}
 
-	private JPanel crearTarjetaEstadistica(String titulo, String valor, Color colorFondo, String emoji) {
-		JPanel panel = new JPanel(new BorderLayout(5, 10)) {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2d.setColor(colorFondo);
-				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+    private JPanel crearTarjetaEstadistica(String titulo, String valor, Color colorFondo, String emoji) {
+        JPanel panel = new JPanel(new BorderLayout(5, 10)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(colorFondo);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 
-				// Pequeños círculos decorativos
-				g2d.setColor(new Color(255, 255, 255, 50));
-				g2d.fillOval(-20, -20, 70, 70);
-				g2d.fillOval(getWidth() - 30, getHeight() - 30, 60, 60);
-			}
-		};
-		panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		panel.setOpaque(false);
+                // Pequeños círculos decorativos
+                g2d.setColor(new Color(255, 255, 255, 50));
+                g2d.fillOval(-20, -20, 70, 70);
+                g2d.fillOval(getWidth() - 30, getHeight() - 30, 60, 60);
+            }
+        };
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        panel.setOpaque(false);
 
-		JLabel lblEmoji = new JLabel(emoji);
-		lblEmoji.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
-		lblEmoji.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel lblEmoji = new JLabel(emoji);
+        lblEmoji.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+        lblEmoji.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel lblTitulo = new JLabel(titulo);
-		lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
-		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel lblValor = new JLabel(valor);
-		lblValor.setFont(new Font("Segoe UI Emoji", Font.BOLD, 17));
-		lblValor.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel lblValor = new JLabel(valor);
+        lblValor.setFont(new Font("Segoe UI Emoji", Font.BOLD, 17));
+        lblValor.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        // Si es el panel de tiempo, guardar referencia para actualización
+        if (titulo.equals("Tiempo total dedicado")) {
+            lblTiempoTotal = lblValor;
+        }
 
-		JPanel panelCentro = new JPanel(new BorderLayout(5, 5));
-		panelCentro.setOpaque(false);
-		panelCentro.add(lblTitulo, BorderLayout.NORTH);
-		panelCentro.add(lblValor, BorderLayout.CENTER);
+        JPanel panelCentro = new JPanel(new BorderLayout(5, 5));
+        panelCentro.setOpaque(false);
+        panelCentro.add(lblTitulo, BorderLayout.NORTH);
+        panelCentro.add(lblValor, BorderLayout.CENTER);
 
-		panel.add(lblEmoji, BorderLayout.NORTH);
-		panel.add(panelCentro, BorderLayout.CENTER);
+        panel.add(lblEmoji, BorderLayout.NORTH);
+        panel.add(panelCentro, BorderLayout.CENTER);
 
-		return panel;
-	}
+        return panel;
+    }
 
 	private JPanel crearPanelInferior() {
 		JPanel panel = new JPanel(new BorderLayout());
@@ -979,184 +1042,211 @@ public class VentanaPrincipal extends JFrame {
 		repaint();
 	}
 
+	// Este método debe modificarse en la clase VentanaPrincipal
 	private void mostrarRangosYLogros() {
-		JDialog dialogoRangos = new JDialog(this, "Mis Rangos y Logros", true);
-		dialogoRangos.setSize(600, 500);
-		dialogoRangos.setLocationRelativeTo(this);
-		dialogoRangos.setLayout(new BorderLayout());
+	    JDialog dialogoRangos = new JDialog(this, "Mis Rangos y Logros", true);
+	    dialogoRangos.setSize(600, 500);
+	    dialogoRangos.setLocationRelativeTo(this);
+	    dialogoRangos.setLayout(new BorderLayout());
 
-		JPanel panelContenido = new JPanel(new BorderLayout(20, 20));
-		panelContenido.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		panelContenido.setBackground(new Color(250, 250, 255));
+	    JPanel panelContenido = new JPanel(new BorderLayout(20, 20));
+	    panelContenido.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+	    panelContenido.setBackground(new Color(250, 250, 255));
 
-		// Título
-		JLabel lblTitulo = new JLabel("Tus Rangos y Logros");
-		lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 22));
-		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    // Título
+	    JLabel lblTitulo = new JLabel("Tus Rangos y Logros");
+	    lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 22));
+	    lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
-		// Panel de usuario y nivel
-		JPanel panelUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-		panelUsuario.setOpaque(false);
+	    // Panel de usuario y nivel
+	    JPanel panelUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+	    panelUsuario.setOpaque(false);
 
-		// Avatar
-		JLabel lblAvatar = new JLabel();
-		try {
-			ImageIcon avatarIcon = new ImageIcon(getClass().getResource("/recursos/avatar_usuario.png"));
-			if (avatarIcon.getIconWidth() == -1) {
-				lblAvatar.setText("\uD83D\uDC64"); // Emoji si no hay icono
-				lblAvatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
-			} else {
-				Image img = avatarIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-				lblAvatar.setIcon(new ImageIcon(img));
-			}
-		} catch (Exception e) {
-			lblAvatar.setText("\uD83D\uDC64"); // Emoji si no hay icono
-			lblAvatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
-		}
+	    // Avatar
+	    JLabel lblAvatar = new JLabel();
+	    try {
+	        ImageIcon avatarIcon = new ImageIcon(getClass().getResource("/recursos/avatar_usuario.png"));
+	        if (avatarIcon.getIconWidth() == -1) {
+	            lblAvatar.setText("\uD83D\uDC64"); // Emoji si no hay icono
+	            lblAvatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
+	        } else {
+	            Image img = avatarIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+	            lblAvatar.setIcon(new ImageIcon(img));
+	        }
+	    } catch (Exception e) {
+	        lblAvatar.setText("\uD83D\uDC64"); // Emoji si no hay icono
+	        lblAvatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
+	    }
 
-		// Información de nivel
-		JPanel panelNivel = new JPanel();
-		panelNivel.setLayout(new BoxLayout(panelNivel, BoxLayout.Y_AXIS));
-		panelNivel.setOpaque(false);
+	    // Información de nivel
+	    JPanel panelNivel = new JPanel();
+	    panelNivel.setLayout(new BoxLayout(panelNivel, BoxLayout.Y_AXIS));
+	    panelNivel.setOpaque(false);
 
-		JLabel lblNombre = new JLabel(usuario.getNombreUsuario());
-		lblNombre.setFont(new Font("Segoe UI Emoji", Font.BOLD, 20));
-		lblNombre.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    JLabel lblNombre = new JLabel(usuario.getNombreUsuario());
+	    lblNombre.setFont(new Font("Segoe UI Emoji", Font.BOLD, 20));
+	    lblNombre.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JLabel lblRango = new JLabel("Aprendiz Entusiasta");
-		lblRango.setFont(new Font("Segoe UI Emoji", Font.ITALIC, 16));
-		lblRango.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    // Obtener rango del usuario
+	    String rangoUsuario = ControladorPDS.getUnicaInstancia().getRangoUsuario();
+	    JLabel lblRango = new JLabel(rangoUsuario);
+	    lblRango.setFont(new Font("Segoe UI Emoji", Font.ITALIC, 16));
+	    lblRango.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		// Barra de progreso
-		JProgressBar barraProgreso = new JProgressBar(0, 100);
-		barraProgreso.setValue(75);
-		barraProgreso.setStringPainted(true);
-		barraProgreso.setString("Nivel 3 - 75%");
-		barraProgreso.setPreferredSize(new Dimension(200, 20));
-		barraProgreso.setMaximumSize(new Dimension(200, 20));
-		barraProgreso.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    // Barra de progreso con valores reales
+	    int nivel = ControladorPDS.getUnicaInstancia().getNivelUsuario();
+	    int porcentaje = ControladorPDS.getUnicaInstancia().getPorcentajeNivel();
+	    
+	    JProgressBar barraProgreso = new JProgressBar(0, 100);
+	    barraProgreso.setValue(porcentaje);
+	    barraProgreso.setStringPainted(true);
+	    barraProgreso.setString("Nivel " + nivel + " - " + porcentaje + "%");
+	    barraProgreso.setPreferredSize(new Dimension(200, 20));
+	    barraProgreso.setMaximumSize(new Dimension(200, 20));
+	    barraProgreso.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    
+	    // Cambiar el color de la barra
+	    barraProgreso.setForeground(new Color(230, 126, 34)); // Naranja
 
-		panelNivel.add(lblNombre);
-		panelNivel.add(Box.createVerticalStrut(5));
-		panelNivel.add(lblRango);
-		panelNivel.add(Box.createVerticalStrut(10));
-		panelNivel.add(barraProgreso);
+	    panelNivel.add(lblNombre);
+	    panelNivel.add(Box.createVerticalStrut(5));
+	    panelNivel.add(lblRango);
+	    panelNivel.add(Box.createVerticalStrut(10));
+	    panelNivel.add(barraProgreso);
 
-		panelUsuario.add(lblAvatar);
-		panelUsuario.add(panelNivel);
+	    panelUsuario.add(lblAvatar);
+	    panelUsuario.add(panelNivel);
 
-		// Panel de logros
-		JPanel panelLogros = new JPanel(new GridLayout(0, 3, 10, 10));
-		panelLogros.setOpaque(false);
-		panelLogros.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(200, 200, 220)),
-				"Logros Desbloqueados", TitledBorder.CENTER, TitledBorder.TOP, new Font("Segoe UI Emoji", Font.BOLD, 16)));
+	    // Panel de logros
+	    JPanel panelLogros = new JPanel(new GridLayout(0, 3, 10, 10));
+	    panelLogros.setOpaque(false);
+	    panelLogros.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(200, 200, 220)),
+	            "Logros Desbloqueados", TitledBorder.CENTER, TitledBorder.TOP, new Font("Segoe UI Emoji", Font.BOLD, 16)));
 
-		// Añadir logros
-		panelLogros.add(crearTarjetaLogro("Primer Día", "Completaste tu primera lección", true));
-		panelLogros.add(crearTarjetaLogro("Racha x7", "Mantuviste una racha de 7 días", true));
-		panelLogros.add(crearTarjetaLogro("Explorador", "Probaste 3 cursos diferentes", true));
-		panelLogros.add(crearTarjetaLogro("Madrugador", "Estudiaste antes de las 8:00 AM", false));
-		panelLogros.add(crearTarjetaLogro("Nocturno", "Estudiaste después de las 22:00", true));
-		panelLogros.add(crearTarjetaLogro("Racha x30", "Mantén una racha de 30 días", false));
-		panelLogros.add(crearTarjetaLogro("Maestro Java", "Completa el curso de Java", false));
-		panelLogros.add(crearTarjetaLogro("Políglota", "Aprende 3 lenguajes", false));
-		panelLogros.add(crearTarjetaLogro("Colaborador", "Crea tu primer curso", false));
+	    // Obtener información de todos los logros
+	    Map<String, GestorLogros.LogroInfo> todosLosLogros = ControladorPDS.getUnicaInstancia().getTodosLosLogros();
+	    
+	    // Recorrer todos los logros disponibles
+	    for (Map.Entry<String, GestorLogros.LogroInfo> entry : todosLosLogros.entrySet()) {
+	        String idLogro = entry.getKey();
+	        GestorLogros.LogroInfo info = entry.getValue();
+	        
+	        // Verificar si está desbloqueado
+	        boolean desbloqueado = ControladorPDS.getUnicaInstancia().tieneLogroDesbloqueado(idLogro);
+	        
+	        // Crear tarjeta de logro
+	        panelLogros.add(crearTarjetaLogro(info.getTitulo(), info.getDescripcion(), desbloqueado));
+	    }
 
-		JScrollPane scrollLogros = new JScrollPane(panelLogros);
-		scrollLogros.setBorder(BorderFactory.createEmptyBorder());
-		scrollLogros.getVerticalScrollBar().setUnitIncrement(16);
+	    JScrollPane scrollLogros = new JScrollPane(panelLogros);
+	    scrollLogros.setBorder(BorderFactory.createEmptyBorder());
+	    scrollLogros.getVerticalScrollBar().setUnitIncrement(16);
 
-		// Panel de próximos rangos
-		JPanel panelRangos = new JPanel();
-		panelRangos.setLayout(new BoxLayout(panelRangos, BoxLayout.Y_AXIS));
-		panelRangos.setOpaque(false);
-		panelRangos.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(200, 200, 220)),
-				"Próximos Rangos", TitledBorder.CENTER, TitledBorder.TOP, new Font("Segoe UI Emoji", Font.BOLD, 16)));
+	    // Panel de próximos rangos
+	    JPanel panelRangos = new JPanel();
+	    panelRangos.setLayout(new BoxLayout(panelRangos, BoxLayout.Y_AXIS));
+	    panelRangos.setOpaque(false);
+	    panelRangos.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(200, 200, 220)),
+	            "Próximos Rangos", TitledBorder.CENTER, TitledBorder.TOP, new Font("Segoe UI Emoji", Font.BOLD, 16)));
 
-		panelRangos.add(crearItemRango("Aprendiz Entusiasta", "Nivel actual"));
-		panelRangos.add(Box.createVerticalStrut(5));
-		panelRangos.add(crearItemRango("Estudiante Constante", "Alcanza el Nivel 5"));
-		panelRangos.add(Box.createVerticalStrut(5));
-		panelRangos.add(crearItemRango("Experto Junior", "Completa 5 cursos"));
-		panelRangos.add(Box.createVerticalStrut(5));
-		panelRangos.add(crearItemRango("Maestro del Conocimiento", "Alcanza el Nivel 10"));
+	    // Añadir los rangos con indicación de cuál es el actual
+	    String rangoActual = ControladorPDS.getUnicaInstancia().getRangoUsuario();
+	    
+	    panelRangos.add(crearItemRango("Aprendiz Entusiasta", "Nivel actual", 
+	            rangoActual.equals("Aprendiz Entusiasta")));
+	            
+	    panelRangos.add(Box.createVerticalStrut(5));
+	    panelRangos.add(crearItemRango("Estudiante Constante", "Alcanza el Nivel 3", 
+	            rangoActual.equals("Estudiante Constante")));
+	            
+	    panelRangos.add(Box.createVerticalStrut(5));
+	    panelRangos.add(crearItemRango("Experto Junior", "Completa 5 cursos", 
+	            rangoActual.equals("Experto Junior")));
+	            
+	    panelRangos.add(Box.createVerticalStrut(5));
+	    panelRangos.add(crearItemRango("Maestro del Conocimiento", "Alcanza el Nivel 10", 
+	            rangoActual.equals("Maestro del Conocimiento")));
 
-		// Botón de cerrar
-		JButton btnCerrar = new JButton("Cerrar");
-		btnCerrar.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
-		btnCerrar.addActionListener(e -> dialogoRangos.dispose());
+	    // Botón de cerrar
+	    JButton btnCerrar = new JButton("Cerrar");
+	    btnCerrar.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
+	    btnCerrar.addActionListener(e -> dialogoRangos.dispose());
 
-		JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		panelBoton.setOpaque(false);
-		panelBoton.add(btnCerrar);
+	    JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	    panelBoton.setOpaque(false);
+	    panelBoton.add(btnCerrar);
 
-		// Añadir componentes al panel principal
-		panelContenido.add(lblTitulo, BorderLayout.NORTH);
-		panelContenido.add(panelUsuario, BorderLayout.NORTH);
+	    // Añadir componentes al panel principal
+	    panelContenido.add(lblTitulo, BorderLayout.NORTH);
+	    panelContenido.add(panelUsuario, BorderLayout.NORTH);
 
-		JPanel panelCentro = new JPanel(new BorderLayout(0, 15));
-		panelCentro.setOpaque(false);
-		panelCentro.add(scrollLogros, BorderLayout.CENTER);
-		panelCentro.add(panelRangos, BorderLayout.SOUTH);
+	    JPanel panelCentro = new JPanel(new BorderLayout(0, 15));
+	    panelCentro.setOpaque(false);
+	    panelCentro.add(scrollLogros, BorderLayout.CENTER);
+	    panelCentro.add(panelRangos, BorderLayout.SOUTH);
 
-		panelContenido.add(panelCentro, BorderLayout.CENTER);
-		panelContenido.add(panelBoton, BorderLayout.SOUTH);
+	    panelContenido.add(panelCentro, BorderLayout.CENTER);
+	    panelContenido.add(panelBoton, BorderLayout.SOUTH);
 
-		dialogoRangos.add(panelContenido);
-		dialogoRangos.setVisible(true);
+	    dialogoRangos.add(panelContenido);
+	    dialogoRangos.setVisible(true);
 	}
 
 	private JPanel crearTarjetaLogro(String titulo, String descripcion, boolean desbloqueado) {
-		JPanel panel = new JPanel(new BorderLayout(5, 5));
-		panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-		panel.setBackground(desbloqueado ? new Color(240, 248, 255) : new Color(245, 245, 245));
+	    JPanel panel = new JPanel(new BorderLayout(5, 5));
+	    panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+	    panel.setBackground(desbloqueado ? new Color(240, 248, 255) : new Color(245, 245, 245));
 
-		JLabel lblIcono = new JLabel(desbloqueado ? "🏆" : "🔒");
-		lblIcono.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
-		lblIcono.setHorizontalAlignment(SwingConstants.CENTER);
+	    // Emoji de trofeo para logros desbloqueados, candado para bloqueados
+	    JLabel lblIcono = new JLabel(desbloqueado ? "🏆" : "🔒");
+	    lblIcono.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+	    lblIcono.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel lblTitulo = new JLabel(titulo);
-		lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
+	    JLabel lblTitulo = new JLabel(titulo);
+	    lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
 
-		JLabel lblDescripcion = new JLabel("<html><body style='width: 120px'>" + descripcion + "</body></html>");
-		lblDescripcion.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 12));
-		lblDescripcion.setForeground(desbloqueado ? new Color(60, 60, 60) : new Color(150, 150, 150));
+	    JLabel lblDescripcion = new JLabel("<html><body style='width: 120px'>" + descripcion + "</body></html>");
+	    lblDescripcion.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 12));
+	    lblDescripcion.setForeground(desbloqueado ? new Color(60, 60, 60) : new Color(150, 150, 150));
 
-		JPanel panelTexto = new JPanel(new BorderLayout(2, 2));
-		panelTexto.setOpaque(false);
-		panelTexto.add(lblTitulo, BorderLayout.NORTH);
-		panelTexto.add(lblDescripcion, BorderLayout.CENTER);
+	    JPanel panelTexto = new JPanel(new BorderLayout(2, 2));
+	    panelTexto.setOpaque(false);
+	    panelTexto.add(lblTitulo, BorderLayout.NORTH);
+	    panelTexto.add(lblDescripcion, BorderLayout.CENTER);
 
-		panel.add(lblIcono, BorderLayout.WEST);
-		panel.add(panelTexto, BorderLayout.CENTER);
+	    panel.add(lblIcono, BorderLayout.WEST);
+	    panel.add(panelTexto, BorderLayout.CENTER);
 
-		return panel;
+	    return panel;
 	}
 
-	private JPanel crearItemRango(String rango, String requisito) {
-		JPanel panel = new JPanel(new BorderLayout(10, 0));
-		panel.setOpaque(false);
-		panel.setMaximumSize(new Dimension(400, 40));
+	private JPanel crearItemRango(String rango, String requisito, boolean esActual) {
+	    JPanel panel = new JPanel(new BorderLayout(10, 0));
+	    panel.setOpaque(false);
+	    panel.setMaximumSize(new Dimension(400, 40));
 
-		JLabel lblIcono = new JLabel("🏅");
-		lblIcono.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+	    // Usar emoji diferente para rango actual
+	    JLabel lblIcono = new JLabel(esActual ? "🌟" : "🏅");
+	    lblIcono.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
 
-		JLabel lblRango = new JLabel(rango);
-		lblRango.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
+	    // Destacar el rango actual con negrita y color diferente
+	    JLabel lblRango = new JLabel(rango);
+	    lblRango.setFont(new Font("Segoe UI Emoji", esActual ? Font.BOLD : Font.PLAIN, 14));
+	    lblRango.setForeground(esActual ? new Color(66, 133, 244) : new Color(60, 60, 60));
 
-		JLabel lblRequisito = new JLabel(requisito);
-		lblRequisito.setFont(new Font("Segoe UI Emoji", Font.ITALIC, 12));
-		lblRequisito.setForeground(new Color(100, 100, 100));
+	    JLabel lblRequisito = new JLabel(esActual ? "Nivel actual" : requisito);
+	    lblRequisito.setFont(new Font("Segoe UI Emoji", Font.ITALIC, 12));
+	    lblRequisito.setForeground(new Color(100, 100, 100));
 
-		JPanel panelTexto = new JPanel(new BorderLayout());
-		panelTexto.setOpaque(false);
-		panelTexto.add(lblRango, BorderLayout.NORTH);
-		panelTexto.add(lblRequisito, BorderLayout.CENTER);
+	    JPanel panelTexto = new JPanel(new BorderLayout());
+	    panelTexto.setOpaque(false);
+	    panelTexto.add(lblRango, BorderLayout.NORTH);
+	    panelTexto.add(lblRequisito, BorderLayout.CENTER);
 
-		panel.add(lblIcono, BorderLayout.WEST);
-		panel.add(panelTexto, BorderLayout.CENTER);
+	    panel.add(lblIcono, BorderLayout.WEST);
+	    panel.add(panelTexto, BorderLayout.CENTER);
 
-		return panel;
+	    return panel;
 	}
 
 	private void abrirVentanaCursosActivos() {
@@ -1193,16 +1283,31 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
-	private String formatearTiempo(int minutos) {
-		int horas = minutos / 60;
-		int minutosRestantes = minutos % 60;
-
-		if (horas > 0) {
-			return horas + " h " + (minutosRestantes > 0 ? minutosRestantes + " min" : "");
-		} else {
-			return minutosRestantes + " minutos";
-		}
-	}
+    // Método para formatear tiempo mejorado
+    private String formatearTiempo(int segundos) {
+        long horas = TimeUnit.SECONDS.toHours(segundos);
+        long minutos = TimeUnit.SECONDS.toMinutes(segundos) - TimeUnit.HOURS.toMinutes(horas);
+        
+        if (horas > 0) {
+            return horas + " h " + minutos + " min";
+        } else {
+            return minutos + " minutos";
+        }
+    }
+    
+    // Método para actualizar el contador de tiempo en la interfaz
+    private void actualizarContadorTiempo() {
+        // Actualizar estadísticas en el controlador
+        ControladorPDS.getUnicaInstancia().actualizarEstadisticasTiempo();
+        
+        // Obtener las estadísticas actualizadas
+        Estadistica stats = usuario.getEstadisticas();
+        
+        // Actualizar la etiqueta de tiempo
+        if (lblTiempoTotal != null) {
+            lblTiempoTotal.setText(formatearTiempo(stats.getTiempoUso()));
+        }
+    }
 
 	private void cambiarUsuario() {
 		int respuesta = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas cerrar sesión?",

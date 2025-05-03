@@ -6,9 +6,12 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -57,10 +60,6 @@ public class AdaptadorPreguntas {
             return null;
         }
     }
-    
-    /**
-     * Crea un JFrame con FlashCardTipoB basado en una PreguntaImagen
-     */
     private static JFrame crearFlashCardTipoB(CursoEnMarcha cursoEnMarcha, int indBloque, int indPregunta) {
         // Obtener la pregunta del tipo imagen
         PreguntaImagen pregunta = (PreguntaImagen) cursoEnMarcha.getPreguntaActual();
@@ -84,23 +83,33 @@ public class AdaptadorPreguntas {
         for (int i = 0; i < Math.min(3, imagenes.size()); i++) {
             try {
                 String imagenURL = imagenes.get(i);
-                // Intentar cargar la imagen desde URL
+                // Intentar cargar la imagen
                 ImageIcon imagen = null;
                 
                 if (imagenURL != null && !imagenURL.isEmpty()) {
-                    // Primero intentar como URL absoluta
-                    imagen = new ImageIcon(imagenURL);
-                    
-                    // Si falla, intentar como recurso
-                    if (imagen.getIconWidth() <= 0) {
-                        imagen = new ImageIcon(frame.getClass().getResource(imagenURL));
+                    try {
+                        // Verificar si la URL es válida y cargarla directamente
+                        URL url = new URL(imagenURL);
+                        Image img = ImageIO.read(url);
+                        
+                        if (img != null) {
+                            imagen = new ImageIcon(img);
+                        }
+                    } catch (Exception e) {
+                        // Si no es una URL válida, intentar como recurso local
+                        try {
+                            imagen = new ImageIcon(frame.getClass().getResource(imagenURL));
+                        } catch (Exception e2) {
+                            System.out.println("Error cargando imagen como recurso: " + e2.getMessage());
+                        }
                     }
                     
                     // Si sigue fallando, usar una imagen por defecto
-                    if (imagen.getIconWidth() <= 0) {
-                        imagen = new ImageIcon(frame.getClass().getResource("/recursos/pregunta_img.png"));
-                        // Si no hay recurso predeterminado, crear una imagen con texto
-                        if (imagen.getIconWidth() <= 0) {
+                    if (imagen == null || imagen.getIconWidth() <= 0) {
+                        try {
+                            imagen = new ImageIcon(frame.getClass().getResource("/recursos/pregunta_img.png"));
+                        } catch (Exception e3) {
+                            // Si no hay recurso predeterminado, crear una imagen con texto
                             BufferedImage bufferedImage = new BufferedImage(
                                 200, 150, BufferedImage.TYPE_INT_ARGB);
                             Graphics2D g2d = bufferedImage.createGraphics();
@@ -156,7 +165,7 @@ public class AdaptadorPreguntas {
         
         // Configurar acciones para respuestas correctas e incorrectas
         frame.configurarAcciones(
-            // Acción para respuesta correcta - Eliminamos el mensaje de diálogo
+            // Acción para respuesta correcta
             () -> {
                 // Actualizar vidas en el curso en marcha
                 cursoEnMarcha.setVidas(frame.getVidas());

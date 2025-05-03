@@ -216,37 +216,50 @@ public class VentanaCursosSinEmpezar extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Curso cursoSeleccionado = list.getSelectedValue();
                 if (cursoSeleccionado != null) {
-                    // Animación de transición
-                    final Timer timer = new Timer(10, new ActionListener() {
-                        float alpha = 1.0f;
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            alpha -= 0.05f;
-                            if (alpha <= 0) {
-                                ((Timer)e.getSource()).stop();
-                                // Iniciar el curso con la estrategia seleccionada
-                                Estrategia estrategiaSeleccionada = obtenerEstrategiaSeleccionada();
-                                CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia().iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada, obtenerTipoEstrategiaSeleccionada());
-                                dispose();
-                                
-                                // Usar el adaptador para crear la flashcard apropiada
-                                JFrame flashCard = AdaptadorPreguntas.crearFlashCard(cursoEnMarcha, 0, 0);
-                                if (flashCard != null) {
-                                    flashCard.setVisible(true);
-                                } else {
-                                    // En caso de error, volver a la ventana principal
-                                    new VentanaPrincipal().setVisible(true);
+
+                    // Iniciar el curso con la estrategia seleccionada
+                    Estrategia estrategiaSeleccionada = obtenerEstrategiaSeleccionada();
+                    CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia()
+                            .iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada, obtenerTipoEstrategiaSeleccionada());
+
+                    if (cursoEnMarcha == null) {
+                        // Si cursoEnMarcha es nulo, mostramos el mensaje de error SIN cerrar la ventana ni hacer animaciones
+                        JOptionPane.showMessageDialog(null, 
+                                "No puede empezar un curso dos veces con la misma estrategia.", 
+                                "Error", 
+                                JOptionPane.ERROR_MESSAGE);
+                        // No hacemos nada más
+                    } else {
+                        // Si cursoEnMarcha NO es nulo, hacemos la animación de desvanecimiento y cerramos
+                        final Timer timer = new Timer(10, new ActionListener() {
+                            float alpha = 1.0f;
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                alpha -= 0.05f;
+                                if (alpha <= 0) {
+                                    ((Timer)e.getSource()).stop();
+                                    dispose();
+                                    
+                                    // Usar el adaptador para crear la flashcard apropiada
+                                    JFrame flashCard = AdaptadorPreguntas.crearFlashCard(cursoEnMarcha, 0, 0);
+                                    if (flashCard != null) {
+                                        flashCard.setVisible(true);
+                                    } else {
+                                        // En caso de error, volver a la ventana principal
+                                        new VentanaPrincipal().setVisible(true);
+                                    }
                                 }
+                                setOpacity(Math.max(0, alpha));
                             }
-                            setOpacity(Math.max(0, alpha));
-                        }
-                    });
-                    timer.start();
+                        });
+                        timer.start();
+                    }
                 } else {
                     mostrarMensajeError("Por favor, seleccione un curso.");
                 }
             }
         });
+
         
         btnCancelar.addActionListener(new ActionListener() {
             @Override

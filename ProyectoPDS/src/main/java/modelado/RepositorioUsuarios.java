@@ -92,10 +92,7 @@ public class RepositorioUsuarios {
         try {
             em.getTransaction().begin();
             
-            if (curso != null) {
-            	//em.merge(curso);
-            }
-            else {
+            if (curso == null) {
             	em.persist(cursoEnMarcha.getCurso());
             }
             cursoEnMarcha.setUsuario(usuario); 

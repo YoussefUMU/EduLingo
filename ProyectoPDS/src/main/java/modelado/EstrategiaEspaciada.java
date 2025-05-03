@@ -34,14 +34,14 @@ public class EstrategiaEspaciada implements Estrategia {
 		// Cálculo del índice siguiente correcto
 		int siguienteIndice;
 		if (esRepetida && !PreguntasCompletas.isEmpty()) {
-			Pregunta ultimaBuena = PreguntasCompletas.get(PreguntasCompletas.size() - 1);
+			Pregunta ultimaBuena = PreguntasCompletas.get(PreguntasCompletas.size()-1);
 			siguienteIndice = ultimaBuena.getNumPregunta() + 1;
 		} else {
 			siguienteIndice = Pactual + 1;
 		}
 
 		// Retornar la siguiente pregunta si existe
-		if (siguienteIndice < todasLasPreguntas.size()) {
+		if (siguienteIndice <= todasLasPreguntas.size()) {
 			for(Pregunta P : todasLasPreguntas) {
 				if(P.getNumPregunta()==siguienteIndice) {
 					return P;

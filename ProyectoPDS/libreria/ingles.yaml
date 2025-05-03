@@ -1,0 +1,125 @@
+id: "curso-ingles-completo"
+nombre: "Curso Completo de Ingles"
+autor: "Juan Pérez"
+descripcion: "Un curso interactivo de Java con diferentes tipos de preguntas."
+imagenCurso: "https://cdn-icons-png.flaticon.com/512/2000/2000860.png"
+categoria: "Idiomas"
+bloques:
+  - titulo: "Fundamentos de Java"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué es una variable en Java?"
+        opciones:
+          - "Un contenedor de datos"
+          - "Un tipo de dato"
+          - "Un lenguaje de programación"
+          - "Una clase"
+        respuestaCorrecta: "Un contenedor de datos"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Cuál es el método principal de una aplicación Java?"
+        opciones:
+          - "public static void main(String[] args)"
+          - "public void main()"
+          - "static void start(String[] args)"
+          - "public main(String args[])"
+        respuestaCorrecta: "public static void main(String[] args)"
+
+      - tipo: "test"
+        numPregunta: 3
+        enunciado: "¿Qué significa JVM?"
+        opciones:
+          - "Java Virtual Machine"
+          - "Java Variable Method"
+          - "Just Virtual Memory"
+          - "Java Visual Module"
+        respuestaCorrecta: "Java Virtual Machine"
+
+  - titulo: "Programación Orientada a Objetos"
+    preguntas:
+      - tipo: "imagen"
+        numPregunta: 1
+        enunciado: "Selecciona la imagen que representa la herencia en POO:"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936630.png"
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936631.png"
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936632.png"
+        textos:
+          - "Herencia"
+          - "Encapsulamiento"
+          - "Polimorfismo"
+        imagenCorrecta: 0
+
+      - tipo: "imagen"
+        numPregunta: 2
+        enunciado: "Identifica la imagen que muestra un diagrama de clase correcto:"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936633.png"
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936634.png"
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936635.png"
+        textos:
+          - "Diagrama A"
+          - "Diagrama B"
+          - "Diagrama C"
+        imagenCorrecta: 1
+
+  - titulo: "Estructuras de Control"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la siguiente frase arrastrando las palabras correctas:"
+        textoCompleto: "En Java, el bucle for se utiliza cuando sabemos el número de iteraciones, mientras que el bucle while se utiliza cuando la condición de terminación depende de una expresión booleana."
+        huecos: 
+          - "for"
+          - "número de iteraciones"
+          - "while"
+          - "expresión booleana"
+
+      - tipo: "arrastrar"
+        numPregunta: 2
+        enunciado: "Completa el código Java arrastrando las palabras correctas:"
+        textoCompleto: "public class Ejemplo { public static void main(String[] args) { int contador = 0; while (contador < 10) { System.out.println(contador); contador++; } } }"
+        huecos:
+          - "public"
+          - "static void"
+          - "contador"
+          - "while"
+          - "System.out.println"
+          - "contador++"
+
+  - titulo: "Excepciones y Errores"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué bloque se utiliza para manejar excepciones en Java?"
+        opciones:
+          - "try-catch"
+          - "if-else"
+          - "for-in"
+          - "switch-case"
+        respuestaCorrecta: "try-catch"
+
+      - tipo: "arrastrar"
+        numPregunta: 2
+        enunciado: "Completa el código para manejo de excepciones:"
+        textoCompleto: "try { int resultado = 10 / 0; } catch (ArithmeticException e) { System.out.println(\"División por cero\"); } finally { System.out.println(\"Este bloque siempre se ejecuta\"); }"
+        huecos:
+          - "try"
+          - "catch"
+          - "ArithmeticException"
+          - "finally"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "Selecciona la imagen que muestra la jerarquía correcta de excepciones en Java:"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936636.png"
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936637.png"
+          - "https://cdn-icons-png.flaticon.com/512/2936/2936638.png"
+        textos:
+          - "Jerarquía A"
+          - "Jerarquía B"
+          - "Jerarquía C"
+        imagenCorrecta: 0
