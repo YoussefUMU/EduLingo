@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.1">
+    <persistence-unit name="repositorioUsuarios">
+        <class>modelado.Usuario</class> 
+		<class>modelado.Curso</class>
+		<class>modelado.CursoEnMarcha</class>
+		<class>modelado.Bloque</class> 		
+		<class>modelado.Pregunta</class> 
+		<class>modelado.TestPregunta</class> 
+		<class>modelado.PreguntaArrastrar</class> 
+		<class>modelado.PreguntaImagen</class> 
+		<class>modelado.Estrategia</class> 
+		<class>modelado.EstrategiaSecuencial</class> 
+		<class>modelado.EstrategiaAleatoria</class> 
+		<class>modelado.EstrategiaEspaciada</class> 
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlite:basedatos.db" />
+            <property name="hibernate.dialect" value="org.hibernate.community.dialect.SQLiteDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.use_sql_comments" value="true"/>
+			<property name="hibernate.generate_statistics" value="true"/>
+			<property name="hibernate.jdbc.lob.non_contextual_creation" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

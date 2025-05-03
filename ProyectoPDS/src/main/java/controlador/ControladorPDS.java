@@ -14,6 +14,7 @@ import modelado.Estrategia;
 import modelado.GestorLogros;
 import modelado.ManejadorCursos;
 import modelado.RepositorioUsuarios;
+import modelado.TipoEstrategia;
 import modelado.Usuario;
 
 public class ControladorPDS {
@@ -55,12 +56,13 @@ public class ControladorPDS {
 	 */
 	public boolean registrarUsuario(String nombre, String contraseña, String correo, String nombreUsuario, LocalDate fechaNacimiento) {
 		Usuario usuario = new Usuario(nombre, contraseña, correo, nombreUsuario, fechaNacimiento);
-		if (repositorioUsuarios.getUsuario(usuario.getNombre()) != null) {
+		if (repositorioUsuarios.getUsuario(usuario.getNombreUsuario()) != null) {
 			return false;
 		}
-		repositorioUsuarios.addUsuario(usuario);
+		repositorioUsuarios.guardarUsuario(usuario);
 		return true;
 	}
+	
 	
 	// Accede al repositorio de Usuarios utilizando el nombre del usuario introducido.
 	// Si existe un Usuario vinculado y su contraseña corresponde a la introducida,
@@ -113,12 +115,14 @@ public class ControladorPDS {
     }
 	
 	// Nuevo método para iniciar curso con una estrategia específica
-	public CursoEnMarcha iniciarCursoE(Curso curso, Estrategia estrategia) {
-		boolean b = sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, estrategia);
-		if(b) {
+	public CursoEnMarcha iniciarCursoE(Curso curso, Estrategia estrategia, TipoEstrategia tipoEstrategia) {
+		if (sesionActual.agregarCurso(curso, CursoEnMarcha.VIDAS_PREDETERMINADAS, estrategia, tipoEstrategia)) {
+			repositorioUsuarios.agregarCurso(sesionActual.getId(), sesionActual.obtenerCursoEnMarcha(curso, estrategia).get());
 			return sesionActual.obtenerCursoEnMarcha(curso, estrategia).get();
-		}return null;
+		}
+		return null;
 	}
+
 	
 	//Nuevo metodo para finalizar un curso
 	public void finalizarCursoEnMarcha(CursoEnMarcha curso) {
@@ -273,6 +277,14 @@ public class ControladorPDS {
 	    return sesionActual != null && sesionActual.tieneCursosAdicionales();
 	}
 	
+
+	/**
+	 * Actualiza un curso en marcha en la base de datos
+	 */
+	
+	public void actualizarCursoEnMarcha(CursoEnMarcha cursoEnMarcha) {
+		repositorioUsuarios.actualizarCurso(cursoEnMarcha);
+	}
     public void actualizarEstadisticasTiempo() {
         if(sesionActual != null && inicioSesionActual != null) {
             LocalDateTime ahora = LocalDateTime.now();
