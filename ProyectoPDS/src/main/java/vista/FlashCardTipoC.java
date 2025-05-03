@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FlashCardTipoC extends JFrame {
-
     private JProgressBar barraTiempo;
     private JLabel preguntaLabel;
     private JPanel zonaOpcionesPanel;
@@ -147,6 +146,7 @@ public class FlashCardTipoC extends JFrame {
                     "¿Seguro que deseas salir? Perderás el progreso de esta pregunta.", "Confirmar salida",
                     JOptionPane.YES_NO_OPTION);
             if (respuesta == JOptionPane.YES_OPTION) {
+            	ControladorPDS.getUnicaInstancia().actualizarCursoEnMarcha(cursoEnMarcha);
                 dispose();
                 new VentanaPrincipal().setVisible(true);
             }

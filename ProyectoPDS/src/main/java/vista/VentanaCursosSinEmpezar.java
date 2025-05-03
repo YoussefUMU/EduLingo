@@ -19,6 +19,7 @@ import modelado.EstrategiaAleatoria;
 import modelado.EstrategiaEspaciada;
 import modelado.EstrategiaSecuencial;
 import modelado.ManejadorCursos;
+import modelado.TipoEstrategia;
 import controlador.ControladorPDS;
 
 public class VentanaCursosSinEmpezar extends JFrame {
@@ -212,10 +213,11 @@ public class VentanaCursosSinEmpezar extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Curso cursoSeleccionado = listaCursos.getSelectedValue(); // Usar la variable de instancia
                 if (cursoSeleccionado != null) {
+
                     // Iniciar el curso con la estrategia seleccionada
                     Estrategia estrategiaSeleccionada = obtenerEstrategiaSeleccionada();
                     CursoEnMarcha cursoEnMarcha = ControladorPDS.getUnicaInstancia()
-                            .iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada);
+                            .iniciarCursoE(cursoSeleccionado, estrategiaSeleccionada, obtenerTipoEstrategiaSeleccionada());
 
                     if (cursoEnMarcha == null) {
                         JOptionPane.showMessageDialog(null, 
@@ -278,8 +280,33 @@ public class VentanaCursosSinEmpezar extends JFrame {
         
         setLocationRelativeTo(null);
     }
+    // Método para obtener la estrategia seleccionada
+    private Estrategia obtenerEstrategiaSeleccionada() {
+        String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
+        switch (estrategiaSeleccionada) {
+            case "Aleatoria":
+                return new EstrategiaAleatoria();
+            case "Espaciada":
+                return new EstrategiaEspaciada();
+            case "Secuencial":
+            default:
+                return new EstrategiaSecuencial();
+        }
+    }
 
-    // Método modificado para importar cursos y actualizar la lista
+    private TipoEstrategia obtenerTipoEstrategiaSeleccionada() {
+        String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
+        switch (estrategiaSeleccionada) {
+            case "Aleatoria":
+                return TipoEstrategia.ALEATORIA;
+            case "Espaciada":
+                return TipoEstrategia.ESPACIADA;
+            case "Secuencial":
+            default:
+                return TipoEstrategia.SECUENCIAL;
+        }
+    }
+    
     private void importarCursosYAML() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Seleccionar archivos YAML");

@@ -7,25 +7,47 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import controlador.ControladorPDS;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 /**
  * Clase que representa a un usuario de la plataforma de aprendizaje.
  */
+
+@Entity
+@Table(name = "usuarios")
 public class Usuario {
-	private final String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
 	private String nombre;
 	private String correo;
 	private String contraseña;
 	private String nombreUsuario;
 	private LocalDate fechaRegistro;  
 	private LocalDate fechaNacimiento;
+	@OneToMany(mappedBy="usuario", cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	private List<CursoEnMarcha> cursosActivos;
-	private Estadistica estadisticas;
+	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
+	@JoinColumn(unique=true)
+	private Estadistica estadisticas;			//ya lo meteré
+	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
+	@JoinColumn(unique=true)
 	private Premium premium;
-
 	
-	public Usuario(String id, String nombre, String contraseña, String correo, String nombreUsuario, LocalDate fechaNacimiento) {
-		this.id = id;
+	public Usuario() {
+		
+	}
+	
+	public Usuario(String nombre, String contraseña, String correo, String nombreUsuario, LocalDate fechaNacimiento) {
 		this.nombre = nombre;
 		this.contraseña = contraseña;
 		this.correo = correo;
@@ -36,22 +58,20 @@ public class Usuario {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public Usuario(String nombre, String contraseña, String correo, String nombreUsuario, LocalDate fechaNacimiento) {
-		this.id = "";
+	public Usuario(String nombre, String correo, String nombreUsuario) {
 		this.nombre = nombre;
-		this.contraseña = contraseña;
+		this.contraseña = "1234";
 		this.correo = correo;
 		this.nombreUsuario = nombreUsuario;
-		this.fechaRegistro = LocalDate.of(2025, 04, 25);
+		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
 		this.estadisticas = new Estadistica();
-		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}
-
+	
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
 	}
@@ -65,7 +85,7 @@ public class Usuario {
 	}
 
 	public Estadistica getEstadisticas() {
-		return estadisticas;
+		return new Estadistica(); //estadisticas;
 	}
 
 	public void setEstadisticas(Estadistica estadisticas) {
@@ -88,14 +108,14 @@ public class Usuario {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia) {
+	public boolean agregarCurso(Curso curso, int vidas, Estrategia estrategia, TipoEstrategia tipoEstrategia) {
 		boolean coincidencia = cursosActivos.stream()
 				.anyMatch(c -> c.getEstrategia().getClass() == estrategia.getClass() // Comparar clases
 						&& ControladorPDS.getUnicaInstancia().getNombreCursoEnMarcha(c).equals(curso.getNombre())
 						&& ControladorPDS.getUnicaInstancia().getDescripcionCursoEnMarcha(c).equals(curso.getDescripcion()));
 
 		if (!coincidencia) {
-			cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia));
+			cursosActivos.add(new CursoEnMarcha(curso, vidas, estrategia, tipoEstrategia));
 			return true;
 		}
 		return false;
@@ -104,29 +124,17 @@ public class Usuario {
 	public List<CursoEnMarcha> obtenerCursosActivos() {
 		return cursosActivos.stream().collect(Collectors.toList());
 	}
-
-	public Optional<CursoEnMarcha> obtenerCursoEnMarcha(String cursoId) {
-		return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(cursoId)).findFirst();
-	}
-
+	
 	public Optional<CursoEnMarcha> obtenerCursoEnMarcha(Curso curso, Estrategia estrategia) {
 		return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(curso.getId()) && 
 				c.getEstrategia().getClass().equals(estrategia.getClass())).findFirst();
 	}
-	
-	public void iniciarCurso(String cursoId) {
-		obtenerCursoEnMarcha(cursoId).ifPresent(CursoEnMarcha::reiniciarCurso);
-	}
-
-	public void avanzarEnCurso(String cursoId) {
-		obtenerCursoEnMarcha(cursoId).ifPresent(CursoEnMarcha::avanzarPregunta);
-	}
 
 	public Estadistica obtenerEstadisticas() {
-		return estadisticas;
+		return new Estadistica();
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
