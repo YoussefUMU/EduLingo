@@ -109,5 +109,22 @@ public class RepositorioUsuarios {
         }
     }
 
-
+    public void activarPremium(Long id, String tipoPlan) {
+    	EntityManager em = emf.createEntityManager();
+        Usuario usuario = em.find(Usuario.class, id);
+        try {
+            em.getTransaction().begin();
+            
+            usuario.activarPremium(tipoPlan);
+            
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
 }

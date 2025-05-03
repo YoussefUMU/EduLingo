@@ -158,6 +158,7 @@ public class ControladorPDS {
 	    
 	    try {
 	        sesionActual.activarPremium(tipoPlan);
+	        repositorioUsuarios.activarPremium(sesionActual.getId(), tipoPlan);
 	        return true;
 	    } catch (Exception e) {
 	        e.printStackTrace();

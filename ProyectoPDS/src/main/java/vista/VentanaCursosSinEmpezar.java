@@ -472,19 +472,6 @@ public class VentanaCursosSinEmpezar extends JFrame {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
     
-    private Estrategia obtenerEstrategiaSeleccionada() {
-        String estrategiaSeleccionada = (String) comboEstrategias.getSelectedItem();
-        switch (estrategiaSeleccionada) {
-            case "Aleatoria":
-                return new EstrategiaAleatoria();
-            case "Espaciada":
-                return new EstrategiaEspaciada();
-            case "Secuencial":
-            default:
-                return new EstrategiaSecuencial();
-        }
-    }
-    
     private void setupWindowMovement() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
