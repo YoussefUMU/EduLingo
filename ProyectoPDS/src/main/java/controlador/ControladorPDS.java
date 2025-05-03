@@ -63,6 +63,7 @@ public class ControladorPDS {
 		return true;
 	}
 	
+	
 	// Accede al repositorio de Usuarios utilizando el nombre del usuario introducido.
 	// Si existe un Usuario vinculado y su contraseña corresponde a la introducida,
 	// se inicia sesion correctamente.
@@ -121,6 +122,7 @@ public class ControladorPDS {
 		}
 		return null;
 	}
+
 	
 	//Nuevo metodo para finalizar un curso
 	public void finalizarCursoEnMarcha(CursoEnMarcha curso) {
@@ -275,6 +277,7 @@ public class ControladorPDS {
 	    return sesionActual != null && sesionActual.tieneCursosAdicionales();
 	}
 	
+
 	/**
 	 * Actualiza un curso en marcha en la base de datos
 	 */
@@ -282,7 +285,6 @@ public class ControladorPDS {
 	public void actualizarCursoEnMarcha(CursoEnMarcha cursoEnMarcha) {
 		repositorioUsuarios.actualizarCurso(cursoEnMarcha);
 	}
-
     public void actualizarEstadisticasTiempo() {
         if(sesionActual != null && inicioSesionActual != null) {
             LocalDateTime ahora = LocalDateTime.now();
