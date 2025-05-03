@@ -158,6 +158,8 @@ public class ControladorPDS {
 	    
 	    try {
 	        sesionActual.activarPremium(tipoPlan);
+	        // Persistir los cambios
+	        repositorioUsuarios.actualizarUsuario(sesionActual);
 	        return true;
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -176,6 +178,8 @@ public class ControladorPDS {
 	    
 	    try {
 	        sesionActual.cancelarPremium();
+	        // Persistir los cambios
+	        repositorioUsuarios.actualizarUsuario(sesionActual);
 	        return true;
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -269,14 +273,6 @@ public class ControladorPDS {
         if (sesionActual == null) return new ArrayList<>();
         return sesionActual.getLogrosDesbloqueados();
     }
-	/**
-	 * Verifica si el usuario tiene el beneficio de acceso a cursos adicionales
-	 * @return true si el usuario tiene acceso a cursos adicionales, false en caso contrario
-	 */
-	public boolean tieneCursosAdicionales() {
-	    return sesionActual != null && sesionActual.tieneCursosAdicionales();
-	}
-	
 
 	/**
 	 * Actualiza un curso en marcha en la base de datos

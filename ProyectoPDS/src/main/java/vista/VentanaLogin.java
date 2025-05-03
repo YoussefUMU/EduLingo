@@ -148,7 +148,7 @@ public class VentanaLogin extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (btnShowPassword.isSelected()) {
                     passwordField.setEchoChar((char) 0); // Mostrar texto
-                    btnShowPassword.setText("\u274C"); // Emoji de cruz (❌)
+                    btnShowPassword.setText("\u274C"); // Emoji de cruz 
                 } else {
                     passwordField.setEchoChar('•'); // Ocultar con puntos
                     btnShowPassword.setText("\uD83D\uDC41"); // Emoji ojo

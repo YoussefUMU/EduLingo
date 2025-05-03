@@ -80,7 +80,21 @@ public class RepositorioUsuarios {
              em.close();
          }
     }
-    
+    public void actualizarUsuario(Usuario usuario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(usuario);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
     public void agregarCurso(Long id, CursoEnMarcha cursoEnMarcha) {
         EntityManager em = emf.createEntityManager();
         Usuario usuario = em.find(Usuario.class, id);

@@ -40,7 +40,7 @@ public class AdaptadorPreguntas {
         
         if (preguntaActual instanceof TestPregunta) {
             // Crear FlashCard Tipo A para preguntas de opción múltiple
-            FlashCardTipoA flashCard = new FlashCardTipoA(cursoEnMarcha, indBloque, indPregunta);
+            PreguntaTipoA flashCard = new PreguntaTipoA(cursoEnMarcha, indBloque, indPregunta);
             return flashCard;
         } 
         else if (preguntaActual instanceof PreguntaImagen) {
@@ -49,7 +49,7 @@ public class AdaptadorPreguntas {
         } 
         else if (preguntaActual instanceof PreguntaArrastrar) {
             // Crear FlashCard Tipo C para preguntas de arrastrar
-            FlashCardTipoC flashCard = new FlashCardTipoC(cursoEnMarcha, indBloque, indPregunta);
+            PreguntaTipoC flashCard = new PreguntaTipoC(cursoEnMarcha, indBloque, indPregunta);
             return flashCard;
         } 
         else {
@@ -65,7 +65,7 @@ public class AdaptadorPreguntas {
         PreguntaImagen pregunta = (PreguntaImagen) cursoEnMarcha.getPreguntaActual();
         
         // Crear el JFrame de tipo B
-        FlashCardTipoB frame = new FlashCardTipoB(cursoEnMarcha, indBloque, indPregunta);
+        PreguntaTipoB frame = new PreguntaTipoB(cursoEnMarcha, indBloque, indPregunta);
         
         // Configurar la pregunta
         frame.setPregunta("B"+cursoEnMarcha.getBloqueActualIndex()+"."+cursoEnMarcha.getPreguntaActualIndex()+"."+pregunta.getEnunciado());

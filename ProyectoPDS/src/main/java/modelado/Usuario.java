@@ -52,7 +52,7 @@ public class Usuario {
 		this.contraseña = contraseña;
 		this.correo = correo;
 		this.nombreUsuario = nombreUsuario;
-		this.fechaRegistro = LocalDate.of(2025, 04, 25);
+		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
 		this.estadisticas = new Estadistica();
 		this.fechaNacimiento = fechaNacimiento;
@@ -85,7 +85,7 @@ public class Usuario {
 	}
 
 	public Estadistica getEstadisticas() {
-		return new Estadistica(); //estadisticas;
+		return estadisticas;
 	}
 
 	public void setEstadisticas(Estadistica estadisticas) {
@@ -169,6 +169,7 @@ public class Usuario {
 	public void activarPremium(String tipoPlan) {
 	    if (premium == null) {
 	        premium = new Premium(tipoPlan);
+	        premium.setUsuario(this); // Asegurarse de que la relación bidireccional está configurada
 	    } else {
 	        // Si ya tenía premium pero estaba inactivo, renovarlo
 	        if (!premium.estaActivo()) {
@@ -200,13 +201,6 @@ public class Usuario {
 	    return esPremium() && premium.isVidasInfinitas();
 	}
 
-	public boolean tieneCursosAdicionales() {
-	    return esPremium() && premium.isCursosAdicionales();
-	}
-
-	public boolean sinAnuncios() {
-	    return esPremium() && premium.isSinAnuncios();
-	}
 	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
         Curso curso = cursoEnMarcha.getCurso();
         
