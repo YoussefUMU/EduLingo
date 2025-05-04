@@ -157,9 +157,7 @@ public class ControladorPDS {
 	    }
 	    
 	    try {
-	        sesionActual.activarPremium(tipoPlan);
-	        // Persistir los cambios
-	        repositorioUsuarios.actualizarUsuario(sesionActual);
+	        repositorioUsuarios.activarPremium(sesionActual.getId(), tipoPlan);
 	        return true;
 	    } catch (Exception e) {
 	        e.printStackTrace();
