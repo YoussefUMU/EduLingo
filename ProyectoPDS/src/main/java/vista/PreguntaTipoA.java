@@ -5,7 +5,7 @@ import javax.swing.border.*;
 
 import controlador.ControladorPDS;
 import modelado.CursoEnMarcha;
-import modelado.TestPregunta;
+import modelado.PreguntaTest;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -21,7 +21,7 @@ public class PreguntaTipoA extends JFrame {
 	private JButton opcion3Button;
 	private JButton opcion4Button;
 
-	private TestPregunta pregunta;
+	private PreguntaTest pregunta;
 	private int vidas;
 
 	private Timer temporizador;
@@ -30,9 +30,9 @@ public class PreguntaTipoA extends JFrame {
 
 	public PreguntaTipoA(CursoEnMarcha curso, int indBloque, int indPregunta) {
 		this.cursoEnMarcha = curso; // Añadir esta línea
-		pregunta = (TestPregunta) curso.getPreguntaActual();
+		pregunta = (PreguntaTest) curso.getPreguntaActual();
 		vidas = curso.getVidas();
-		pregunta = (TestPregunta) curso.getPreguntaActual();
+		pregunta = (PreguntaTest) curso.getPreguntaActual();
 		vidas = curso.getVidas();
 
 		setSize(new Dimension(700, 650));

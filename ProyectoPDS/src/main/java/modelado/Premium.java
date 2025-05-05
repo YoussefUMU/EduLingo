@@ -70,9 +70,6 @@ public class Premium {
 	 * @return true si la suscripción sigue vigente, false en caso contrario
 	 */
 	public boolean estaActivo() {
-		if (!activo)
-			return false;
-
 		LocalDate hoy = LocalDate.now();
 		return !hoy.isAfter(fechaFin);
 	}

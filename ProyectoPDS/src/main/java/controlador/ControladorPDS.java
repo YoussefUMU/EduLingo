@@ -3,10 +3,13 @@ package controlador;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.EntityManager;
+import modelado.ComentarioComunidad;
 import modelado.Curso;
 import modelado.CursoEnMarcha;
 import modelado.Estadistica;
@@ -176,8 +179,7 @@ public class ControladorPDS {
 	    
 	    try {
 	        sesionActual.cancelarPremium();
-	        // Persistir los cambios
-	        repositorioUsuarios.actualizarUsuario(sesionActual);
+	        repositorioUsuarios.cancelarPremium(sesionActual.getId()); // Asegurar persistencia
 	        return true;
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -288,5 +290,95 @@ public class ControladorPDS {
             // Reiniciar el contador
             inicioSesionActual = ahora;
         }
+    }
+    /**
+     * Publica un nuevo comentario en la comunidad
+     * @param texto Texto del comentario
+     * @param etiqueta Etiqueta del comentario
+     * @return El comentario creado o null si hubo un error
+     */
+    public ComentarioComunidad publicarComentario(String texto, String etiqueta) {
+        if (sesionActual == null) {
+            return null;
+        }
+        
+        try {
+            ComentarioComunidad comentario = sesionActual.añadirComentario(texto, etiqueta);
+            repositorioUsuarios.guardarComentario(comentario);
+            return comentario;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Edita un comentario existente
+     * @param comentarioId ID del comentario a editar
+     * @param nuevoTexto Nuevo texto para el comentario
+     * @return true si se editó correctamente, false si no
+     */
+    public boolean editarComentario(Long comentarioId, String nuevoTexto) {
+        if (sesionActual == null) {
+            return false;
+        }
+        
+        try {
+            boolean resultado = sesionActual.editarComentario(comentarioId, nuevoTexto);
+            if (resultado) {
+                // No necesitamos acceder directamente al EntityManager 
+                // Podemos simplemente actualizar el comentario en el repositorio
+                
+                // Buscar el comentario en la lista del usuario actual
+                ComentarioComunidad comentarioActualizado = null;
+                for (ComentarioComunidad c : sesionActual.getComentarios()) {
+                    if (c.getId().equals(comentarioId)) {
+                        comentarioActualizado = c;
+                        break;
+                    }
+                }
+                
+                if (comentarioActualizado != null) {
+                    // El comentario ya ha sido actualizado en el método editarComentario del Usuario
+                    // Solo necesitamos persistirlo
+                    repositorioUsuarios.actualizarComentario(comentarioActualizado);
+                    return true;
+                }
+            }
+            return resultado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Elimina un comentario
+     * @param comentarioId ID del comentario a eliminar
+     * @return true si se eliminó correctamente, false si no
+     */
+    public boolean eliminarComentario(Long comentarioId) {
+        if (sesionActual == null) {
+            return false;
+        }
+        
+        try {
+            boolean resultado = sesionActual.eliminarComentario(comentarioId);
+            if (resultado) {
+                repositorioUsuarios.eliminarComentario(comentarioId);
+            }
+            return resultado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Obtiene todos los comentarios de la comunidad
+     * @return Lista de todos los comentarios
+     */
+    public List<ComentarioComunidad> obtenerTodosComentarios() {
+        return repositorioUsuarios.obtenerTodosComentarios();
     }
 }

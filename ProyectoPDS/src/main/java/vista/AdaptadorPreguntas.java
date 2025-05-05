@@ -21,7 +21,7 @@ import modelado.CursoEnMarcha;
 import modelado.Pregunta;
 import modelado.PreguntaArrastrar;
 import modelado.PreguntaImagen;
-import modelado.TestPregunta;
+import modelado.PreguntaTest;
 
 /**
  * Esta clase se encarga de crear la flashcard apropiada según el tipo de pregunta
@@ -38,7 +38,7 @@ public class AdaptadorPreguntas {
     public static JFrame crearFlashCard(CursoEnMarcha cursoEnMarcha, int indBloque, int indPregunta) {
         Pregunta preguntaActual = cursoEnMarcha.getPreguntaActual();
         
-        if (preguntaActual instanceof TestPregunta) {
+        if (preguntaActual instanceof PreguntaTest) {
             // Crear FlashCard Tipo A para preguntas de opción múltiple
             PreguntaTipoA flashCard = new PreguntaTipoA(cursoEnMarcha, indBloque, indPregunta);
             return flashCard;

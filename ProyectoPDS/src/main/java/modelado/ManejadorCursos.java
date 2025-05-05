@@ -115,8 +115,8 @@ public class ManejadorCursos {
 		return preguntas;
 	}
 
-	private TestPregunta procesarPreguntaTest(String enunciado, Map<String, Object> preguntaMap) {
-		TestPregunta pregunta = new TestPregunta();
+	private PreguntaTest procesarPreguntaTest(String enunciado, Map<String, Object> preguntaMap) {
+		PreguntaTest pregunta = new PreguntaTest();
 		pregunta.setEnunciado(enunciado);
 
 		List<String> opciones = (List<String>) preguntaMap.get("opciones");
