@@ -39,7 +39,7 @@ public class Usuario {
 	private List<CursoEnMarcha> cursosActivos;
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
-	private Estadistica estadisticas;			//ya lo meteré
+	private Estadistica estadisticas;
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
 	private Premium premium;
