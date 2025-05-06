@@ -22,6 +22,7 @@ import controlador.ControladorPDS;
 public class VentanaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
+	private Estadistica stats;
 	private JPanel panelPrincipal, panelCentral, panelContenido;
 	private JLabel saludoUsuario;
 	private JButton btnCursosActivos, btnCursosDisponibles, btnMiPerfil, btnAsistente;
@@ -44,6 +45,7 @@ public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal() {
         usuario = ControladorPDS.getUnicaInstancia().getSesionActual();
+		stats = usuario.getEstadisticas();
         inicializarInterfaz();
         
         // Iniciar timer para actualizar el tiempo de uso cada minuto
@@ -448,6 +450,12 @@ public class VentanaPrincipal extends JFrame {
 			actividadReciente = "Has iniciado " + ControladorPDS.getUnicaInstancia().numCursosActivos().get(categoria) + " cursos de la categoria " + categoria; 
 			listaCategorias.add(actividadReciente);
 		}
+		
+		for(String categoria : ControladorPDS.getUnicaInstancia().numCursosCompletados().keySet()) {
+			actividadReciente = "Has completado " + ControladorPDS.getUnicaInstancia().numCursosCompletados().get(categoria) + " cursos de la categoria " + categoria; 
+			listaCategorias.add(actividadReciente);
+		}
+		
 		listaCategorias.add("Tienes una racha actual de " + usuario.getEstadisticas().getMejorRacha() + " días");
 	
 		// Panel de resumen de actividad
@@ -612,7 +620,6 @@ public class VentanaPrincipal extends JFrame {
 		});
 
 		btnRacha.addActionListener(e -> {
-			Estadistica stats = usuario.getEstadisticas();
 			actualizarMensajeAsistente("¡Llevas " + stats.getMejorRacha()
 					+ " días de racha! Sigue así para alcanzar nuevos niveles y desbloquear recompensas.");
 		});
@@ -703,7 +710,7 @@ public class VentanaPrincipal extends JFrame {
 	    // Tarjeta de cursos completados
 	    JPanel tarjetaCursosCompletados = crearTarjetaEstadistica(
 	            "Cursos completados", 
-	            stats.getCursosCompletados() + " cursos",
+	            usuario.getCursosCompletados().size() + " cursos",
 	            new Color(244, 160, 0, 50), "\uD83C\uDF1F");
 
 	    // Fecha de registro formateada
@@ -724,7 +731,7 @@ public class VentanaPrincipal extends JFrame {
 	    // Tarjeta de preguntas respondidas
 	    JPanel tarjetaPreguntas = crearTarjetaEstadistica(
 	            "Preguntas respondidas", 
-	            stats.getPreguntasRespondidas() + " (" + String.format("%.1f", stats.getPorcentajeAciertos()) + "% correctas)",
+	            stats.getPreguntasRespondidas() + "",
 	            new Color(0, 172, 193, 50), "\u2753");
 
 	    // Añadir todas las tarjetas al panel
@@ -1108,10 +1115,9 @@ public class VentanaPrincipal extends JFrame {
 		repaint();
 	}
 
-	// Este método debe modificarse en la clase VentanaPrincipal
 	private void mostrarRangosYLogros() {
 	    JDialog dialogoRangos = new JDialog(this, "Mis Rangos y Logros", true);
-	    dialogoRangos.setSize(600, 500);
+	    dialogoRangos.setSize(900, 750);
 	    dialogoRangos.setLocationRelativeTo(this);
 	    dialogoRangos.setLayout(new BorderLayout());
 
@@ -1172,7 +1178,7 @@ public class VentanaPrincipal extends JFrame {
 	    barraProgreso.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    
 	    // Cambiar el color de la barra
-	    barraProgreso.setForeground(new Color(230, 126, 34)); // Naranja
+	    barraProgreso.setForeground(new Color(0, 0, 0)); 
 
 	    panelNivel.add(lblNombre);
 	    panelNivel.add(Box.createVerticalStrut(5));

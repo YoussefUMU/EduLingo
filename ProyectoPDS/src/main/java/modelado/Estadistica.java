@@ -240,19 +240,19 @@ public class Estadistica {
     }
     
     /**
-     * Verifica si el usuario estudió temprano (antes de las 8:00).
+     * Verifica si el usuario estudió temprano (antes de las 8:00, después de las 5:00).
      */
     public boolean estudioPorLaMañana() {
         if (primeraActividadDelDia == null) return false;
-        return primeraActividadDelDia.toLocalTime().isBefore(LocalTime.of(8, 0));
+        return primeraActividadDelDia.toLocalTime().isBefore(LocalTime.of(8, 0)) && primeraActividadDelDia.toLocalTime().isAfter(LocalTime.of(5, 0));
     }
     
     /**
-     * Verifica si el usuario estudió tarde (después de las 22:00).
+     * Verifica si el usuario estudió tarde (después de las 22:00, antes de las 5:00).
      */
     public boolean estudioPorLaNoche() {
         if (ultimaActividadDelDia == null) return false;
-        return ultimaActividadDelDia.toLocalTime().isAfter(LocalTime.of(22, 0));
+        return ultimaActividadDelDia.toLocalTime().isAfter(LocalTime.of(22, 0)) && primeraActividadDelDia.toLocalTime().isBefore(LocalTime.of(5, 0));
     }
     
     public int getExperiencia() {
