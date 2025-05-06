@@ -59,6 +59,7 @@ public class Usuario {
 		this.nombreUsuario = nombreUsuario;
 		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
+	    this.cursosCompletados = new ArrayList<>(); 
 		this.estadisticas = new Estadistica();
 		this.fechaNacimiento = fechaNacimiento;
 	}
@@ -70,6 +71,7 @@ public class Usuario {
 		this.nombreUsuario = nombreUsuario;
 		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
+	    this.cursosCompletados = new ArrayList<>();
 		this.estadisticas = new Estadistica();
 	}
 
@@ -212,24 +214,29 @@ public class Usuario {
 	}
 
 	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
-        Curso curso = cursoEnMarcha.getCurso();
-        
-        // Registrar curso completado en estadísticas
-        if (estadisticas.registrarCursoCompletado(curso.getId(), curso.getCategoria())) {
-            // Comprobar si se han desbloqueado nuevos logros
-            String[] nuevosLogros = GestorLogros.comprobarLogros(this);
-            
-            // Si se han desbloqueado logros, mostrar notificación
-            if (nuevosLogros.length > 0) {
-                mostrarNotificacionLogros(nuevosLogros);
-            }
-        }
-        
-        // Eliminar de cursos activos
-        this.cursosActivos.remove(cursoEnMarcha);
-        this.cursosCompletados.add(curso);
-        cursoEnMarcha.finalizar();
-    }
+	    Curso curso = cursoEnMarcha.getCurso();
+	    
+	    // Registrar curso completado en estadísticas
+	    if (estadisticas.registrarCursoCompletado(curso.getId(), curso.getCategoria())) {
+	        // Comprobar si se han desbloqueado nuevos logros
+	        String[] nuevosLogros = GestorLogros.comprobarLogros(this);
+	        
+	        // Si se han desbloqueado logros, mostrar notificación
+	        if (nuevosLogros.length > 0) {
+	            mostrarNotificacionLogros(nuevosLogros);
+	        }
+	    }
+	    
+	    // Eliminar de cursos activos
+	    this.cursosActivos.remove(cursoEnMarcha);
+	    
+	    // Añadir a cursos completados (verificar si ya está añadido)
+	    if (!this.cursosCompletados.contains(curso)) {
+	        this.cursosCompletados.add(curso);
+	    }
+	    
+	    cursoEnMarcha.finalizar();
+	}
     
     /**
      * Muestra una notificación al usuario sobre los logros desbloqueados

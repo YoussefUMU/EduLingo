@@ -127,9 +127,15 @@ public class ControladorPDS {
 	}
 
 	
-	//Nuevo metodo para finalizar un curso
 	public void finalizarCursoEnMarcha(CursoEnMarcha curso) {
-		this.sesionActual.finalizarCurso(curso);
+	    // Primero obtenemos el curso que queremos completar
+	    Curso cursoCompletado = curso.getCurso();
+	    
+	    // Llamamos al método que elimina el curso activo y lo añade a completados
+	    this.sesionActual.finalizarCurso(curso);
+	    
+	    // Actualizamos el usuario en la base de datos para persistir los cambios
+	    repositorioUsuarios.actualizarUsuario(sesionActual);
 	}
 	
 	public List<Curso> obtenerCursosLocales(){
