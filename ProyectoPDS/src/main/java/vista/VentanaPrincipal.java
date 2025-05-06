@@ -652,188 +652,254 @@ public class VentanaPrincipal extends JFrame {
 		textoAsistente.setText(estiloHTML);
 	}
 
-    private JPanel crearPanelEstadisticas() {
-        JPanel panel = new JPanel(new BorderLayout(20, 20));
-        panel.setOpaque(false);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	private JPanel crearPanelEstadisticas() {
+	    JPanel panel = new JPanel(new BorderLayout(20, 20));
+	    panel.setOpaque(false);
+	    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		// Panel superior con título y descripción
-		JPanel panelTitulo = new JPanel(new BorderLayout());
-		panelTitulo.setOpaque(false);
+	    // Panel superior con título y descripción
+	    JPanel panelTitulo = new JPanel(new BorderLayout());
+	    panelTitulo.setOpaque(false);
 
-		JLabel lblTitulo = new JLabel("Mis Estadísticas");
-		lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 24));
+	    JLabel lblTitulo = new JLabel("Mis Estadísticas");
+	    lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 24));
 
-		JLabel lblDescripcion = new JLabel("Visualiza tu progreso y crecimiento en Edulingo");
-		lblDescripcion.setFont(new Font("Segoe UI Emoji", Font.ITALIC, 14));
-		lblDescripcion.setForeground(new Color(100, 100, 100));
+	    JLabel lblDescripcion = new JLabel("Visualiza tu progreso y crecimiento en Edulingo");
+	    lblDescripcion.setFont(new Font("Segoe UI Emoji", Font.ITALIC, 14));
+	    lblDescripcion.setForeground(new Color(100, 100, 100));
 
-		JButton btnVolver = new JButton("Volver al inicio");
-		btnVolver.setFont(new Font("Segoe UI Emoji", Font.BOLD, 12));
-		btnVolver.setFocusPainted(false);
-		btnVolver.addActionListener(e -> gestorPaneles.show(panelContenido, "bienvenida"));
+	    JButton btnVolver = new JButton("Volver al inicio");
+	    btnVolver.setFont(new Font("Segoe UI Emoji", Font.BOLD, 12));
+	    btnVolver.setFocusPainted(false);
+	    btnVolver.addActionListener(e -> gestorPaneles.show(panelContenido, "bienvenida"));
 
-		panelTitulo.add(lblTitulo, BorderLayout.NORTH);
-		panelTitulo.add(lblDescripcion, BorderLayout.CENTER);
-		panelTitulo.add(btnVolver, BorderLayout.EAST);
+	    panelTitulo.add(lblTitulo, BorderLayout.NORTH);
+	    panelTitulo.add(lblDescripcion, BorderLayout.CENTER);
+	    panelTitulo.add(btnVolver, BorderLayout.EAST);
 
-		// Panel central con tarjetas de estadísticas
-        JPanel panelTarjetas = new JPanel(new GridLayout(2, 2, 15, 15));
-        panelTarjetas.setOpaque(false);
+	    // Panel central con tarjetas de estadísticas en un grid de 3x2
+	    JPanel panelTarjetas = new JPanel(new GridLayout(2, 3, 15, 15));
+	    panelTarjetas.setOpaque(false);
 
-		// Obtener estadísticas del usuario
-		Estadistica stats = usuario.getEstadisticas();
+	    // Obtener estadísticas del usuario
+	    Estadistica stats = usuario.getEstadisticas();
 
-		// Tarjeta de tiempo de uso
-        JPanel tarjetaTiempo = crearTarjetaEstadistica("Tiempo total dedicado", 
-                formatearTiempo(stats.getTiempoUso()),
-                new Color(66, 133, 244, 50), "\u23F1");
+	    // Tarjeta de tiempo de uso
+	    JPanel tarjetaTiempo = crearTarjetaEstadistica("Tiempo total dedicado", 
+	            formatearTiempo(stats.getTiempoUso()),
+	            new Color(66, 133, 244, 50), "\u23F1");
 
-		// Tarjeta de racha
-		JPanel tarjetaRacha = crearTarjetaEstadistica("Mejor racha", stats.getMejorRacha() + " días",
-				new Color(219, 68, 55, 50), "\uD83D\uDD25");
+	    // Tarjeta de racha
+	    JPanel tarjetaRacha = crearTarjetaEstadistica("Mejor racha", 
+	            stats.getMejorRacha() + " días",
+	            new Color(219, 68, 55, 50), "\uD83D\uDD25");
 
-		// Tarjeta de cursos
-		JPanel tarjetaCursos = crearTarjetaEstadistica("Cursos activos", usuario.getCursosActivos().size() + " cursos",
-				new Color(15, 157, 88, 50), "\uD83D\uDCDA");
+	    // Tarjeta de cursos activos
+	    JPanel tarjetaCursosActivos = crearTarjetaEstadistica(
+	            "Cursos activos", 
+	            usuario.getCursosActivos().size() + " cursos",
+	            new Color(15, 157, 88, 50), "\uD83D\uDCDA");
 
-		// Fecha de registro formateada
-		LocalDate fechaRegistro = usuario.getFechaRegistro();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		String fechaFormateada = fechaRegistro.format(formatter);
+	    // Tarjeta de cursos completados
+	    JPanel tarjetaCursosCompletados = crearTarjetaEstadistica(
+	            "Cursos completados", 
+	            stats.getCursosCompletados() + " cursos",
+	            new Color(244, 160, 0, 50), "\uD83C\uDF1F");
 
-		// Días desde registro
-		LocalDate hoy = LocalDate.now();
-		long diasMiembro = java.time.temporal.ChronoUnit.DAYS.between(fechaRegistro, hoy);
+	    // Fecha de registro formateada
+	    LocalDate fechaRegistro = usuario.getFechaRegistro();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	    String fechaFormateada = fechaRegistro.format(formatter);
 
-		// Tarjeta de miembro desde
-		JPanel tarjetaMiembro = crearTarjetaEstadistica("Miembro desde",
-				fechaFormateada + " (" + diasMiembro + " días)", new Color(244, 160, 0, 50), "\uD83C\uDF1F");
+	    // Días desde registro
+	    LocalDate hoy = LocalDate.now();
+	    long diasMiembro = java.time.temporal.ChronoUnit.DAYS.between(fechaRegistro, hoy);
 
-		panelTarjetas.add(tarjetaTiempo);
-		panelTarjetas.add(tarjetaRacha);
-		panelTarjetas.add(tarjetaCursos);
-		panelTarjetas.add(tarjetaMiembro);
+	    // Tarjeta de miembro desde
+	    JPanel tarjetaMiembro = crearTarjetaEstadistica(
+	            "Miembro desde",
+	            fechaFormateada + " (" + diasMiembro + " días)", 
+	            new Color(121, 80, 242, 50), "\uD83D\uDCC5");
 
-		// Panel inferior con gráfico o datos adicionales
-		JPanel panelInferior = new JPanel(new BorderLayout());
-		panelInferior.setOpaque(false);
-		panelInferior.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+	    // Tarjeta de preguntas respondidas
+	    JPanel tarjetaPreguntas = crearTarjetaEstadistica(
+	            "Preguntas respondidas", 
+	            stats.getPreguntasRespondidas() + " (" + String.format("%.1f", stats.getPorcentajeAciertos()) + "% correctas)",
+	            new Color(0, 172, 193, 50), "\u2753");
 
-		JLabel lblProgresoTitulo = new JLabel("Tu nivel de progreso");
-		lblProgresoTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 18));
+	    // Añadir todas las tarjetas al panel
+	    panelTarjetas.add(tarjetaTiempo);
+	    panelTarjetas.add(tarjetaRacha);
+	    panelTarjetas.add(tarjetaCursosActivos);
+	    panelTarjetas.add(tarjetaCursosCompletados); 
+	    panelTarjetas.add(tarjetaMiembro);
+	    panelTarjetas.add(tarjetaPreguntas);
 
-		// Simulación de un gráfico de progreso
-		JPanel panelProgreso = new JPanel(new BorderLayout(10, 10)) {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	    // Panel inferior con gráfico de actividad
+	    JPanel panelInferior = new JPanel(new BorderLayout());
+	    panelInferior.setOpaque(false);
+	    panelInferior.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 
-				int width = getWidth();
-				int height = getHeight();
+	    JLabel lblActividadTitulo = new JLabel("Resumen de actividad");
+	    lblActividadTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 18));
 
-				// Fondo del gráfico
-				g2d.setColor(new Color(240, 240, 240));
-				g2d.fillRoundRect(0, 0, width, height, 15, 15);
+	    // Panel con gráfico de actividad reciente
+	    JPanel panelGrafico = new JPanel(new BorderLayout(10, 10)) {
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            Graphics2D g2d = (Graphics2D) g;
+	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-				// Barras de progreso
-				int margen = 40;
-				int espaciado = 50;
-				int altoBarras = 30;
-				int anchoDisponible = width - 2 * margen;
+	            int width = getWidth();
+	            int height = getHeight();
 
-				String[] categorias = { "Java", "POO", "Patrones", "Interfaces" };
-				int[] valores = { 85, 70, 50, 60 }; // Porcentajes de progreso
-				Color[] colores = { new Color(66, 133, 244), new Color(219, 68, 55), new Color(244, 160, 0),
-						new Color(15, 157, 88) };
+	            // Fondo del gráfico
+	            g2d.setColor(new Color(240, 240, 240));
+	            g2d.fillRoundRect(0, 0, width, height, 15, 15);
 
-				for (int i = 0; i < categorias.length; i++) {
-					int y = margen + i * espaciado;
+	            // Título del gráfico
+	            g2d.setColor(new Color(80, 80, 80));
+	            g2d.setFont(new Font("Segoe UI", Font.BOLD, 14));
+	            g2d.drawString("Actividad de los últimos 7 días", 20, 30);
 
-					// Etiqueta
-					g2d.setColor(Color.BLACK);
-					g2d.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
-					g2d.drawString(categorias[i], 10, y + altoBarras / 2 + 5);
+	            // Dibujar barras de actividad para los últimos 7 días
+	            int barWidth = 50;
+	            int maxBarHeight = 150;
+	            int startX = 60;
+	            int startY = height - 60;
+	            
+	            // Simulación de datos de actividad diaria (minutos por día)
+	            int[] actividadDiaria = {25, 40, 15, 60, 30, 45, 20};
+	            String[] diasSemana = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
+	            Color[] colores = {
+	                new Color(66, 133, 244), 
+	                new Color(219, 68, 55), 
+	                new Color(244, 160, 0),
+	                new Color(15, 157, 88),
+	                new Color(66, 133, 244),
+	                new Color(219, 68, 55),
+	                new Color(15, 157, 88)
+	            };
+	            
+	            // Encontrar el valor máximo para escalar
+	            int maxActividad = 0;
+	            for (int valor : actividadDiaria) {
+	                maxActividad = Math.max(maxActividad, valor);
+	            }
+	            
+	            // Dibujar ejes
+	            g2d.setColor(new Color(150, 150, 150));
+	            g2d.drawLine(startX - 10, startY, width - 40, startY); // Eje X
+	            g2d.drawLine(startX - 10, startY, startX - 10, startY - maxBarHeight - 10); // Eje Y
+	            
+	            // Dibujar barras
+	            for (int i = 0; i < actividadDiaria.length; i++) {
+	                int barHeight = (int)((double)actividadDiaria[i] / maxActividad * maxBarHeight);
+	                int x = startX + i * (barWidth + 20);
+	                
+	                // Barra
+	                g2d.setColor(colores[i]);
+	                g2d.fillRoundRect(x, startY - barHeight, barWidth, barHeight, 10, 10);
+	                
+	                // Etiqueta día
+	                g2d.setColor(new Color(80, 80, 80));
+	                g2d.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+	                FontMetrics fm = g2d.getFontMetrics();
+	                int textWidth = fm.stringWidth(diasSemana[i]);
+	                g2d.drawString(diasSemana[i], x + (barWidth - textWidth) / 2, startY + 20);
+	                
+	                // Valor
+	                g2d.setFont(new Font("Segoe UI", Font.BOLD, 11));
+	                String valor = actividadDiaria[i] + "m";
+	                textWidth = fm.stringWidth(valor);
+	                g2d.drawString(valor, x + (barWidth - textWidth) / 2, startY - barHeight - 5);
+	            }
+	            
+	            // Leyenda
+	            g2d.setColor(new Color(100, 100, 100));
+	            g2d.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+	            g2d.drawString("Tiempo de estudio diario (minutos)", width / 2 - 80, height - 15);
+	        }
 
-					// Barra de fondo
-					g2d.setColor(new Color(200, 200, 200));
-					g2d.fillRoundRect(100, y, anchoDisponible - 100, altoBarras, 10, 10);
+	        @Override
+	        public Dimension getPreferredSize() {
+	            return new Dimension(600, 250);
+	        }
+	    };
 
-					// Barra de progreso
-					g2d.setColor(colores[i]);
-					int anchoBarra = (int) ((anchoDisponible - 100) * valores[i] / 100.0);
-					g2d.fillRoundRect(100, y, anchoBarra, altoBarras, 10, 10);
+	    panelInferior.add(lblActividadTitulo, BorderLayout.NORTH);
+	    panelInferior.add(panelGrafico, BorderLayout.CENTER);
 
-					// Porcentaje
-					g2d.setColor(Color.WHITE);
-					g2d.drawString(valores[i] + "%", 110, y + altoBarras / 2 + 5);
-				}
-			}
+	    panel.add(panelTitulo, BorderLayout.NORTH);
+	    panel.add(panelTarjetas, BorderLayout.CENTER);
+	    panel.add(panelInferior, BorderLayout.SOUTH);
 
-			@Override
-			public Dimension getPreferredSize() {
-				return new Dimension(600, 250);
-			}
-		};
-
-		panelInferior.add(lblProgresoTitulo, BorderLayout.NORTH);
-		panelInferior.add(panelProgreso, BorderLayout.CENTER);
-
-		panel.add(panelTitulo, BorderLayout.NORTH);
-		panel.add(panelTarjetas, BorderLayout.CENTER);
-		panel.add(panelInferior, BorderLayout.SOUTH);
-
-		return panel;
+	    return panel;
 	}
 
-    private JPanel crearTarjetaEstadistica(String titulo, String valor, Color colorFondo, String emoji) {
-        JPanel panel = new JPanel(new BorderLayout(5, 10)) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.setColor(colorFondo);
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+	private JPanel crearTarjetaEstadistica(String titulo, String valor, Color colorFondo, String emoji) {
+	    JPanel panel = new JPanel(new BorderLayout(5, 10)) {
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            Graphics2D g2d = (Graphics2D) g;
+	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	            
+	            // Fondo con degradado
+	            GradientPaint gp = new GradientPaint(
+	                0, 0, 
+	                new Color(colorFondo.getRed(), colorFondo.getGreen(), colorFondo.getBlue(), 80), 
+	                getWidth(), getHeight(), 
+	                new Color(colorFondo.getRed(), colorFondo.getGreen(), colorFondo.getBlue(), 30)
+	            );
+	            g2d.setPaint(gp);
+	            g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+	            
+	            // Borde
+	            g2d.setColor(new Color(colorFondo.getRed(), colorFondo.getGreen(), colorFondo.getBlue(), 100));
+	            g2d.setStroke(new BasicStroke(1.5f));
+	            g2d.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 20, 20);
 
-                // Pequeños círculos decorativos
-                g2d.setColor(new Color(255, 255, 255, 50));
-                g2d.fillOval(-20, -20, 70, 70);
-                g2d.fillOval(getWidth() - 30, getHeight() - 30, 60, 60);
-            }
-        };
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        panel.setOpaque(false);
+	            // Elementos decorativos
+	            g2d.setColor(new Color(255, 255, 255, 50));
+	            g2d.fillOval(-20, -20, 70, 70);
+	            g2d.fillOval(getWidth() - 30, getHeight() - 30, 60, 60);
+	        }
+	    };
+	    panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+	    panel.setOpaque(false);
 
-        JLabel lblEmoji = new JLabel(emoji);
-        lblEmoji.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
-        lblEmoji.setHorizontalAlignment(SwingConstants.CENTER);
+	    // Panel para el emoji y título
+	    JPanel panelSuperior = new JPanel(new BorderLayout(5, 5));
+	    panelSuperior.setOpaque(false);
 
-        JLabel lblTitulo = new JLabel(titulo);
-        lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
-        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    JLabel lblEmoji = new JLabel(emoji);
+	    lblEmoji.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
+	    lblEmoji.setHorizontalAlignment(SwingConstants.CENTER);
+	    
+	    JLabel lblTitulo = new JLabel(titulo);
+	    lblTitulo.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
+	    lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    
+	    panelSuperior.add(lblEmoji, BorderLayout.WEST);
+	    panelSuperior.add(lblTitulo, BorderLayout.CENTER);
 
-        JLabel lblValor = new JLabel(valor);
-        lblValor.setFont(new Font("Segoe UI Emoji", Font.BOLD, 17));
-        lblValor.setHorizontalAlignment(SwingConstants.CENTER);
-        
-        // Si es el panel de tiempo, guardar referencia para actualización
-        if (titulo.equals("Tiempo total dedicado")) {
-            lblTiempoTotal = lblValor;
-        }
+	    // Panel para el valor
+	    JLabel lblValor = new JLabel(valor);
+	    lblValor.setFont(new Font("Segoe UI Emoji", Font.BOLD, 22));
+	    lblValor.setHorizontalAlignment(SwingConstants.CENTER);
+	    
+	    // Si es el panel de tiempo, guardar referencia para actualización
+	    if (titulo.equals("Tiempo total dedicado")) {
+	        lblTiempoTotal = lblValor;
+	    }
 
-        JPanel panelCentro = new JPanel(new BorderLayout(5, 5));
-        panelCentro.setOpaque(false);
-        panelCentro.add(lblTitulo, BorderLayout.NORTH);
-        panelCentro.add(lblValor, BorderLayout.CENTER);
+	    panel.add(panelSuperior, BorderLayout.NORTH);
+	    panel.add(lblValor, BorderLayout.CENTER);
 
-        panel.add(lblEmoji, BorderLayout.NORTH);
-        panel.add(panelCentro, BorderLayout.CENTER);
-
-        return panel;
-    }
+	    return panel;
+	}
 
 	private JPanel crearPanelInferior() {
 		JPanel panel = new JPanel(new BorderLayout());
