@@ -37,6 +37,8 @@ public class Usuario {
 	private LocalDate fechaNacimiento;
 	@OneToMany(mappedBy="usuario", cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	private List<CursoEnMarcha> cursosActivos;
+	@OneToMany(cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	private List<Curso> cursosCompletados;
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
 	private Estadistica estadisticas;
@@ -86,6 +88,14 @@ public class Usuario {
 	public void setCursosActivos(List<CursoEnMarcha> cursosActivos) {
 		this.cursosActivos = cursosActivos;
 	}
+	
+	public List<Curso> getCursosCompletados() {
+		return cursosCompletados;
+	}
+
+	public void setCursosCompletados(List<Curso> cursosCompletados) {
+		this.cursosCompletados = cursosCompletados;
+	}
 
 	public Estadistica getEstadisticas() {
 		return estadisticas;
@@ -122,10 +132,6 @@ public class Usuario {
 			return true;
 		}
 		return false;
-	}
-
-	public List<CursoEnMarcha> obtenerCursosActivos() {
-		return cursosActivos.stream().collect(Collectors.toList());
 	}
 	
 	public Optional<CursoEnMarcha> obtenerCursoEnMarcha(Curso curso, Estrategia estrategia) {
@@ -221,6 +227,7 @@ public class Usuario {
         
         // Eliminar de cursos activos
         this.cursosActivos.remove(cursoEnMarcha);
+        this.cursosCompletados.add(curso);
         cursoEnMarcha.finalizar();
     }
     
@@ -348,4 +355,6 @@ public class Usuario {
     public List<ComentarioComunidad> getComentarios() {
         return new ArrayList<>(comentarios);
     }
+    
+    
 }

@@ -147,6 +147,9 @@ public class ControladorPDS {
 	public List<CursoEnMarcha> getCursosActivosSesionActual() {
 		return this.sesionActual.getCursosActivos();
 	}
+	public List<Curso> getCursosCompletadosSesionActual() {
+		return this.sesionActual.getCursosCompletados();
+	}
 	
 
 	/**
@@ -198,6 +201,22 @@ public class ControladorPDS {
 	    Map<String, Integer> resultado = cursosActivos.stream()
 	        .collect(Collectors.groupingBy(
 	            curso -> curso.getCurso().getCategoria(),
+	            Collectors.summingInt(curso -> 1)
+	        ));
+	    return resultado;
+	}
+	
+	/***
+	 * Método para obtener un mapa asociando la categoría del curso con el número de cursos que tiene completados un usuario
+	 * @return mapa categoría curso - número de cursoa
+	 */
+	
+	public Map<String, Integer> numCursosCompletados() {
+	    List<Curso> cursosCompletados = getCursosCompletadosSesionActual();
+	    
+	    Map<String, Integer> resultado = cursosCompletados.stream()
+	        .collect(Collectors.groupingBy(
+	            curso -> curso.getCategoria(),
 	            Collectors.summingInt(curso -> 1)
 	        ));
 	    return resultado;
