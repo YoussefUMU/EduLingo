@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FlashCardTipoB extends JFrame {
+public class PreguntaTipoB extends JFrame {
 
     private JProgressBar barraTiempo;
     private JLabel preguntaLabel;
@@ -35,7 +35,7 @@ public class FlashCardTipoB extends JFrame {
     private CursoEnMarcha cursoEnMarcha;
     private Point dragPoint;
 
-    public FlashCardTipoB(CursoEnMarcha curso, int indBloque, int indPregunta) {
+    public PreguntaTipoB(CursoEnMarcha curso, int indBloque, int indPregunta) {
         this.cursoEnMarcha = curso;
         this.vidas = curso.getVidas();
         

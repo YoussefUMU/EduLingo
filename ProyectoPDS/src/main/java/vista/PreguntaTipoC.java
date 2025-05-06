@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FlashCardTipoC extends JFrame {
+public class PreguntaTipoC extends JFrame {
     private JProgressBar barraTiempo;
     private JLabel preguntaLabel;
     private JPanel zonaOpcionesPanel;
@@ -42,7 +42,7 @@ public class FlashCardTipoC extends JFrame {
     // Variable para rastrear si se está editando
     private boolean modoEdicion = false;
 
-    public FlashCardTipoC(CursoEnMarcha curso, int indBloque, int indPregunta) {
+    public PreguntaTipoC(CursoEnMarcha curso, int indBloque, int indPregunta) {
         // Guardar referencia al curso
         this.cursoEnMarcha = curso;
 

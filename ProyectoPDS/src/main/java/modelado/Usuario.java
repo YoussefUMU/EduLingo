@@ -2,6 +2,7 @@ package modelado;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,6 +43,8 @@ public class Usuario {
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
 	private Premium premium;
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<ComentarioComunidad> comentarios = new ArrayList<>();
 	
 	public Usuario() {
 		
@@ -52,7 +55,7 @@ public class Usuario {
 		this.contraseña = contraseña;
 		this.correo = correo;
 		this.nombreUsuario = nombreUsuario;
-		this.fechaRegistro = LocalDate.of(2025, 04, 25);
+		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
 		this.estadisticas = new Estadistica();
 		this.fechaNacimiento = fechaNacimiento;
@@ -85,7 +88,7 @@ public class Usuario {
 	}
 
 	public Estadistica getEstadisticas() {
-		return new Estadistica(); //estadisticas;
+		return estadisticas;
 	}
 
 	public void setEstadisticas(Estadistica estadisticas) {
@@ -169,6 +172,8 @@ public class Usuario {
 	public void activarPremium(String tipoPlan) {
 	    if (premium == null) {
 	        premium = new Premium(tipoPlan);
+	        premium.setUsuario(this); // Asegurarse de que la relación bidireccional está configurada
+	        premium.setActivo(true);
 	    } else {
 	        // Si ya tenía premium pero estaba inactivo, renovarlo
 	        if (!premium.estaActivo()) {
@@ -200,13 +205,6 @@ public class Usuario {
 	    return esPremium() && premium.isVidasInfinitas();
 	}
 
-	public boolean tieneCursosAdicionales() {
-	    return esPremium() && premium.isCursosAdicionales();
-	}
-
-	public boolean sinAnuncios() {
-	    return esPremium() && premium.isSinAnuncios();
-	}
 	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
         Curso curso = cursoEnMarcha.getCurso();
         
@@ -304,5 +302,50 @@ public class Usuario {
      */
     public boolean tieneLogroDesbloqueado(String idLogro) {
         return estadisticas.esLogroDesbloqueado(idLogro);
+    }
+    /**
+     * Añade un comentario a la lista de comentarios del usuario
+     * @param texto Texto del comentario
+     * @param etiqueta Etiqueta del comentario
+     * @return El comentario creado
+     */
+    public ComentarioComunidad añadirComentario(String texto, String etiqueta) {
+        ComentarioComunidad comentario = new ComentarioComunidad(this, texto, etiqueta, new Date());
+        comentarios.add(comentario);
+        return comentario;
+    }
+
+    /**
+     * Edita un comentario existente
+     * @param comentarioId ID del comentario a editar
+     * @param nuevoTexto Nuevo texto para el comentario
+     * @return true si se editó correctamente, false si no se encontró
+     */
+    public boolean editarComentario(Long comentarioId, String nuevoTexto) {
+        for (ComentarioComunidad comentario : comentarios) {
+            if (comentario.getId().equals(comentarioId)) {
+                comentario.setTexto(nuevoTexto);
+                comentario.setFecha(new Date()); // Actualizar fecha
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Elimina un comentario
+     * @param comentarioId ID del comentario a eliminar
+     * @return true si se eliminó correctamente, false si no se encontró
+     */
+    public boolean eliminarComentario(Long comentarioId) {
+        return comentarios.removeIf(c -> c.getId().equals(comentarioId));
+    }
+
+    /**
+     * Obtiene todos los comentarios del usuario
+     * @return Lista de comentarios
+     */
+    public List<ComentarioComunidad> getComentarios() {
+        return new ArrayList<>(comentarios);
     }
 }
