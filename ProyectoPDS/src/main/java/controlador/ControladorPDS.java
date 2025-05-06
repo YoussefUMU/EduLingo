@@ -224,6 +224,7 @@ public class ControladorPDS {
     public void registrarRespuestaPregunta(boolean correcta) {
         if (sesionActual != null) {
             sesionActual.registrarRespuestaPregunta(correcta);
+            repositorioUsuarios.actualizarEstadisticas(sesionActual.getEstadisticas());
         }
     }
     
@@ -287,6 +288,7 @@ public class ControladorPDS {
             long segundosTranscurridos = java.time.Duration.between(inicioSesionActual, ahora).getSeconds();
             // Actualizar estadísticas del usuario
             sesionActual.getEstadisticas().incrementarTiempoUso((int)segundosTranscurridos);
+            repositorioUsuarios.actualizarEstadisticas(sesionActual.getEstadisticas());
             // Reiniciar el contador
             inicioSesionActual = ahora;
         }

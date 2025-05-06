@@ -142,6 +142,24 @@ public class RepositorioUsuarios {
         }
     }
 
+    public void actualizarEstadisticas(Estadistica estadisticas) {
+    	EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            
+            em.merge(estadisticas);
+            
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    
     public void cancelarPremium(Long id) {
         EntityManager em = emf.createEntityManager();
         Usuario usuario = em.find(Usuario.class, id);
