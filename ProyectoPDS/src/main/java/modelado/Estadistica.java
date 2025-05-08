@@ -1,10 +1,14 @@
 package modelado;
 
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +24,7 @@ import java.time.LocalTime;
 @Entity
 public class Estadistica {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
     private int tiempoUso; // Tiempo en segundos
     private int mejorRacha; // Cantidad de días consecutivos usando la aplicación
@@ -30,7 +34,9 @@ public class Estadistica {
     private int sesionesEstudio;
     private int ultimoInicioSesion; // Timestamp para cálculo de rachas
     private int experiencia; // Nueva variable para almacenar la experiencia
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> cursosCompletadosIds; // Set para almacenar IDs de cursos completados
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> logrosDesbloqueados; // Lista para almacenar logros desbloqueados
     private LocalDateTime primeraActividadDelDia; // Primera actividad registrada en el día
     private LocalDateTime ultimaActividadDelDia; // Última actividad registrada en el día
@@ -234,19 +240,19 @@ public class Estadistica {
     }
     
     /**
-     * Verifica si el usuario estudió temprano (antes de las 8:00).
+     * Verifica si el usuario estudió temprano (antes de las 8:00, después de las 5:00).
      */
     public boolean estudioPorLaMañana() {
         if (primeraActividadDelDia == null) return false;
-        return primeraActividadDelDia.toLocalTime().isBefore(LocalTime.of(8, 0));
+        return primeraActividadDelDia.toLocalTime().isBefore(LocalTime.of(8, 0)) && primeraActividadDelDia.toLocalTime().isAfter(LocalTime.of(5, 0));
     }
     
     /**
-     * Verifica si el usuario estudió tarde (después de las 22:00).
+     * Verifica si el usuario estudió tarde (después de las 22:00, antes de las 5:00).
      */
     public boolean estudioPorLaNoche() {
         if (ultimaActividadDelDia == null) return false;
-        return ultimaActividadDelDia.toLocalTime().isAfter(LocalTime.of(22, 0));
+        return ultimaActividadDelDia.toLocalTime().isAfter(LocalTime.of(22, 0)) && primeraActividadDelDia.toLocalTime().isBefore(LocalTime.of(5, 0));
     }
     
     public int getExperiencia() {

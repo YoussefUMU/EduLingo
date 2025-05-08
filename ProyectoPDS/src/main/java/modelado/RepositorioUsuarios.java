@@ -80,7 +80,21 @@ public class RepositorioUsuarios {
              em.close();
          }
     }
-    
+    public void actualizarUsuario(Usuario usuario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(usuario);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
     public void agregarCurso(Long id, CursoEnMarcha cursoEnMarcha) {
         EntityManager em = emf.createEntityManager();
         Usuario usuario = em.find(Usuario.class, id);
@@ -128,13 +142,12 @@ public class RepositorioUsuarios {
         }
     }
 
-	public void cancelarPremium(Long id) {
-		EntityManager em = emf.createEntityManager();
-        Usuario usuario = em.find(Usuario.class, id);
+    public void actualizarEstadisticas(Estadistica estadisticas) {
+    	EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             
-            usuario.cancelarPremium();
+            em.merge(estadisticas);
             
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -145,6 +158,99 @@ public class RepositorioUsuarios {
         } finally {
             em.close();
         }
-		
-	}
+    }
+    
+    public void cancelarPremium(Long id) {
+        EntityManager em = emf.createEntityManager();
+        Usuario usuario = em.find(Usuario.class, id);
+        try {
+            em.getTransaction().begin();
+            
+            // Marcamos premium como no renovable, pero mantenemos hasta fecha fin
+            Premium premium = usuario.getPremium();
+            premium.setActivo(false);
+            em.merge(premium);
+            
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    /**
+     * Guarda un nuevo comentario en la base de datos
+     * @param comentario El comentario a guardar
+     */
+    public void guardarComentario(ComentarioComunidad comentario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(comentario);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Actualiza un comentario existente
+     * @param comentario El comentario a actualizar
+     */
+    public void actualizarComentario(ComentarioComunidad comentario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(comentario);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Elimina un comentario
+     * @param comentarioId ID del comentario a eliminar
+     */
+    public void eliminarComentario(Long comentarioId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            ComentarioComunidad comentario = em.find(ComentarioComunidad.class, comentarioId);
+            if (comentario != null) {
+                em.remove(comentario);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Obtiene todos los comentarios de la comunidad
+     * @return Lista de todos los comentarios
+     */
+    public List<ComentarioComunidad> obtenerTodosComentarios() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<ComentarioComunidad> query = em.createQuery(
+                "SELECT c FROM ComentarioComunidad c ORDER BY c.fecha DESC", 
+                ComentarioComunidad.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -421,46 +421,46 @@ public class PanelPremium extends JPanel {
 		return boton;
 	}
 
+	// Modificación en vista/PanelPremium.java
 	public void actualizarInfoSuscripcion() {
-		Usuario usuario = ControladorPDS.getUnicaInstancia().getSesionActual();
+	    Usuario usuario = ControladorPDS.getUnicaInstancia().getSesionActual();
 
-		if (usuario != null && usuario.esPremium()) {
-			Premium premium = usuario.getPremium();
+	    if (usuario != null && usuario.esPremium()) {
+	        Premium premium = usuario.getPremium();
 
-			// Siempre mostramos como activo si es premium, independientemente de si está
-			// cancelado
-			estadoSuscripcionLabel.setText("Premium activo (" + premium.getTipoPlan() + ")");
-			estadoSuscripcionLabel.setForeground(colorVerde);
+	        // Siempre mostramos como activo si es premium, independientemente de si está cancelado
+	        estadoSuscripcionLabel.setText("Premium activo (" + premium.getTipoPlan() + ")");
+	        estadoSuscripcionLabel.setForeground(colorVerde);
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			String fechaFin = premium.getFechaFin().format(formatter);
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	        String fechaFin = premium.getFechaFin().format(formatter);
 
-			// Si está cancelado, indicamos que no se renovará
-			if (!premium.isActivo()) {
-				fechaVencimientoLabel.setText("Finaliza el: " + fechaFin + " (no se renovará)");
-				fechaVencimientoLabel.setForeground(new Color(200, 100, 100));
-				btnCancelar.setVisible(false);
-			} else {
-				fechaVencimientoLabel.setText("Vence el: " + fechaFin);
-				fechaVencimientoLabel.setForeground(new Color(100, 100, 100));
-				btnCancelar.setVisible(true);
-			}
+	        // Si está cancelado, indicamos que no se renovará
+	        if (!premium.isActivo()) {
+	            fechaVencimientoLabel.setText("Finaliza el: " + fechaFin + " (no se renovará)");
+	            fechaVencimientoLabel.setForeground(new Color(200, 100, 100));
+	            btnCancelar.setVisible(false); // Ocultar botón de cancelar
+	        } else {
+	            fechaVencimientoLabel.setText("Vence el: " + fechaFin);
+	            fechaVencimientoLabel.setForeground(new Color(100, 100, 100));
+	            btnCancelar.setVisible(true); // Mostrar botón de cancelar
+	        }
 
-			btnActivar.setText("Renovar Premium");
+	        btnActivar.setText("Renovar Premium");
 
-			// Seleccionar el plan actual
-			if ("anual".equalsIgnoreCase(premium.getTipoPlan())) {
-				radioAnual.setSelected(true);
-			} else {
-				radioMensual.setSelected(true);
-			}
-		} else {
-			estadoSuscripcionLabel.setText("No tienes suscripción premium");
-			estadoSuscripcionLabel.setForeground(new Color(100, 100, 100));
-			fechaVencimientoLabel.setText("");
-			btnActivar.setText("Activar Premium");
-			btnCancelar.setVisible(false);
-		}
+	        // Seleccionar el plan actual
+	        if ("anual".equalsIgnoreCase(premium.getTipoPlan())) {
+	            radioAnual.setSelected(true);
+	        } else {
+	            radioMensual.setSelected(true);
+	        }
+	    } else {
+	        estadoSuscripcionLabel.setText("No tienes suscripción premium");
+	        estadoSuscripcionLabel.setForeground(new Color(100, 100, 100));
+	        fechaVencimientoLabel.setText("");
+	        btnActivar.setText("Activar Premium");
+	        btnCancelar.setVisible(false);
+	    }
 	}
 
 	private void activarPremium() {

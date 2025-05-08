@@ -2,6 +2,7 @@ package modelado;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,12 +37,16 @@ public class Usuario {
 	private LocalDate fechaNacimiento;
 	@OneToMany(mappedBy="usuario", cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	private List<CursoEnMarcha> cursosActivos;
+	@OneToMany(cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	private List<Curso> cursosCompletados;
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
-	private Estadistica estadisticas;			//ya lo meteré
+	private Estadistica estadisticas;
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
 	private Premium premium;
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<ComentarioComunidad> comentarios = new ArrayList<>();
 	
 	public Usuario() {
 		
@@ -52,8 +57,9 @@ public class Usuario {
 		this.contraseña = contraseña;
 		this.correo = correo;
 		this.nombreUsuario = nombreUsuario;
-		this.fechaRegistro = LocalDate.of(2025, 04, 25);
+		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
+	    this.cursosCompletados = new ArrayList<>(); 
 		this.estadisticas = new Estadistica();
 		this.fechaNacimiento = fechaNacimiento;
 	}
@@ -65,6 +71,7 @@ public class Usuario {
 		this.nombreUsuario = nombreUsuario;
 		this.fechaRegistro = LocalDate.now();
 		this.cursosActivos = new ArrayList<>();
+	    this.cursosCompletados = new ArrayList<>();
 		this.estadisticas = new Estadistica();
 	}
 
@@ -83,9 +90,17 @@ public class Usuario {
 	public void setCursosActivos(List<CursoEnMarcha> cursosActivos) {
 		this.cursosActivos = cursosActivos;
 	}
+	
+	public List<Curso> getCursosCompletados() {
+		return cursosCompletados;
+	}
+
+	public void setCursosCompletados(List<Curso> cursosCompletados) {
+		this.cursosCompletados = cursosCompletados;
+	}
 
 	public Estadistica getEstadisticas() {
-		return new Estadistica(); //estadisticas;
+		return estadisticas;
 	}
 
 	public void setEstadisticas(Estadistica estadisticas) {
@@ -124,7 +139,6 @@ public class Usuario {
 	public List<CursoEnMarcha> obtenerCursosActivos() {
 		return cursosActivos.stream().collect(Collectors.toList());
 	}
-
 	public Optional<CursoEnMarcha> obtenerCursoEnMarcha(Curso curso, Estrategia estrategia) {
 		return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(curso.getId()) && 
 				c.getEstrategia().getClass().equals(estrategia.getClass())).findFirst();
@@ -168,6 +182,8 @@ public class Usuario {
 	public void activarPremium(String tipoPlan) {
 	    if (premium == null) {
 	        premium = new Premium(tipoPlan);
+	        premium.setUsuario(this); // Asegurarse de que la relación bidireccional está configurada
+	        premium.setActivo(true);
 	    } else {
 	        // Si ya tenía premium pero estaba inactivo, renovarlo
 	        if (!premium.estaActivo()) {
@@ -199,31 +215,30 @@ public class Usuario {
 	    return esPremium() && premium.isVidasInfinitas();
 	}
 
-	public boolean tieneCursosAdicionales() {
-	    return esPremium() && premium.isCursosAdicionales();
-	}
-
-	public boolean sinAnuncios() {
-	    return esPremium() && premium.isSinAnuncios();
-	}
 	public void finalizarCurso(CursoEnMarcha cursoEnMarcha) {
-        Curso curso = cursoEnMarcha.getCurso();
-        
-        // Registrar curso completado en estadísticas
-        if (estadisticas.registrarCursoCompletado(curso.getId(), curso.getCategoria())) {
-            // Comprobar si se han desbloqueado nuevos logros
-            String[] nuevosLogros = GestorLogros.comprobarLogros(this);
-            
-            // Si se han desbloqueado logros, mostrar notificación
-            if (nuevosLogros.length > 0) {
-                mostrarNotificacionLogros(nuevosLogros);
-            }
-        }
-        
-        // Eliminar de cursos activos
-        this.cursosActivos.remove(cursoEnMarcha);
-        cursoEnMarcha.finalizar();
-    }
+	    Curso curso = cursoEnMarcha.getCurso();
+	    
+	    // Registrar curso completado en estadísticas
+	    if (estadisticas.registrarCursoCompletado(curso.getId(), curso.getCategoria())) {
+	        // Comprobar si se han desbloqueado nuevos logros
+	        String[] nuevosLogros = GestorLogros.comprobarLogros(this);
+	        
+	        // Si se han desbloqueado logros, mostrar notificación
+	        if (nuevosLogros.length > 0) {
+	            mostrarNotificacionLogros(nuevosLogros);
+	        }
+	    }
+	    
+	    // Eliminar de cursos activos
+	    this.cursosActivos.remove(cursoEnMarcha);
+	    
+	    // Añadir a cursos completados (verificar si ya está añadido)
+	    if (!this.cursosCompletados.contains(curso)) {
+	        this.cursosCompletados.add(curso);
+	    }
+	    
+	    cursoEnMarcha.finalizar();
+	}
     
     /**
      * Muestra una notificación al usuario sobre los logros desbloqueados
@@ -304,4 +319,51 @@ public class Usuario {
     public boolean tieneLogroDesbloqueado(String idLogro) {
         return estadisticas.esLogroDesbloqueado(idLogro);
     }
+    /**
+     * Añade un comentario a la lista de comentarios del usuario
+     * @param texto Texto del comentario
+     * @param etiqueta Etiqueta del comentario
+     * @return El comentario creado
+     */
+    public ComentarioComunidad añadirComentario(String texto, String etiqueta) {
+        ComentarioComunidad comentario = new ComentarioComunidad(this, texto, etiqueta, new Date());
+        comentarios.add(comentario);
+        return comentario;
+    }
+
+    /**
+     * Edita un comentario existente
+     * @param comentarioId ID del comentario a editar
+     * @param nuevoTexto Nuevo texto para el comentario
+     * @return true si se editó correctamente, false si no se encontró
+     */
+    public boolean editarComentario(Long comentarioId, String nuevoTexto) {
+        for (ComentarioComunidad comentario : comentarios) {
+            if (comentario.getId().equals(comentarioId)) {
+                comentario.setTexto(nuevoTexto);
+                comentario.setFecha(new Date()); // Actualizar fecha
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Elimina un comentario
+     * @param comentarioId ID del comentario a eliminar
+     * @return true si se eliminó correctamente, false si no se encontró
+     */
+    public boolean eliminarComentario(Long comentarioId) {
+        return comentarios.removeIf(c -> c.getId().equals(comentarioId));
+    }
+
+    /**
+     * Obtiene todos los comentarios del usuario
+     * @return Lista de comentarios
+     */
+    public List<ComentarioComunidad> getComentarios() {
+        return new ArrayList<>(comentarios);
+    }
+    
+    
 }

@@ -10,6 +10,8 @@ import javax.swing.border.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import controlador.ControladorPDS;
+import modelado.ComentarioComunidad;
 import modelado.Usuario;
 
 public class PanelComunidad extends JPanel {
@@ -19,7 +21,7 @@ public class PanelComunidad extends JPanel {
     private JButton btnPublicar;
     private JTextField campoBusqueda;
     private JComboBox<String> filtroEtiquetas;
-    private List<Comentario> listaComentarios;
+    private List<ComentarioComunidad> listaComentarios;
     private JPanel panelScrollable;
     private Usuario usuarioActual;
     private JLabel contadorCaracteres;
@@ -27,7 +29,7 @@ public class PanelComunidad extends JPanel {
 
     public PanelComunidad(Usuario usuario) {
         this.usuarioActual = usuario;
-        this.listaComentarios = new ArrayList<>();
+        this.listaComentarios = ControladorPDS.getUnicaInstancia().obtenerTodosComentarios();
         
         setLayout(new BorderLayout(10, 10));
         setOpaque(false);
@@ -198,40 +200,40 @@ public class PanelComunidad extends JPanel {
     
     private void actualizarListaComentarios() {
         panelScrollable.removeAll();
-        
+
         // Ordenar comentarios por fecha (más recientes primero)
-        List<Comentario> comentariosFiltrados = new ArrayList<>(listaComentarios);
+        List<ComentarioComunidad> comentariosFiltrados = new ArrayList<>(listaComentarios);
         Collections.sort(comentariosFiltrados, (c1, c2) -> c2.getFecha().compareTo(c1.getFecha()));
-        
+
         // Aplicar filtros si es necesario
         String busqueda = campoBusqueda.getText().toLowerCase();
         String etiquetaSeleccionada = (String) filtroEtiquetas.getSelectedItem();
-        
-        for (Comentario comentario : comentariosFiltrados) {
+
+        for (ComentarioComunidad comentario : comentariosFiltrados) {
             boolean cumpleFiltro = true;
-            
+
             // Filtrar por texto de búsqueda
             if (!busqueda.isEmpty()) {
-                cumpleFiltro = comentario.getTexto().toLowerCase().contains(busqueda) || 
+                cumpleFiltro = comentario.getTexto().toLowerCase().contains(busqueda) ||
                                comentario.getUsuario().getNombreUsuario().toLowerCase().contains(busqueda);
             }
-            
+
             // Filtrar por etiqueta
             if (!etiquetaSeleccionada.equals("Todas las etiquetas") && cumpleFiltro) {
                 cumpleFiltro = comentario.getEtiqueta().equals(etiquetaSeleccionada);
             }
-            
+
             if (cumpleFiltro) {
                 panelScrollable.add(crearPanelComentario(comentario));
                 panelScrollable.add(Box.createRigidArea(new Dimension(0, 10)));
             }
         }
-        
+
         panelScrollable.revalidate();
         panelScrollable.repaint();
     }
     
-    private JPanel crearPanelComentario(Comentario comentario) {
+    private JPanel crearPanelComentario(ComentarioComunidad comentario) {
         JPanel panel = new JPanel(new BorderLayout(10, 5));
         panel.setOpaque(true);
         panel.setBackground(new Color(250, 250, 255));
@@ -303,26 +305,12 @@ public class PanelComunidad extends JPanel {
         textoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         textoLabel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
         
-        // Panel inferior con botones de acción
+        // Panel inferior con botones de editar/eliminar (sólo si es propietario)
         JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelAcciones.setOpaque(false);
         
-        JButton btnLike = new JButton("👍 Me gusta");
-        estilizarBotonAccion(btnLike);
-        
-        JButton btnResponder = new JButton("↩️ Responder");
-        estilizarBotonAccion(btnResponder);
-        
-        panelAcciones.add(btnLike);
-        panelAcciones.add(btnResponder);
-        
-        // Añadir componentes al panel del comentario
-        panel.add(panelInfo, BorderLayout.NORTH);
-        panel.add(textoLabel, BorderLayout.CENTER);
-        panel.add(panelAcciones, BorderLayout.SOUTH);
-        
-        // Si el comentario es del usuario actual, añadir botones adicionales
-        if (comentario.getUsuario().equals(usuarioActual)) {
+        // Si el comentario es del usuario actual, añadir botones de editar y eliminar
+        if (comentario.getUsuario().getId().equals(usuarioActual.getId())) {
             JButton btnEditar = new JButton("✏️ Editar");
             estilizarBotonAccion(btnEditar);
             
@@ -335,6 +323,11 @@ public class PanelComunidad extends JPanel {
             panelAcciones.add(btnEditar);
             panelAcciones.add(btnEliminar);
         }
+        
+        // Añadir componentes al panel del comentario
+        panel.add(panelInfo, BorderLayout.NORTH);
+        panel.add(textoLabel, BorderLayout.CENTER);
+        panel.add(panelAcciones, BorderLayout.SOUTH);
         
         return panel;
     }
@@ -364,43 +357,61 @@ public class PanelComunidad extends JPanel {
         }
         
         String etiqueta = (String) comboEtiquetas.getSelectedItem();
-        Comentario nuevoComentario = new Comentario(usuarioActual, texto, etiqueta, new Date());
+        ComentarioComunidad nuevoComentario = ControladorPDS.getUnicaInstancia()
+            .publicarComentario(texto, etiqueta);
         
-        listaComentarios.add(0, nuevoComentario);
-        actualizarListaComentarios();
-        
-        campoComentario.setText("");
-        JOptionPane.showMessageDialog(this, 
-            "¡Comentario publicado con éxito!",
-            "Publicación exitosa", 
-            JOptionPane.INFORMATION_MESSAGE);
+        if (nuevoComentario != null) {
+            listaComentarios.add(0, nuevoComentario);
+            actualizarListaComentarios();
+            
+            campoComentario.setText("");
+            JOptionPane.showMessageDialog(this, 
+                "¡Comentario publicado con éxito!",
+                "Publicación exitosa", 
+                JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Error al publicar el comentario.",
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
     
-    private void eliminarComentario(Comentario comentario) {
+    private void eliminarComentario(ComentarioComunidad comentario) {
         int respuesta = JOptionPane.showConfirmDialog(this,
             "¿Estás seguro de que deseas eliminar este comentario?",
             "Confirmar eliminación",
             JOptionPane.YES_NO_OPTION);
             
         if (respuesta == JOptionPane.YES_OPTION) {
-            listaComentarios.remove(comentario);
-            actualizarListaComentarios();
-            JOptionPane.showMessageDialog(this, 
-                "El comentario ha sido eliminado.",
-                "Eliminación exitosa", 
-                JOptionPane.INFORMATION_MESSAGE);
+            boolean eliminado = ControladorPDS.getUnicaInstancia()
+                .eliminarComentario(comentario.getId());
+                
+            if (eliminado) {
+                listaComentarios.remove(comentario);
+                actualizarListaComentarios();
+                JOptionPane.showMessageDialog(this, 
+                    "El comentario ha sido eliminado.",
+                    "Eliminación exitosa", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
     
-    private void editarComentario(Comentario comentario) {
+    private void editarComentario(ComentarioComunidad comentario) {
         String nuevoTexto = JOptionPane.showInputDialog(this,
             "Editar comentario:",
             comentario.getTexto());
             
         if (nuevoTexto != null && !nuevoTexto.trim().isEmpty() && nuevoTexto.length() <= MAX_CARACTERES) {
-            comentario.setTexto(nuevoTexto.trim());
-            comentario.setFecha(new Date()); // Actualizar fecha
-            actualizarListaComentarios();
+            boolean editado = ControladorPDS.getUnicaInstancia()
+                .editarComentario(comentario.getId(), nuevoTexto.trim());
+                
+            if (editado) {
+                comentario.setTexto(nuevoTexto.trim());
+                comentario.setFecha(new Date());
+                actualizarListaComentarios();
+            }
         } else if (nuevoTexto != null) {
             JOptionPane.showMessageDialog(this, 
                 "El comentario debe tener entre 1 y " + MAX_CARACTERES + " caracteres.",
