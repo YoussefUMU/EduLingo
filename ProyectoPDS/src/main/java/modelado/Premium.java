@@ -14,137 +14,80 @@ import jakarta.persistence.OneToOne;
  */
 @Entity
 public class Premium {
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-	private LocalDate fechaInicio;
-	private LocalDate fechaFin;
-	private boolean activo;
-	private String tipoPlan; // "mensual", "anual", etc.
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private boolean activo;
+    private String tipoPlan; // "mensual", "anual", etc.
 
-	@OneToOne(mappedBy = "premium")
-	private Usuario usuario;
+    @OneToOne(mappedBy = "premium")
+    private Usuario usuario;
 
-	// Beneficios específicos que puede tener un usuario premium
-	private boolean vidasInfinitas;
+    // Beneficios específicos que puede tener un usuario premium
+    private boolean vidasInfinitas;
 
-	/**
-	 * Constructor por defecto
-	 */
-	public Premium() {
-		this.fechaInicio = LocalDate.now();
-		this.fechaFin = LocalDate.now().plusMonths(1); // Por defecto, suscripción mensual
-		this.activo = true;
-		this.tipoPlan = "mensual";
+    /** Constructor por defecto (mensual). */
+    public Premium() {
+        this.fechaInicio      = LocalDate.now();
+        this.fechaFin         = LocalDate.now().plusMonths(1);
+        this.activo           = true;
+        this.tipoPlan         = "mensual";
+        this.vidasInfinitas   = true;
+    }
 
-		// Activar todos los beneficios por defecto
-		this.vidasInfinitas = true;
-	}
+    /** Constructor que permite especificar el tipo de plan. */
+    public Premium(String tipoPlan) {
+        this.fechaInicio = LocalDate.now();
+        this.activo      = true;
+        this.tipoPlan    = tipoPlan;
+        if ("anual".equalsIgnoreCase(tipoPlan)) {
+            this.fechaFin = LocalDate.now().plusYears(1);
+        } else {
+            this.fechaFin = LocalDate.now().plusMonths(1);
+        }
+        this.vidasInfinitas = true;
+    }
 
-	/**
-	 * Constructor que permite especificar el tipo de plan
-	 * 
-	 * @param tipoPlan Tipo de plan ("mensual", "anual", etc.)
-	 */
-	public Premium(String tipoPlan) {
-		this.fechaInicio = LocalDate.now();
-		this.activo = true;
-		this.tipoPlan = tipoPlan;
+    /** Verifica si la suscripción premium está activa (flag y fecha). */
+    public boolean estaActivo() {
+        LocalDate hoy = LocalDate.now();
+        return activo && !hoy.isAfter(fechaFin);
+    }
 
-		// Establecer la fecha de fin según el tipo de plan
-		if ("anual".equalsIgnoreCase(tipoPlan)) {
-			this.fechaFin = LocalDate.now().plusYears(1);
-		} else {
-			// Por defecto, mensual
-			this.fechaFin = LocalDate.now().plusMonths(1);
-		}
+    /** Renueva la suscripción premium. */
+    public void renovar(int meses) {
+        if (LocalDate.now().isAfter(fechaFin)) {
+            this.fechaInicio = LocalDate.now();
+        }
+        this.fechaFin = this.fechaFin.plusMonths(meses);
+        this.activo  = true;
+        this.tipoPlan = meses >= 12 ? "anual" : "mensual";
+    }
 
-		// Activar todos los beneficios por defecto
-		this.vidasInfinitas = true;
-	}
+    /** Cancela la suscripción premium (flag a false). */
+    public void cancelar() {
+        this.activo = false;
+    }
 
-	/**
-	 * Verifica si la suscripción premium está activa (no ha expirado)
-	 * 
-	 * @return true si la suscripción sigue vigente, false en caso contrario
-	 */
-	public boolean estaActivo() {
-		LocalDate hoy = LocalDate.now();
-		return !hoy.isAfter(fechaFin);
-	}
+    // Getters y setters...
+    public LocalDate getFechaInicio() { return fechaInicio; }
+    public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }
 
-	/**
-	 * Renueva la suscripción premium
-	 * 
-	 * @param meses Número de meses a renovar
-	 */
-	public void renovar(int meses) {
-		if (LocalDate.now().isAfter(fechaFin)) {
-			// Si ya expiró, comenzar desde hoy
-			this.fechaInicio = LocalDate.now();
-		}
+    public LocalDate getFechaFin() { return fechaFin; }
+    public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
 
-		this.fechaFin = this.fechaFin.plusMonths(meses);
-		this.activo = true;
+    /** Devuelve el flag interno; no confundir con estaActivo(). */
+    public boolean isActivo() { return activo; }
+    public void setActivo(boolean activo) { this.activo = activo; }
 
-		if (meses >= 12) {
-			this.tipoPlan = "anual";
-		} else {
-			this.tipoPlan = "mensual";
-		}
-	}
+    public String getTipoPlan() { return tipoPlan; }
+    public void setTipoPlan(String tipoPlan) { this.tipoPlan = tipoPlan; }
 
-	/**
-	 * Cancela la suscripción premium (se mantendrá activa hasta la fecha de fin)
-	 */
-	public void cancelar() {
-		this.activo = false;
-	}
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
-	// Getters y Setters
-
-	public LocalDate getFechaInicio() {
-		return fechaInicio;
-	}
-
-	public void setFechaInicio(LocalDate fechaInicio) {
-		this.fechaInicio = fechaInicio;
-	}
-
-	public LocalDate getFechaFin() {
-		return fechaFin;
-	}
-
-	public void setFechaFin(LocalDate fechaFin) {
-		this.fechaFin = fechaFin;
-	}
-
-	public boolean isActivo() {
-		return activo;
-	}
-
-	public void setActivo(boolean activo) {
-		this.activo = activo;
-	}
-
-	public String getTipoPlan() {
-		return tipoPlan;
-	}
-
-	public void setTipoPlan(String tipoPlan) {
-		this.tipoPlan = tipoPlan;
-	}
-	public void setUsuario(Usuario usuario) {
-	    this.usuario = usuario;
-	}
-
-	public boolean isVidasInfinitas() {
-		return vidasInfinitas;
-	}
-
-	public void setVidasInfinitas(boolean vidasInfinitas) {
-		this.vidasInfinitas = vidasInfinitas;
-	}
-
+    public boolean isVidasInfinitas() { return vidasInfinitas; }
+    public void setVidasInfinitas(boolean vidasInfinitas) { this.vidasInfinitas = vidasInfinitas; }
 }
