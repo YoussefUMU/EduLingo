@@ -1,118 +1,130 @@
 package modelado;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.*;
+
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
+
+import controlador.ControladorPDS;
+
 class CursoEnMarchaTest {
-   /* private Curso curso;
-    private CursoEnMarcha cursoEnMarcha;
-    private Bloque bloque1, bloque2;
-    private PreguntaSimple pregunta1, pregunta2, pregunta3;*/
+	private CursoEnMarcha cem;
+	private Curso curso;
+	private MockedStatic<ControladorPDS> ctrlMock;
+	private ControladorPDS ctrl;
 
-   /* @BeforeEach
-    void setUp() {
-        // Configuración inicial para las pruebas usando las clases actualizadas
-        pregunta1 = new PreguntaSimple("Pregunta 1", "respuesta1");
-        pregunta2 = new PreguntaSimple("Pregunta 2", "respuesta2");
-        pregunta3 = new PreguntaSimple("Pregunta 3", "respuesta3");
-        
-        bloque1 = new Bloque("Bloque 1", Arrays.asList(pregunta1, pregunta2));
-        bloque2 = new Bloque("Bloque 2", Arrays.asList(pregunta3));
-        
-        curso = new Curso("1", "Curso de prueba", "Autor", "Descripción", 
-                         Arrays.asList(bloque1, bloque2), "imagen.jpg");
-        
-        cursoEnMarcha = new CursoEnMarcha(curso, 3, new EstrategiaSecuencial());
-    }*/
+	// Bloques de prueba
+	private Bloque bloque1, bloque2;
+	private PreguntaTest p1, p2, p3;
 
-    // Clase auxiliar para testing
-   /* class PreguntaSimple extends Pregunta {
-        private String respuestaCorrecta;
-        
-        public PreguntaSimple(String enunciado, String respuestaCorrecta) {
-            super(enunciado);
-            this.respuestaCorrecta = respuestaCorrecta;
-        }
+	@BeforeEach
+	void setUp() {
+		// 1) Mockear controlador estático
+		ctrlMock = mockStatic(ControladorPDS.class);
+		ctrl = mock(ControladorPDS.class);
+		ctrlMock.when(ControladorPDS::getUnicaInstancia).thenReturn(ctrl);
 
-        @Override
-        public boolean verificarRespuesta(String respuesta) {
-            return respuestaCorrecta.equals(respuesta);
-        }
+		// 2) Crear preguntas y bloques
+		p1 = new PreguntaTest(1, "P1", List.of("A", "B"), "A");
+		p2 = new PreguntaTest(2, "P2", List.of("A", "B"), "A");
+		p3 = new PreguntaTest(1, "P3", List.of("A", "B"), "A");
+
+		bloque1 = new Bloque("B1", List.of(p1, p2));
+		bloque2 = new Bloque("B2", List.of(p3));
+
+		// 3) Mockear Curso para devolver estos bloques
+		curso = mock(Curso.class);
+		when(curso.getBloques()).thenReturn(List.of(bloque1, bloque2));
+		when(curso.getBloqueEspecifico(0)).thenReturn(bloque1);
+		when(curso.getBloqueEspecifico(1)).thenReturn(bloque2);
+
+		// 4) Instanciar CursoEnMarcha con 3 vidas y estrategia secuencial
+		cem = new CursoEnMarcha(curso, 3, new EstrategiaSecuencial(), TipoEstrategia.SECUENCIAL);
+	}
+
+	@AfterEach
+	void tearDown() {
+		ctrlMock.close();
+	}
+
+	@Test
+	void testConstructorInicializaCorrectamente() {
+		assertEquals(curso, cem.getCurso());
+		assertEquals(3, cem.getVidas());
+		assertEquals(0, cem.getBloqueActualIndex());
+		assertEquals(1, cem.getPreguntaActualIndex());
+		assertTrue(cem.getEstrategia() instanceof EstrategiaSecuencial);
+		assertEquals(TipoEstrategia.SECUENCIAL, cem.getTipoEstrategia());
+	}
+
+	@Test
+	void testRegistrarRespuesta_invocaControlador() {
+		cem.registrarRespuesta(true);
+		verify(ctrl).registrarRespuestaPregunta(true);
+	}
+
+	@Test
+	void testReiniciarCurso() {
+		// Avanzamos para modificar índices
+		cem.reiniciarCurso();
+		assertEquals(0, cem.getBloqueActualIndex());
+		assertEquals(0, cem.getPreguntaActualIndex());
+	}
+
+	@Test
+	void testGetPreguntaYBloqueActual() {
+		// Inicialmente bloque 0, pregunta 1 → getPreguntaActual → p1
+		assertEquals(bloque1, cem.getBloqueActual());
+		assertEquals(p1, cem.getPreguntaActual());
+	}
+
+	@Test
+	void testAvanzarPreguntaDentroDelBloque() {
+		// Al avanzar desde pregunta 1 en bloque1, debe pasar a la 2
+		cem.avanzarPregunta();
+		assertEquals(0, cem.getBloqueActualIndex());
+		assertEquals(2, cem.getPreguntaActualIndex());
+		// La pregunta 1 debe quedar registrada como completada
+		// (internamente en la lista de PreguntasCompletas)
+		// No hay acceso público directo, pero al volver a avanzar:
+		cem.avanzarPregunta(); // ya no hay más en bloque1 → salta de bloque
+		// Comprueba que resetea el índice de pregunta y avanza bloque
+		assertEquals(1, cem.getBloqueActualIndex());
+		assertEquals(1, cem.getPreguntaActualIndex());
+	}
+
+	@Test
+	void testAvanzarPreguntaAlFinalDeBloque() {
+		// Inicialmente: bloqueActualIndex = 0, preguntaActualIndex = 1
+		// Avanzamos dos veces:
+		cem.avanzarPregunta(); // de pregunta 1 → 2 en el mismo bloque
+		cem.avanzarPregunta(); // fin de bloque1 → pasa a bloque2, pregunta = 1
+
+		assertEquals(1, cem.getBloqueActualIndex(), "Debería haber avanzado al bloque 2 (índice 1)");
+		assertEquals(1, cem.getPreguntaActualIndex(), "La pregunta debería reiniciarse a la 1 en el nuevo bloque");
+	}
+
+	@Test
+	void testObtenerSiguienteBloqueYPregunta() {
+		// Con estrategia secuencial:
+		assertEquals(bloque2, cem.obtenerSiguienteBloque(0));
+		assertEquals(p2, cem.obtenerSiguientePregunta(1));
+	}
+
+	@Test
+    void testFinalizarLlamaRegistrarActividad() {
+        // Stubear el final de curso: situar en último bloque y última pregunta
+        // Forzamos que nextBlock sea null:
+        when(ctrl.getEstadisticas()).thenReturn(mock(Estadistica.class));
+        // Llamamos a finalizar
+        cem.finalizar();
+        // Debe invocar registro de actividad
+        verify(ctrl.getEstadisticas()).registrarActividad();
     }
-
-    @Test
-    void testConstructor() {
-        assertEquals(0, cursoEnMarcha.getBloqueActualIndex());
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex());
-        assertEquals(3, cursoEnMarcha.getVidas());
-        assertNotNull(cursoEnMarcha.getEstrategia());
-    }
-
-    @Test
-    void testAvanzarPregunta_DentroDelMismoBloque() {
-        // Primera pregunta
-        Pregunta preguntaActual = cursoEnMarcha.getPreguntaActual();
-        assertEquals("Pregunta 1", preguntaActual.getEnunciado());
-        
-        // Avanzar a segunda pregunta
-        cursoEnMarcha.avanzarPregunta();
-        assertEquals(0, cursoEnMarcha.getBloqueActualIndex());
-        assertEquals(1, cursoEnMarcha.getPreguntaActualIndex());
-        assertEquals("Pregunta 2", cursoEnMarcha.getPreguntaActual().getEnunciado());
-    }
-
-    @Test
-    void testAvanzarPregunta_CambioDeBloque() {
-        // Posicionar en última pregunta del primer bloque
-        cursoEnMarcha.setPreguntaActual(1);
-        
-        // Avanzar debería cambiar al siguiente bloque
-        cursoEnMarcha.avanzarPregunta();
-        assertEquals(1, cursoEnMarcha.getBloqueActualIndex());
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex());
-        assertEquals("Pregunta 3", cursoEnMarcha.getPreguntaActual().getEnunciado());
-    }
-
-    @Test
-    void testAvanzarPregunta_FinDelCurso() {
-        // Posicionar en última pregunta del último bloque
-        cursoEnMarcha.setBloqueActual(1);
-        cursoEnMarcha.setPreguntaActual(0);
-        
-        // Avanzar debería finalizar el curso
-        cursoEnMarcha.avanzarPregunta();
-        // Verificar que se llamó al método finalizar (podrías usar un mock para verificar esto)
-    }
-
-    @Test
-    void testReiniciarCurso() {
-        // Avanzar algunas preguntas
-        cursoEnMarcha.avanzarPregunta();
-        cursoEnMarcha.avanzarPregunta();
-        
-        // Reiniciar
-        cursoEnMarcha.reiniciarCurso();
-        assertEquals(0, cursoEnMarcha.getBloqueActualIndex());
-        assertEquals(0, cursoEnMarcha.getPreguntaActualIndex());
-    }
-
-
-    @Test
-    void testSetVidas() {
-        cursoEnMarcha.setVidas(5);
-        assertEquals(5, cursoEnMarcha.getVidas());
-    }
-
-    @Test
-    void testObtenerPreguntaDesdeBloque() {
-        Bloque bloque = cursoEnMarcha.getBloqueActual();
-        assertNotNull(bloque);
-        
-        Pregunta pregunta = bloque.obtenerPregunta(0);
-        assertNotNull(pregunta);
-        assertEquals("Pregunta 1", pregunta.getEnunciado());
-    }*/
 }

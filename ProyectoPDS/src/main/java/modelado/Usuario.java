@@ -135,12 +135,14 @@ public class Usuario {
 		}
 		return false;
 	}
-	
+
+	public List<CursoEnMarcha> obtenerCursosActivos() {
+		return cursosActivos.stream().collect(Collectors.toList());
+	}
 	public Optional<CursoEnMarcha> obtenerCursoEnMarcha(Curso curso, Estrategia estrategia) {
 		return cursosActivos.stream().filter(c -> c.getCurso().getId().equals(curso.getId()) && 
 				c.getEstrategia().getClass().equals(estrategia.getClass())).findFirst();
 	}
-
 	public Estadistica obtenerEstadisticas() {
 		return new Estadistica();
 	}

@@ -29,81 +29,60 @@ public class Premium {
 	// Beneficios específicos que puede tener un usuario premium
 	private boolean vidasInfinitas;
 
-	/**
-	 * Constructor por defecto
-	 */
+	/** Constructor por defecto (mensual). */
 	public Premium() {
 		this.fechaInicio = LocalDate.now();
-		this.fechaFin = LocalDate.now().plusMonths(1); // Por defecto, suscripción mensual
+		this.fechaFin = LocalDate.now().plusMonths(1);
 		this.activo = true;
 		this.tipoPlan = "mensual";
-
-		// Activar todos los beneficios por defecto
 		this.vidasInfinitas = true;
 	}
 
-	/**
-	 * Constructor que permite especificar el tipo de plan
-	 * 
-	 * @param tipoPlan Tipo de plan ("mensual", "anual", etc.)
-	 */
+	/** Constructor que permite especificar el tipo de plan. */
 	public Premium(String tipoPlan) {
 		this.fechaInicio = LocalDate.now();
 		this.activo = true;
 		this.tipoPlan = tipoPlan;
-
-		// Establecer la fecha de fin según el tipo de plan
 		if ("anual".equalsIgnoreCase(tipoPlan)) {
 			this.fechaFin = LocalDate.now().plusYears(1);
 		} else {
-			// Por defecto, mensual
 			this.fechaFin = LocalDate.now().plusMonths(1);
 		}
-
-		// Activar todos los beneficios por defecto
 		this.vidasInfinitas = true;
 	}
 
-	/**
-	 * Verifica si la suscripción premium está activa (no ha expirado)
-	 * 
-	 * @return true si la suscripción sigue vigente, false en caso contrario
-	 */
+	/** Verifica si la suscripción premium está activa (flag y fecha). */
 	public boolean estaActivo() {
 		LocalDate hoy = LocalDate.now();
-		return !hoy.isAfter(fechaFin);
+		return activo && !hoy.isAfter(fechaFin);
 	}
 
-	/**
-	 * Renueva la suscripción premium
-	 * 
-	 * @param meses Número de meses a renovar
+	/** Renueva la suscripción premium. */
+	/*
+	 * public void renovar(int meses) { if (LocalDate.now().isAfter(fechaFin)) {
+	 * this.fechaInicio = LocalDate.now(); } this.fechaFin =
+	 * this.fechaFin.plusMonths(meses); this.activo = true; this.tipoPlan = meses >=
+	 * 12 ? "anual" : "mensual"; }
 	 */
 	public void renovar(int meses) {
 		if (LocalDate.now().isAfter(fechaFin)) {
-			// Si ya expiró, comenzar desde hoy
+			// Suscripción expiró: reiniciamos inicio y fin desde hoy
 			this.fechaInicio = LocalDate.now();
-		}
-
-		this.fechaFin = this.fechaFin.plusMonths(meses);
-		this.activo = true;
-
-		if (meses >= 12) {
-			this.tipoPlan = "anual";
+			this.fechaFin = this.fechaInicio.plusMonths(meses);
 		} else {
-			this.tipoPlan = "mensual";
+			// Aún vigente: extendemos desde la fechaFin actual
+			this.fechaFin = this.fechaFin.plusMonths(meses);
 		}
+		this.activo = true;
+		this.tipoPlan = meses >= 12 ? "anual" : "mensual";
 	}
 
-	/**
-	 * Cancela la suscripción premium (se mantendrá activa hasta la fecha de fin)
-	 */
+	/** Cancela la suscripción premium (flag a false). */
 	public void cancelar() {
 		this.activo = false;
 	}
 
-	// Getters y Setters
-
+	// Getters y setters...
 	public LocalDate getFechaInicio() {
 		return fechaInicio;
 	}
@@ -120,6 +99,7 @@ public class Premium {
 		this.fechaFin = fechaFin;
 	}
 
+	/** Devuelve el flag interno; no confundir con estaActivo(). */
 	public boolean isActivo() {
 		return activo;
 	}
@@ -135,8 +115,9 @@ public class Premium {
 	public void setTipoPlan(String tipoPlan) {
 		this.tipoPlan = tipoPlan;
 	}
+
 	public void setUsuario(Usuario usuario) {
-	    this.usuario = usuario;
+		this.usuario = usuario;
 	}
 
 	public boolean isVidasInfinitas() {
@@ -146,5 +127,4 @@ public class Premium {
 	public void setVidasInfinitas(boolean vidasInfinitas) {
 		this.vidasInfinitas = vidasInfinitas;
 	}
-
 }

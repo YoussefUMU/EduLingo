@@ -30,7 +30,7 @@ public class ControladorPDS {
 	private Usuario sesionActual;
 	
 	// Tiempo de inicio de sesión
-    private LocalDateTime inicioSesionActual;
+     LocalDateTime inicioSesionActual;
 
 	// Repositorio donde se almacenan los usuarios registrados en la aplicación
 	private RepositorioUsuarios repositorioUsuarios;
