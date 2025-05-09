@@ -80,7 +80,7 @@ public class VentanaCursosEnMarcha extends JFrame {
         JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelLogo.setOpaque(false);
         
-        ImageIcon iconoLogo = new ImageIcon(getClass().getResource("/Recursos/EdulingoRedimensionadad.png"));
+        ImageIcon iconoLogo = new ImageIcon(getClass().getResource("/recursos/EdulingoRedimensionadad.png"));
         JLabel lblLogo = new JLabel(iconoLogo);
         panelLogo.add(lblLogo);
         
