@@ -88,7 +88,7 @@ public class VentanaCursosSinEmpezar extends JFrame {
         JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelLogo.setOpaque(false);
         
-        ImageIcon iconoLogo = new ImageIcon(getClass().getResource("/Recursos/EdulingoRedimensionadad.png"));
+        ImageIcon iconoLogo = new ImageIcon(getClass().getResource("/recursos/EdulingoRedimensionadad.png"));
         JLabel lblLogo = new JLabel(iconoLogo);
         panelLogo.add(lblLogo);
         
@@ -327,7 +327,6 @@ public class VentanaCursosSinEmpezar extends JFrame {
             }
         });
         
-        // Configurar directorio inicial
         File libreriaFolder = new File(System.getProperty("user.dir"), "libreria");
         if (libreriaFolder.exists() && libreriaFolder.isDirectory()) {
             fileChooser.setCurrentDirectory(libreriaFolder);
@@ -337,51 +336,64 @@ public class VentanaCursosSinEmpezar extends JFrame {
         
         if (result == JFileChooser.APPROVE_OPTION) {
             File[] selectedFiles = fileChooser.getSelectedFiles();
-            
+
             if (selectedFiles != null && selectedFiles.length > 0) {
-                int cursosAñadidos = 0;
-                ManejadorCursos manejador = new ManejadorCursos();
-                
-                for (File file : selectedFiles) {
-                    try {
-                        // Parsear el archivo YAML
-                        Curso nuevoCurso = manejador.parseYAML(file.toPath());
-                        
-                        // Verificar si el curso ya existe en la lista
-                        boolean cursoExiste = false;
-                        for (int i = 0; i < modeloCursos.getSize(); i++) {
-                            Curso cursoExistente = modeloCursos.getElementAt(i);
-                            if (cursoExistente.getId().equals(nuevoCurso.getId())) {
-                                cursoExiste = true;
-                                break;
+                new SwingWorker<Integer, Void>() {
+                    @Override
+                    protected Integer doInBackground() throws Exception {
+                        int cursosAñadidos = 0;
+                        ManejadorCursos manejador = new ManejadorCursos();
+                        File resourcesDir = new File(System.getProperty("user.dir"), "libreria");
+                        if (!resourcesDir.exists()) resourcesDir.mkdirs();
+
+                        for (File file : selectedFiles) {
+                            try {
+                                File destinationFile = new File(resourcesDir, file.getName());
+                                java.nio.file.Files.copy(file.toPath(), destinationFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                                Curso nuevoCurso = manejador.parseYAML(destinationFile.toPath());
+
+                                boolean cursoExiste = false;
+                                for (int i = 0; i < modeloCursos.getSize(); i++) {
+                                    if (modeloCursos.getElementAt(i).getId().equals(nuevoCurso.getId())) {
+                                        cursoExiste = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!cursoExiste) {
+                                    modeloCursos.addElement(nuevoCurso);
+                                    cursosAñadidos++;
+                                }
+                            } catch (Exception ex) {
+                                System.err.println("Error procesando archivo: " + file.getName());
+                                ex.printStackTrace();
                             }
                         }
-                        
-                        // Si no existe, añadirlo
-                        if (!cursoExiste) {
-                            modeloCursos.addElement(nuevoCurso);
-                            cursosAñadidos++;
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Error al procesar archivo: " + file.getName());
-                        e.printStackTrace();
+                        return cursosAñadidos;
                     }
-                }
-                
-                // Actualizar la lista
-                listaCursos.setModel(modeloCursos);
-                
-                // Mostrar resultado
-                if (cursosAñadidos > 0) {
-                    mostrarDialogoImportacion(cursosAñadidos);
-                } else {
-                    mostrarMensajeError("No se añadieron nuevos cursos. Es posible que ya existieran en la lista.");
-                }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            int añadidos = get();
+                            listaCursos.setModel(modeloCursos);
+                            if (añadidos > 0) {
+                                mostrarDialogoImportacion(añadidos);
+                            } else {
+                                mostrarMensajeError("No se añadieron nuevos cursos. Es posible que ya existieran en la lista.");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            mostrarMensajeError("Ocurrió un error durante la importación.");
+                        }
+                    }
+                }.execute();
             } else {
                 mostrarMensajeError("No se seleccionaron archivos.");
             }
         }
     }
+
     
     private void mostrarDialogoImportacion(int numCursos) {
         JDialog dialog = new JDialog(this, "Importación Exitosa", true);
