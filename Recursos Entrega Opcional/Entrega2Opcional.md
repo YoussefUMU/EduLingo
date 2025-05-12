@@ -48,13 +48,12 @@ Un usuario deberá poder realizar cursos creados por otros usuarios.
 2. El usuario introduce su nombre de usuario y contraseña.
 3. El usuario le da al botón *Aceptar*.
 4. El usuario accede a la ventana principal de la app.
-5. El usuario que desea inicar un nuevo curso, pulsa el botón *Cursos*.
+5. El usuario que desea inicar un nuevo curso, pulsa el botón *Explorar Cursos*.
 6. El usuario accede la Ventana de cursos sin empezar.
-7. El ususario selecciona un curso de los que le aperecen en la lista y pulsa el botón *Empezar*. 
-8. El usuario accede a la Ventana Iniciar Curso, donde deberá seleccionar una estrategia a seguir de las ofertadas.
-9. Una vez seleccionada la estrategia, el usuario pulsa el botón *Iniciar*.
-10. El usuario irá completando las preguntas conforme a la estrategia seleccionada.
-11. El usuario finaliza el curso sin gastar sus vidas.
+7. El usuario selecciona un curso de los que le aperecen en la lista, selecciona una estrategia y pulsa el botón *Empezar*. 
+8. Una vez seleccionada la estrategia, el usuario pulsa el botón *Iniciar*.
+9. El usuario irá completando las preguntas conforme a la estrategia seleccionada.
+10. El usuario finaliza el curso sin gastar sus vidas.
 
 **Extensiones (Flujos Alternativos):**  
 - **3a** El usuario no está registrado en la app.
@@ -65,35 +64,20 @@ Un usuario deberá poder realizar cursos creados por otros usuarios.
    - El usuario pulsa el botón *Aceptar* y queda registrado en el sistema.
    - Vuelve al punto 2.
 - **5a** El ususario desa continuar con un curso ya empezado.
-   - El ususario pulsa el botón *Continuar Cursos* de la Ventana Principal.
+   - El ususario pulsa el botón *Mis Cursos* de la Ventana Principal.
    - El usuario accede a la Ventana de cursos empezados.
    - El usuario selecciona uno de sus Cursos empezados y pulsa el botón *Continuar*.
    - Vuelve al punto 10.
-- **9a** El usuario ha seleccionado la misma estrategia en un curso que ya tenia empezado con esa estrategia.
+- **8a** El usuario ha seleccionado la misma estrategia en un curso que ya tenia empezado con esa estrategia.
    - El sistema le muestra un mensaje de error al usuario indicando que no puede hacer el mismo curso a la vez con la misma estrategia.
 - **7a.** El usuario no tiene cursos disponibles en su biblioteca interna.  
   - Se notifica al usuario que no hay cursos para seleccionar.  
-- **11a** El ususario ha gastado todas sus vidas.
+- **10a** El ususario ha gastado todas sus vidas.
   - Se le notifica al usuario que ha gastado todas sus vidas.
   - Se le notifica al ususaio que con la funcionalidad premium, tendrá vidas infinitas.
   - El usuario tiene que volver a hacer el curso desde el principio.
 ---
-
-### Caso de Uso 2: Cancelar un curso en marcha
-**Resumen:**  
-Un usuario deberá poder cancelar un curso ya empezado.
-
-**Actor Principal:** Consumidor  
-
-**Flujo Básico:**
-1. Un usuario ya logueado y dentro de la ventana principal pulsa el botón *Continuar Cursos*.
-2. En la ventana de cursos empezados, el usuario selecciona el curso que desea abandonar, y pulsa el botón *Abandonar*.
-3. El sistema le muestra al usuario un mensaje sobre la importancia del esfuerzo.
-4. El curso desaparece la ventana de cursos empezados.
-
----
-
-### Caso de Uso 3: Agregar un nuevo curso
+### Caso de Uso 2: Agregar un nuevo curso
 
 **Resumen:**
 Un usuario podrá importar cursos a si biblioteca interna.
@@ -101,13 +85,62 @@ Un usuario podrá importar cursos a si biblioteca interna.
 **Actor Principal:** Consumidor
 
 **Flujo Básico:**
-1. Un usuario ya logueado y dentro de la ventana principal pulsa el botón *Cursos*.
+1. Un usuario ya logueado y dentro de la ventana principal pulsa el botón *Explorar Cursos*.
 2. Dentro de la ventana de cursos sin empezar, el usuario seleccionara el botón *Añadir Curso*.
 3. El sistema abrirá una ventana de dialogo donde el usuario podrá seleccionar el archivo del curso pertinente.
 4. El curso se agregará a su biblioteca interna.
 ---
+### Caso de Uso 3: Activar Premium
 
+**Resumen:**
+Un usuario quiere acceder a los servicios premium
 
+**Flujo Básico:**
+
+1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Perfil* y seleccionara la opción *Edulingo Premium*.
+2. En la nueva ventana, el usuario selccionara si prefiere suscribirse a un plan mensual o anual.
+3. Una vez seleecionado el plan, el usuario pulsará el botón *Activar Premium* y confirmará su suscripción.
+4. El sistema procesará el pago.
+5. Ahora como usuario premium, el usuario tendrá diversas ventajas como vidas infinitas, también podrá cancelar o renovar su suscripción desde los botones *Renovar Premium* y *Cancelar suscripción*.
+---
+### Caso de Uso 4: Publicar un mensaje en la comunidad
+
+**Resumen:**
+Un usuario quiere publicar un mensaje en la comunidad de Edulingo
+
+**Flujo Básico:**
+1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Comunidad*.
+2. En la nueva ventana, el usuario seleccionrá la etiqueta del nuevo mensaje, habiendo tres opciones: Sugerencia, Problema o Crítica.
+3. El usuario ahora escribirá su mensaje en el cuadro de texto.
+4. Una vez escrito el mensaje, pulsará el botón *Publicar*.
+---
+### Caso de Uso 5: Buscar un mensaje en la comunidad para editarlo o eliminarlo.
+
+**Resumen:**
+Un usuario quiere buscar un mensaje en la comunidad de Edulingo para editarlo o eliminarlo.
+
+**Flujo Básico:**
+1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Comunidad*.
+2. En la nueva ventana, el usuario puede o bien filtrar los mensajes según la etiqueta o bien escribir un texto por el que buscarlo en el cuadro de texto supeior y después pulsando el botón *Buscar*.
+3. El usuario ahora puede opcionalmente decidir si quiere editar o eliminar el mensaje mediante los botones *editar* y *eliminar* del mensaje.
+---
+### Caso de Uso 6: Ver estadisticas del usuario
+
+**Resumen:**
+Un usuario quiere ver sus estadísticas.
+
+**Flujo Básico:**
+1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Perfil* y seleccionará *Mis Estadísticas*.
+2. En la nueva ventana, el usuario podrá visualizar sus estadíticas.
+---
+### Caso de Uso 7: Ver rangos y logros del usuario
+
+**Resumen:**
+Un usuario quiere ver sus rangos y logros.
+
+**Flujo Básico:**
+1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Perfil* y seleccionará mis *Mis Rangos y Logros*.
+2. En la nueva ventana, el usuario podrá visualizar sus Rangos y Logros
 ---
 
 ## Modelado de dominio  
