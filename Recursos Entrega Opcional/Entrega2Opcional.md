@@ -108,8 +108,7 @@ Un autor quiere crear un nuevo curso e imporatrlo.
 6. El curso se agregará a su biblioteca interna.
 ---
 ### Caso de Uso 3: Importar un curso
-
-Subsumido en el caso de uso anterior a partir del punto 2 en el flujo principal.
+- Subsumido en el caso de uso anterior a partir del punto 2 en el flujo principal.
 ---
 ### Caso de Uso 4: Activar Premium
 
