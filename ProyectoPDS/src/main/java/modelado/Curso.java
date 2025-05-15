@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 @Entity
 public class Curso {
 	@Id
@@ -26,8 +25,6 @@ public class Curso {
     private List<Bloque> bloques;
     private String imagenCurso;
     private String categoria;
-   // @OneToMany(mappedBy="curso")
-    //private CursoEnMarcha cursoEnMarcha;
     public Curso() {
         this.bloques = new ArrayList<>();
     }

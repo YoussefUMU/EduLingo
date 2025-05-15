@@ -364,6 +364,10 @@ public class Usuario {
     public List<ComentarioComunidad> getComentarios() {
         return new ArrayList<>(comentarios);
     }
+
+	public void actualizarRacha(LocalDate fecha) {
+		estadisticas.actualizarRacha(fecha);
+	}
     
     
 }

@@ -2,7 +2,6 @@ package modelado;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -98,17 +97,11 @@ public class RepositorioUsuarios {
     public void agregarCurso(Long id, CursoEnMarcha cursoEnMarcha) {
         EntityManager em = emf.createEntityManager();
         Usuario usuario = em.find(Usuario.class, id);
-        Curso curso = null;
-        if (cursoEnMarcha.getCurso().getIdDB() != null) {
-        	curso = em.find(Curso.class, cursoEnMarcha.getCurso().getIdDB());	//Como varios Cursos en Marcha comparten el mismo atributo Curso, es necesario manejar su persistencia por separado.
-            																	//Creo que lo anterior es obsoleto, ya no se comparte el mismo curso.
-        }
         try {
             em.getTransaction().begin();
             
-            if (curso == null) {
-            	em.persist(cursoEnMarcha.getCurso());
-            }
+            em.persist(cursoEnMarcha.getCurso());
+            
             cursoEnMarcha.setUsuario(usuario); 
             usuario.getCursosActivos().add(cursoEnMarcha);
             

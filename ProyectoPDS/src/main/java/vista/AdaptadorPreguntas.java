@@ -3,19 +3,17 @@ package vista;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
+
 
 import modelado.CursoEnMarcha;
 import modelado.Pregunta;
@@ -159,7 +157,7 @@ public class AdaptadorPreguntas {
         
         // Configurar acciones para cada opción
         for (int i = 0; i < 3; i++) {
-            final int index = i;
+            //final int index = i;
             frame.configurarOpcion(i, i == imagenCorrecta);
         }
         
