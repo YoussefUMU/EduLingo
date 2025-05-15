@@ -14,11 +14,18 @@ Jesús Sánchez Cuadrado
 ---
 
 ## Índice  
+
 1. [Identificación de casos de uso](#identificación-de-casos-de-uso)  
 2. [Desarrollo de casos de uso](#desarrollo-de-casos-de-uso)  
-   - [Caso de Uso 1: Realizar Cueso](#caso-de-uso-1-realizar-curso)  
-   - [Caso de Uso 2: Cancelar un curso en marcha](#caso-de-uso-2-cancelar-un-curso-en-marcha)
-   - [Caso de Uso 3: Agregar un nuevo curso.](#caso-de-uso-3-agregar-un-nuevo-curso)
+   - [Caso de Uso 1: Realizar Curso](#caso-de-uso-1-realizar-curso)  
+   - [Caso de Uso 2: Crear un nuevo curso](#caso-de-uso-2-crear-un-nuevo-curso)  
+   - [Caso de Uso 3: Importar un curso](#caso-de-uso-3-importar-un-curso)  
+   - [Caso de Uso 4: Activar Premium](#caso-de-uso-4-activar-premium)  
+   - [Caso de Uso 5: Publicar un mensaje en la comunidad](#caso-de-uso-5-publicar-un-mensaje-en-la-comunidad)  
+   - [Caso de Uso 6: Editar o eliminar mensaje en la comunidad](#caso-de-uso-6-editar-o-eliminar-mensaje-en-la-comunidad)  
+   - [Caso de Uso 7: Ver estadísticas del usuario](#caso-de-uso-7-ver-estadísticas-del-usuario)  
+   - [Caso de Uso 8: Ver rangos y logros del usuario](#caso-de-uso-8-ver-rangos-y-logros-del-usuario)  
+   - [Caso de Uso 9: Recomendar cursos](#caso-de-uso-9-recomendar-cursos)  
 3. [Modelado de dominio](#modelado-de-dominio)  
 
 ---
@@ -29,9 +36,9 @@ Jesús Sánchez Cuadrado
 
 | Actor   | Objetivo |
 |---------|---------|
-| **Creador** | - Añadir nuevos tipos de preguntas  <br>- Crear cursos  <br>- Compartir cursos creados |
-| **Consumidor** | - Realizar curso |
-| **Sistema** | - Ofrecer distintos tipos de estrategias  <br>- Guardar estado actual del curso  <br>- Restaurar estado previo del curso  <br>- Guardar las estadísticas de uso  <br>- Permitir la instalación de nuevos cursos en su biblioteca interna |
+| **Autor** | - Crear cursos e importarlos|
+| **Consumidor** | - Realizar curso <br>- Importar un curso <br>- Activar Premium <br>- Publicar mensajes en la comunidad <br>- Editar/Eliminar mensajes de la comunidad <br>- Ver sus estadísticas <br>- Ver sus rangos y logros  |
+| **Sistema** | - Recomendar cursos a los usuarios |
 ---
 
 ## Desarrollo de casos de uso  
@@ -42,6 +49,10 @@ Jesús Sánchez Cuadrado
 Un usuario deberá poder realizar cursos creados por otros usuarios.
 
 **Actor Principal:** Consumidor  
+
+**Precondición**: Usuario registrado y logueado
+
+**Postcondición**: Curso completado o progreso guardado
 
 **Flujo Básico:**  
 1. El usuario inicia la app y accede a la ventana login. El sistema tiene en cuenta el dia del acceso a la app y empieza a contar el tiempo de uso en la app.
@@ -77,23 +88,38 @@ Un usuario deberá poder realizar cursos creados por otros usuarios.
   - Se le notifica al ususaio que con la funcionalidad premium, tendrá vidas infinitas.
   - El usuario tiene que volver a hacer el curso desde el principio.
 ---
-### Caso de Uso 2: Agregar un nuevo curso
+### Caso de Uso 2: Crear un nuevo curso
 
 **Resumen:**
-Un usuario podrá importar cursos a si biblioteca interna.
+Un autor quiere crear un nuevo curso e imporatrlo.
 
-**Actor Principal:** Consumidor
+**Actor Principal:** Autor
+
+**Precondición**: Autor logueado
+
+**Postcondición**: Curso agregado a la biblioteca interna
 
 **Flujo Básico:**
-1. Un usuario ya logueado y dentro de la ventana principal pulsa el botón *Explorar Cursos*.
-2. Dentro de la ventana de cursos sin empezar, el usuario seleccionara el botón *Añadir Curso*.
-3. El sistema abrirá una ventana de dialogo donde el usuario podrá seleccionar el archivo del curso pertinente.
-4. El curso se agregará a su biblioteca interna.
+1. Un autor crea su curso en un archivo .yml.
+2. El autor inicia la app.
+3. El autor ya logueado y dentro de la ventana principal pulsa el botón *Explorar Cursos*.
+4. Dentro de la ventana de cursos sin empezar, el usuario seleccionara el botón *Añadir Curso*.
+5. El sistema abrirá una ventana de dialogo donde el usuario podrá seleccionar el archivo del curso pertinente.
+6. El curso se agregará a su biblioteca interna.
 ---
-### Caso de Uso 3: Activar Premium
+### Caso de Uso 3: Importar un curso
+- Subsumido en el caso de uso anterior a partir del punto 2 en el flujo principal.
+---
+### Caso de Uso 4: Activar Premium
 
 **Resumen:**
 Un usuario quiere acceder a los servicios premium
+
+**Actor Principal:** Consumidor 
+
+**Precondición**: Usuario logueado
+
+**Postcondición**: Suscripción Premium activa
 
 **Flujo Básico:**
 
@@ -103,10 +129,16 @@ Un usuario quiere acceder a los servicios premium
 4. El sistema procesará el pago.
 5. Ahora como usuario premium, el usuario tendrá diversas ventajas como vidas infinitas, también podrá cancelar o renovar su suscripción desde los botones *Renovar Premium* y *Cancelar suscripción*.
 ---
-### Caso de Uso 4: Publicar un mensaje en la comunidad
+### Caso de Uso 5: Publicar un mensaje en la comunidad
 
 **Resumen:**
 Un usuario quiere publicar un mensaje en la comunidad de Edulingo
+
+**Actor Principal:** Consumidor 
+
+**Precondición**: Usuario logueado
+
+**Postcondición**: Mensaje publicado
 
 **Flujo Básico:**
 1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Comunidad*.
@@ -114,33 +146,66 @@ Un usuario quiere publicar un mensaje en la comunidad de Edulingo
 3. El usuario ahora escribirá su mensaje en el cuadro de texto.
 4. Una vez escrito el mensaje, pulsará el botón *Publicar*.
 ---
-### Caso de Uso 5: Buscar un mensaje en la comunidad para editarlo o eliminarlo.
+### Caso de Uso 6: Buscar un mensaje en la comunidad para editarlo o eliminarlo.
 
 **Resumen:**
 Un usuario quiere buscar un mensaje en la comunidad de Edulingo para editarlo o eliminarlo.
+
+**Actor Principal:** Consumidor 
+
+**Precondición**: Usuario logueado
+
+**Postcondición**: Mensaje actualizado o eliminado
 
 **Flujo Básico:**
 1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Comunidad*.
 2. En la nueva ventana, el usuario puede o bien filtrar los mensajes según la etiqueta o bien escribir un texto por el que buscarlo en el cuadro de texto supeior y después pulsando el botón *Buscar*.
 3. El usuario ahora puede opcionalmente decidir si quiere editar o eliminar el mensaje mediante los botones *editar* y *eliminar* del mensaje.
 ---
-### Caso de Uso 6: Ver estadisticas del usuario
+### Caso de Uso 7: Ver estadisticas del usuario
 
 **Resumen:**
 Un usuario quiere ver sus estadísticas.
+
+**Actor Principal:** Consumidor 
+
+**Precondición**: Usuario logueado
+
+**Postcondición**: Estadísticas mostradas
 
 **Flujo Básico:**
 1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Perfil* y seleccionará *Mis Estadísticas*.
 2. En la nueva ventana, el usuario podrá visualizar sus estadíticas.
 ---
-### Caso de Uso 7: Ver rangos y logros del usuario
+### Caso de Uso 8: Ver rangos y logros del usuario
 
 **Resumen:**
 Un usuario quiere ver sus rangos y logros.
 
+**Actor Principal:** Consumidor 
+
+**Precondición**: Usuario logueado
+
+**Postcondición**: Rangos y logros mostrados
+
 **Flujo Básico:**
 1. Un usuario logueado y dentro de la ventana principal, pulsará el botón *Perfil* y seleccionará mis *Mis Rangos y Logros*.
 2. En la nueva ventana, el usuario podrá visualizar sus Rangos y Logros
+---
+### Caso de Uso 9: Recomendar cursos
+
+**Resumen:**
+El sistema quiere recomendar cursos a los usuarios
+
+**Actor Principal:** Sistema 
+
+**Precondición**: Se detecta un usuario conectado
+
+**Postcondición**: Se muestran los cursos recomendados
+
+**Flujo Básico:**
+1. El sistema detecta que un usuario ha inicado sesión.
+2. El sistema accede a la librería interna y muestra en la ventana principal los cursos recomendados para dicho usuario.
 ---
 
 ## Modelado de dominio  
