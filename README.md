@@ -53,8 +53,6 @@
 ### Requisitos Previos:
 - **Java 17** o superior
 - **Apache Maven 3.8+**
-- **4GB RAM** mínimo
-- **500MB** espacio en disco
 
 ### Instalación y Ejecución:
 
