@@ -133,6 +133,7 @@ public class ControladorPDS {
 	    
 	    // Actualizamos el usuario en la base de datos para persistir los cambios
 	    repositorioUsuarios.actualizarUsuario(sesionActual);
+	    repositorioUsuarios.eliminarCurso(sesionActual.getId(), curso);
 	}
 	
 	public List<Curso> obtenerCursosLocales(){

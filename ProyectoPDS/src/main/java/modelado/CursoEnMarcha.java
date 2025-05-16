@@ -186,6 +186,10 @@ public class CursoEnMarcha {
 		return this.curso;
 	}
 
+	public long getId() {
+		return id;
+	}
+	
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}

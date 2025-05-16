@@ -47,7 +47,7 @@ public class GestorLogros {
                 new LogroInfo("Maestro Java", "Completa un curso de Java"));
         
         infoLogros.put(LOGRO_PROGRAMADOR, 
-                new LogroInfo("Programador", "Completa 5 cursos de programación"));
+                new LogroInfo("Programador", "Completa 5 cursos de programación diferentes"));
         
         infoLogros.put(LOGRO_MAESTRO_PYTHON, 
                 new LogroInfo("Maestro Python", "Completa un curso de Python"));
@@ -104,20 +104,18 @@ public class GestorLogros {
             }
         }
         
-        // Comprobar logro: Maestro Java/Maestro C++
+        // Comprobar logro: Maestro Java/Maestro Python
         for (String cursoId : stats.getCursosCompletadosIds()) {
             // Verificar si alguno de los cursos completados es de Java
             if (cursoId.toLowerCase().contains("java")) {
                 if (stats.desbloquearLogro(LOGRO_MAESTRO_JAVA)) {
                     nuevosLogros.add(LOGRO_MAESTRO_JAVA);
                 }
-                break;
             }
             if (cursoId.toLowerCase().contains("python")) {
                 if (stats.desbloquearLogro(LOGRO_MAESTRO_PYTHON)) {
                     nuevosLogros.add(LOGRO_MAESTRO_PYTHON);
                 }
-                break;
             }
         }
         
