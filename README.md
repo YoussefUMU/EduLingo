@@ -84,6 +84,9 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 ### Principales Casos de Uso
 
 #### CU-01: Realizar Curso
+**Resumen:**
+Un usuario deberá poder realizar cursos creados por otros usuarios.
+
 **Actor Principal:** Consumidor  
 **Precondición:** Usuario registrado y logueado  
 **Postcondición:** Curso completado o progreso guardado
@@ -99,6 +102,9 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 8. El usuario finaliza el curso sin gastar sus vidas
 
 #### CU-02: Importar un Curso
+**Resumen:**
+Un autor quiere crear un nuevo curso e imporatrlo.
+
 **Actor Principal:** Autor/Consumidor  
 **Precondición:** Usuario logueado  
 **Postcondición:** Curso agregado a la biblioteca interna
@@ -111,6 +117,9 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 5. El curso se agrega a la biblioteca interna
 
 #### CU-03: Activar Premium
+**Resumen:**
+Un usuario quiere acceder a los servicios premium
+
 **Actor Principal:** Consumidor  
 **Precondición:** Usuario logueado  
 **Postcondición:** Suscripción Premium activa
@@ -123,6 +132,9 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 5. Usuario obtiene beneficios premium (vidas infinitas)
 
 #### CU-04: Publicar Mensaje en Comunidad
+**Resumen:**
+Un usuario quiere publicar un mensaje en la comunidad de Edulingo
+
 **Actor Principal:** Consumidor  
 **Precondición:** Usuario logueado  
 **Postcondición:** Mensaje publicado
@@ -134,6 +146,9 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 4. Pulsa *Publicar*
 
 #### CU-05: Ver Estadísticas
+**Resumen:**
+Un usuario quiere ver sus estadísticas.
+
 **Actor Principal:** Consumidor  
 **Precondición:** Usuario logueado  
 **Postcondición:** Estadísticas mostradas
@@ -143,6 +158,9 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 2. Sistema muestra estadísticas detalladas del usuario
 
 #### CU-06: Ver Rangos y Logros
+**Resumen:**
+Un usuario quiere ver sus rangos y logros.
+
 **Actor Principal:** Consumidor  
 **Precondición:** Usuario logueado  
 **Postcondición:** Rangos y logros mostrados
@@ -151,6 +169,30 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 1. Usuario pulsa *Perfil* y selecciona *Mis Rangos y Logros*
 2. Sistema muestra rangos y logros del usuario
 
+#### CU-07: Buscar un mensaje en la comunidad para editarlo o eliminarlo.
+**Resumen:**
+Un usuario quiere buscar un mensaje en la comunidad de Edulingo para editarlo o eliminarlo.
+
+**Actor Principal:** Consumidor 
+**Precondición:** Usuario logueado
+**Postcondición:** Mensaje actualizado o eliminado
+
+**Flujo Básico:**
+1. Un usuario logueado y dentro de la ventana principal, pulsará el botón Comunidad.
+2. En la nueva ventana, el usuario puede o bien filtrar los mensajes según la etiqueta o bien escribir un texto por el que buscarlo en el cuadro de texto supeior y después pulsando el botón Buscar.
+3. El usuario ahora puede opcionalmente decidir si quiere editar o eliminar el mensaje mediante los botones editar y eliminar del mensaje.
+
+#### CU-08: Recomendar cursos
+**Resumen:**
+El sistema quiere recomendar cursos a los usuarios
+
+**Actor Principal:** Sistema 
+**Precondición:** Se detecta un usuario conectado
+**Postcondición:** Se muestran los cursos recomendados
+
+**Flujo Básico:**
+1. El sistema detecta que un usuario ha inicado sesión.
+2. El sistema accede a la librería interna y muestra en la ventana principal los cursos recomendados para dicho usuario.
 ## 📊 Modelo de Dominio
 
 ![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/62eaff7b3c3beaf37e54e21d80181c3da2cc6798/Recursos/ModeladoDominioEduLingo.jpg)
@@ -201,3 +243,7 @@ La aplicación utiliza **SQLite** con **Hibernate** como ORM. La base de datos s
 ```
 ProyectoPDS/basedatos.db
 ```
+
+## 📚 Cursos Incluidos
+EduLingo incluye una librería de cursos de ejemplo en la carpeta libreria/ que cubren diferentes áreas de programación. Los cursos disponibles incluyen Java, Python, C++ y Ensamblador MIPS, cada uno diseñado con preguntas interactivas de múltiples tipos (test, imágenes y drag & drop) para proporcionar una experiencia de aprendizaje completa. 
+
