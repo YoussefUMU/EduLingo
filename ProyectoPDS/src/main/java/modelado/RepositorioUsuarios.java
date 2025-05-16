@@ -116,6 +116,29 @@ public class RepositorioUsuarios {
         }
     }
 
+    public void eliminarCurso(Long id, CursoEnMarcha cursoEnMarcha) {
+        EntityManager em = emf.createEntityManager();
+        Usuario usuario = em.find(Usuario.class, id);
+        CursoEnMarcha curso = em.find(CursoEnMarcha.class, cursoEnMarcha.getId());
+        try {
+            em.getTransaction().begin();
+            
+            em.remove(curso);
+            
+            usuario.getCursosActivos().remove(curso);
+      
+            
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    
     public void activarPremium(Long id, String tipoPlan) {
     	EntityManager em = emf.createEntityManager();
         Usuario usuario = em.find(Usuario.class, id);
