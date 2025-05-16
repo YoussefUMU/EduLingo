@@ -50,7 +50,7 @@
 
 ## 🚀 Instalación
 
-
+Se recomienda la ejecución en Windows por el tema de los iconos / emojis introducidos en la aplicación.
 ### Instalación y Ejecución:
 
 1. **Clonar el repositorio**
