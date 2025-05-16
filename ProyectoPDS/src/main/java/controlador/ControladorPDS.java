@@ -3,12 +3,10 @@ package controlador;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import jakarta.persistence.EntityManager;
 import modelado.ComentarioComunidad;
 import modelado.Curso;
 import modelado.CursoEnMarcha;
@@ -129,8 +127,6 @@ public class ControladorPDS {
 
 	
 	public void finalizarCursoEnMarcha(CursoEnMarcha curso) {
-	    // Primero obtenemos el curso que queremos completar
-	    Curso cursoCompletado = curso.getCurso();
 	    
 	    // Llamamos al método que elimina el curso activo y lo añade a completados
 	    this.sesionActual.finalizarCurso(curso);

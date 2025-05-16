@@ -35,11 +35,11 @@ public class Usuario {
 	private String nombreUsuario;
 	private LocalDate fechaRegistro;  
 	private LocalDate fechaNacimiento;
-	@OneToMany(mappedBy="usuario", cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="usuario", cascade={ CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private List<CursoEnMarcha> cursosActivos;
-	@OneToMany(cascade={ CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@OneToMany(cascade={ CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private List<Curso> cursosCompletados;
-	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
+	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@JoinColumn(unique=true)
 	private Estadistica estadisticas;
 	@OneToOne(cascade={ CascadeType.PERSIST, CascadeType.REMOVE })
