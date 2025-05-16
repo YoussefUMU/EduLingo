@@ -78,8 +78,7 @@ public class ControladorPDS {
 			return false;
 		}
 		sesionActual = usuario;
-		LocalDate test = LocalDate.now().plusDays(6);
-		sesionActual.actualizarRacha(test);
+		sesionActual.actualizarRacha(LocalDate.now());
 		repositorioUsuarios.actualizarUsuario(usuario);
         inicioSesionActual = LocalDateTime.now();
 		return true;
