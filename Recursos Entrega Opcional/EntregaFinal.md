@@ -209,7 +209,7 @@ El sistema quiere recomendar cursos a los usuarios
 ---
 
 ## Modelado de dominio  
-![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/502bc265b7a61bda6f40d6bd1c5a1b938e8dedad/Recursos%20Entrega%20Opcional/modelado/ModeladoDominioEntrega2.jpg)
+![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/main/Recursos%20Entrega%20Opcional/modelado/ModeladoDominio.jpg?raw=true)
 
 El modelo de dominio refleja las relaciones entre los **usuarios**, los **cursos**, los **bloques**, las **preguntas** y las **estrategias de aprendizaje**. 
 
