@@ -53,6 +53,8 @@
 ### Requisitos Previos:
 - **Java 17** o superior
 - **Apache Maven 3.8+**
+- **4GB RAM** mínimo
+- **500MB** espacio en disco
 
 ### Instalación y Ejecución:
 
@@ -69,16 +71,110 @@ mvn clean compile
 
 3. **Ejecutar la aplicación**
 ```bash
-Abrir proyecto en Eclipse --> Ejecutar "Lanzador"
+mvn exec:java -Dexec.mainClass="lanzador.Lanzador"
 ```
 
+4. **(Opcional) Generar JAR ejecutable**
+```bash
+mvn package
+java -jar target/edulingo-1.0.jar
+```
 
-## 📋 Documentación
+## 📋 Casos de Uso
 
-- **[Casos de Uso](documentacion/casos-de-uso.md)**: Descripción detallada de todas las funcionalidades
-- **[Modelo de Dominio](documentacion/modelo-dominio.md)**: Estructura de datos y relaciones del sistema
-- **[Arquitectura](documentacion/arquitectura.md)**: Documentación técnica del proyecto
+### Actores del Sistema
 
+| Actor | Objetivos |
+|-------|-----------|
+| **Autor** | - Crear cursos e importarlos |
+| **Consumidor** | - Realizar curso<br>- Importar un curso<br>- Activar Premium<br>- Publicar mensajes en la comunidad<br>- Editar/Eliminar mensajes de la comunidad<br>- Ver sus estadísticas<br>- Ver sus rangos y logros |
+| **Sistema** | - Recomendar cursos a los usuarios |
+
+### Principales Casos de Uso
+
+#### CU-01: Realizar Curso
+**Actor Principal:** Consumidor  
+**Precondición:** Usuario registrado y logueado  
+**Postcondición:** Curso completado o progreso guardado
+
+**Flujo Básico:**
+1. El usuario inicia la app y accede a la ventana login
+2. El usuario introduce su nombre de usuario y contraseña
+3. El usuario pulsa el botón *Aceptar*
+4. El usuario accede a la ventana principal de la app
+5. El usuario pulsa el botón *Explorar Cursos*
+6. El usuario selecciona un curso, selecciona una estrategia y pulsa *Empezar*
+7. El usuario irá completando las preguntas conforme a la estrategia seleccionada
+8. El usuario finaliza el curso sin gastar sus vidas
+
+#### CU-02: Importar un Curso
+**Actor Principal:** Autor/Consumidor  
+**Precondición:** Usuario logueado  
+**Postcondición:** Curso agregado a la biblioteca interna
+
+**Flujo Básico:**
+1. Un autor crea su curso en un archivo .yml
+2. El usuario accede a *Explorar Cursos*
+3. Selecciona el botón *Añadir Curso*
+4. El sistema abre una ventana de diálogo para seleccionar el archivo
+5. El curso se agrega a la biblioteca interna
+
+#### CU-03: Activar Premium
+**Actor Principal:** Consumidor  
+**Precondición:** Usuario logueado  
+**Postcondición:** Suscripción Premium activa
+
+**Flujo Básico:**
+1. El usuario pulsa *Perfil* y selecciona *Edulingo Premium*
+2. Selecciona plan mensual o anual
+3. Pulsa *Activar Premium* y confirma suscripción
+4. El sistema procesa el pago
+5. Usuario obtiene beneficios premium (vidas infinitas)
+
+#### CU-04: Publicar Mensaje en Comunidad
+**Actor Principal:** Consumidor  
+**Precondición:** Usuario logueado  
+**Postcondición:** Mensaje publicado
+
+**Flujo Básico:**
+1. El usuario pulsa el botón *Comunidad*
+2. Selecciona etiqueta (Sugerencia/Problema/Crítica)
+3. Escribe mensaje en el cuadro de texto
+4. Pulsa *Publicar*
+
+#### CU-05: Ver Estadísticas
+**Actor Principal:** Consumidor  
+**Precondición:** Usuario logueado  
+**Postcondición:** Estadísticas mostradas
+
+**Flujo Básico:**
+1. Usuario pulsa *Perfil* y selecciona *Mis Estadísticas*
+2. Sistema muestra estadísticas detalladas del usuario
+
+#### CU-06: Ver Rangos y Logros
+**Actor Principal:** Consumidor  
+**Precondición:** Usuario logueado  
+**Postcondición:** Rangos y logros mostrados
+
+**Flujo Básico:**
+1. Usuario pulsa *Perfil* y selecciona *Mis Rangos y Logros*
+2. Sistema muestra rangos y logros del usuario
+
+## 📊 Modelo de Dominio
+
+![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/502bc265b7a61bda6f40d6bd1c5a1b938e8dedad/Recursos%20Entrega%20Opcional/modelado/ModeladoDominioEntrega2.jpg)
+
+### Descripción del Modelo
+
+El modelo de dominio refleja las relaciones entre los **usuarios**, los **cursos**, los **bloques**, las **preguntas** y las **estrategias de aprendizaje**.
+
+- **Repositorio de usuarios** gestiona a los usuarios con atributos como id, nombre, correo, contraseña y fecha de registro
+- **Cursos** están compuestos por **bloques**, que organizan diferentes **preguntas**
+- **Preguntas** se organizan en tipos como **PreguntaTest**, **PreguntaImagen** o **PreguntaArrastrar**
+- **Cursos en marcha** mantienen el progreso del curso (bloque actual, pregunta actual)
+- **Estrategias de aprendizaje** implementadas: **Secuencial**, **Aleatoria** y **Espaciada**
+- **Sistema de estadísticas** registra tiempo de uso, racha y rendimiento del usuario
+- 
 ## 🏗️ Arquitectura
 
 El proyecto sigue el patrón **MVC (Modelo-Vista-Controlador)** con las siguientes capas:
@@ -114,9 +210,3 @@ La aplicación utiliza **SQLite** con **Hibernate** como ORM. La base de datos s
 ```
 ProyectoPDS/basedatos.db
 ```
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
-
----
