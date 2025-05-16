@@ -8,7 +8,7 @@
 
 ## 📖 Descripción
 
-**EduLingo** es una aplicación de aprendizaje diseñada para ofrecer una experiencia interactiva y efectiva basada en ejercicios rápidos, flashcards y juegos educativos. Inspirada en plataformas como Duolingo y Mochi, la aplicación permite a los usuarios reforzar sus conocimientos en diferentes áreas como idiomas, programación, cultura general, entre otros.
+**EduLingo** es una aplicación de aprendizaje diseñada para ofrecer una experiencia interactiva y efectiva basada en ejercicios rápidos, flashcards y juegos educativos. Inspirada en plataformas como Duolingo y Mochi, la aplicación permite a los usuarios reforzar sus conocimientos en programación.
 
 ## 👥 Equipo de Desarrollo
 
@@ -236,13 +236,11 @@ Ejecutar tests específicos:
 ```bash
 mvn test -Dtest=ControladorPDSTest
 ```
+```bash
+Abrir proyecto en Eclipse -> Ejecutar test seleccionado con JUnit 5
 
-## 📄 Configuración de Base de Datos
+```
 
-La aplicación utiliza **SQLite** con **Hibernate** como ORM. La base de datos se crea automáticamente en:
-```
-ProyectoPDS/basedatos.db
-```
 
 ## 📚 Cursos Incluidos
 EduLingo incluye una librería de cursos de ejemplo en la carpeta libreria/ que cubren diferentes áreas de programación. Los cursos disponibles incluyen Java, Python, C++ y Ensamblador MIPS, cada uno diseñado con preguntas interactivas de múltiples tipos (test, imágenes y drag & drop) para proporcionar una experiencia de aprendizaje completa. 
