@@ -1,21 +1,21 @@
 id: "curso-java-completo"
 nombre: "Curso Completo de Java"
 autor: "Juan Pérez"
-descripcion: "Un curso interactivo de Java con diferentes tipos de preguntas."
-imagenCurso: "https://cdn-icons-png.flaticon.com/512/2000/2000860.png"
+descripcion: "Un curso interactivo de Java desde fundamentos hasta programación orientada a objetos."
+imagenCurso: "https://cdn-icons-png.flaticon.com/512/226/226777.png"
 categoria: "Programación"
 bloques:
   - titulo: "Fundamentos de Java"
     preguntas:
       - tipo: "test"
         numPregunta: 1
-        enunciado: "¿Qué es una variable en Java?"
+        enunciado: "¿Qué es Java?"
         opciones:
-          - "Un contenedor de datos"
-          - "Un tipo de dato"
-          - "Un lenguaje de programación"
-          - "Una clase"
-        respuestaCorrecta: "Un contenedor de datos"
+          - "Un lenguaje de programación orientado a objetos"
+          - "Una bebida"
+          - "Un sistema operativo"
+          - "Una base de datos"
+        respuestaCorrecta: "Un lenguaje de programación orientado a objetos"
 
       - tipo: "test"
         numPregunta: 2
@@ -41,36 +41,36 @@ bloques:
     preguntas:
       - tipo: "imagen"
         numPregunta: 1
-        enunciado: "Selecciona la imagen que representa la herencia en POO:"
+        enunciado: "Selecciona la imagen que representa mejor la herencia en POO:"
         imagenes:
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936630.png"
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936631.png"
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936632.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308395.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308388.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308392.png"
         textos:
-          - "Herencia"
-          - "Encapsulamiento"
-          - "Polimorfismo"
+          - "Herencia (Clase padre → hija)"
+          - "Encapsulamiento (Privado/Público)"
+          - "Polimorfismo (Múltiples formas)"
         imagenCorrecta: 0
 
       - tipo: "imagen"
         numPregunta: 2
-        enunciado: "Identifica la imagen que muestra un diagrama de clase correcto:"
+        enunciado: "¿Qué diagrama muestra mejor una clase Java?"
         imagenes:
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936633.png"
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936634.png"
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936635.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103633.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103620.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103658.png"
         textos:
-          - "Diagrama A"
-          - "Diagrama B"
-          - "Diagrama C"
-        imagenCorrecta: 1
+          - "Diagrama de Clase UML"
+          - "Diagrama de Flujo"
+          - "Esquema de Base de Datos"
+        imagenCorrecta: 0
 
   - titulo: "Estructuras de Control"
     preguntas:
       - tipo: "arrastrar"
         numPregunta: 1
-        enunciado: "Completa la siguiente frase arrastrando las palabras correctas:"
-        textoCompleto: "En Java, el bucle for se utiliza cuando sabemos el número de iteraciones, mientras que el bucle while se utiliza cuando la condición de terminación depende de una expresión booleana."
+        enunciado: "Completa la explicación sobre bucles en Java:"
+        textoCompleto: "En Java, el bucle for se utiliza cuando conocemos el número de iteraciones, mientras que el bucle while se utiliza cuando la condición depende de una expresión booleana."
         huecos: 
           - "for"
           - "número de iteraciones"
@@ -79,7 +79,7 @@ bloques:
 
       - tipo: "arrastrar"
         numPregunta: 2
-        enunciado: "Completa el código Java arrastrando las palabras correctas:"
+        enunciado: "Completa el código Java para un bucle básico:"
         textoCompleto: "public class Ejemplo { public static void main(String[] args) { int contador = 0; while (contador < 10) { System.out.println(contador); contador++; } } }"
         huecos:
           - "public"
@@ -89,7 +89,7 @@ bloques:
           - "System.out.println"
           - "contador++"
 
-  - titulo: "Excepciones y Errores"
+  - titulo: "Manejo de Excepciones"
     preguntas:
       - tipo: "test"
         numPregunta: 1
@@ -113,13 +113,13 @@ bloques:
 
       - tipo: "imagen"
         numPregunta: 3
-        enunciado: "Selecciona la imagen que muestra la jerarquía correcta de excepciones en Java:"
+        enunciado: "Selecciona la imagen que mejor representa el manejo de excepciones:"
         imagenes:
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936636.png"
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936637.png"
-          - "https://cdn-icons-png.flaticon.com/512/2936/2936638.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176463.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176430.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176455.png"
         textos:
-          - "Jerarquía A"
-          - "Jerarquía B"
-          - "Jerarquía C"
+          - "Try-Catch Block"
+          - "Simple Conditional"
+          - "Loop Structure"
         imagenCorrecta: 0

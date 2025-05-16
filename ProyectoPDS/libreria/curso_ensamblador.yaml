@@ -1,0 +1,161 @@
+id: "curso-ensamblador-mips"
+nombre: "Curso Completo de Ensamblador MIPS"
+autor: "Dr. Carlos Ruiz"
+descripcion: "Aprende programación en ensamblador MIPS desde instrucciones básicas hasta optimización de código."
+imagenCurso: "https://cdn-icons-png.flaticon.com/512/2103/2103647.png"
+categoria: "Programación"
+bloques:
+  - titulo: "Introducción a MIPS"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué significa MIPS?"
+        opciones:
+          - "Microprocessor without Interlocked Pipeline Stages"
+          - "Multiple Instruction Per Second"
+          - "Memory Instruction Processing System"
+          - "Modern Integrated Processing Standard"
+        respuestaCorrecta: "Microprocessor without Interlocked Pipeline Stages"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Cuántos registros generales tiene la arquitectura MIPS?"
+        opciones:
+          - "32"
+          - "16"
+          - "64"
+          - "8"
+        respuestaCorrecta: "32"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "¿Qué imagen representa mejor la arquitectura de un procesador?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103647.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103588.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103665.png"
+        textos:
+          - "CPU/Processor Architecture"
+          - "Software Function"
+          - "Data Variable"
+        imagenCorrecta: 0
+
+  - titulo: "Instrucciones Básicas"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la instrucción MIPS para sumar dos registros:"
+        textoCompleto: "add $t0, $t1, $t2"
+        huecos:
+          - "add"
+          - "$t0"
+          - "$t1"
+          - "$t2"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Qué instrucción se usa para cargar una palabra de memoria?"
+        opciones:
+          - "lw"
+          - "ld"
+          - "mov"
+          - "get"
+        respuestaCorrecta: "lw"
+
+      - tipo: "arrastrar"
+        numPregunta: 3
+        enunciado: "Completa la instrucción para almacenar un dato en memoria:"
+        textoCompleto: "sw $t0, 0($sp)"
+        huecos:
+          - "sw"
+          - "$t0"
+          - "$sp"
+
+  - titulo: "Control de Flujo"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué instrucción se usa para salto incondicional?"
+        opciones:
+          - "j"
+          - "jr"
+          - "jal"
+          - "beq"
+        respuestaCorrecta: "j"
+
+      - tipo: "arrastrar"
+        numPregunta: 2
+        enunciado: "Completa la instrucción de salto condicional:"
+        textoCompleto: "beq $t0, $t1, label"
+        huecos:
+          - "beq"
+          - "$t0"
+          - "$t1"
+          - "label"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "¿Qué imagen representa mejor el control de flujo en programación?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176455.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176430.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176438.png"
+        textos:
+          - "Flow Control (branches)"
+          - "Simple Operation"
+          - "Memory Management"
+        imagenCorrecta: 0
+
+  - titulo: "Procedimientos y Stack"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la convención para llamar un procedimiento:"
+        textoCompleto: "jal procedimiento # Guarda dirección en $ra"
+        huecos:
+          - "jal"
+          - "procedimiento"
+          - "$ra"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Qué registro se usa como stack pointer en MIPS?"
+        opciones:
+          - "$sp"
+          - "$fp"
+          - "$ra"
+          - "$gp"
+        respuestaCorrecta: "$sp"
+
+      - tipo: "arrastrar"
+        numPregunta: 3
+        enunciado: "Completa el código para retornar de un procedimiento:"
+        textoCompleto: "jr $ra # Salta a la dirección de retorno"
+        huecos:
+          - "jr"
+          - "$ra"
+
+  - titulo: "Optimización"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué es un pipeline hazard?"
+        opciones:
+          - "Conflicto entre instrucciones en el pipeline"
+          - "Error de sintaxis"
+          - "Falta de memoria"
+          - "Registro no válido"
+        respuestaCorrecta: "Conflicto entre instrucciones en el pipeline"
+
+      - tipo: "imagen"
+        numPregunta: 2
+        enunciado: "¿Qué imagen representa mejor el concepto de pipeline?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308362.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308395.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308388.png"
+        textos:
+          - "Pipeline Stages"
+          - "Class Hierarchy"
+          - "Data Encapsulation"
+        imagenCorrecta: 0
