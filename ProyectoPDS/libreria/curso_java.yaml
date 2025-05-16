@@ -1,0 +1,125 @@
+id: "curso-java-completo"
+nombre: "Curso Completo de Java"
+autor: "Juan Pérez"
+descripcion: "Un curso interactivo de Java desde fundamentos hasta programación orientada a objetos."
+imagenCurso: "https://cdn-icons-png.flaticon.com/512/226/226777.png"
+categoria: "Programación"
+bloques:
+  - titulo: "Fundamentos de Java"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué es Java?"
+        opciones:
+          - "Un lenguaje de programación orientado a objetos"
+          - "Una bebida"
+          - "Un sistema operativo"
+          - "Una base de datos"
+        respuestaCorrecta: "Un lenguaje de programación orientado a objetos"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Cuál es el método principal de una aplicación Java?"
+        opciones:
+          - "public static void main(String[] args)"
+          - "public void main()"
+          - "static void start(String[] args)"
+          - "public main(String args[])"
+        respuestaCorrecta: "public static void main(String[] args)"
+
+      - tipo: "test"
+        numPregunta: 3
+        enunciado: "¿Qué significa JVM?"
+        opciones:
+          - "Java Virtual Machine"
+          - "Java Variable Method"
+          - "Just Virtual Memory"
+          - "Java Visual Module"
+        respuestaCorrecta: "Java Virtual Machine"
+
+  - titulo: "Programación Orientada a Objetos"
+    preguntas:
+      - tipo: "imagen"
+        numPregunta: 1
+        enunciado: "Selecciona la imagen que representa mejor la herencia en POO:"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308395.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308388.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308392.png"
+        textos:
+          - "Herencia (Clase padre → hija)"
+          - "Encapsulamiento (Privado/Público)"
+          - "Polimorfismo (Múltiples formas)"
+        imagenCorrecta: 0
+
+      - tipo: "imagen"
+        numPregunta: 2
+        enunciado: "¿Qué diagrama muestra mejor una clase Java?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103633.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103620.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103658.png"
+        textos:
+          - "Diagrama de Clase UML"
+          - "Diagrama de Flujo"
+          - "Esquema de Base de Datos"
+        imagenCorrecta: 0
+
+  - titulo: "Estructuras de Control"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la explicación sobre bucles en Java:"
+        textoCompleto: "En Java, el bucle for se utiliza cuando conocemos el número de iteraciones, mientras que el bucle while se utiliza cuando la condición depende de una expresión booleana."
+        huecos: 
+          - "for"
+          - "número de iteraciones"
+          - "while"
+          - "expresión booleana"
+
+      - tipo: "arrastrar"
+        numPregunta: 2
+        enunciado: "Completa el código Java para un bucle básico:"
+        textoCompleto: "public class Ejemplo { public static void main(String[] args) { int contador = 0; while (contador < 10) { System.out.println(contador); contador++; } } }"
+        huecos:
+          - "public"
+          - "static void"
+          - "contador"
+          - "while"
+          - "System.out.println"
+          - "contador++"
+
+  - titulo: "Manejo de Excepciones"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué bloque se utiliza para manejar excepciones en Java?"
+        opciones:
+          - "try-catch"
+          - "if-else"
+          - "for-in"
+          - "switch-case"
+        respuestaCorrecta: "try-catch"
+
+      - tipo: "arrastrar"
+        numPregunta: 2
+        enunciado: "Completa el código para manejo de excepciones:"
+        textoCompleto: "try { int resultado = 10 / 0; } catch (ArithmeticException e) { System.out.println(\"División por cero\"); } finally { System.out.println(\"Este bloque siempre se ejecuta\"); }"
+        huecos:
+          - "try"
+          - "catch"
+          - "ArithmeticException"
+          - "finally"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "Selecciona la imagen que mejor representa el manejo de excepciones:"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176463.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176430.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176455.png"
+        textos:
+          - "Try-Catch Block"
+          - "Simple Conditional"
+          - "Loop Structure"
+        imagenCorrecta: 0

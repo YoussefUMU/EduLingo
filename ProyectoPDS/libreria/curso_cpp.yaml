@@ -1,0 +1,133 @@
+id: "curso-cpp-completo"
+nombre: "Curso Completo de C++"
+autor: "Roberto Martinez"
+descripcion: "Domina C++ desde sintaxis básica hasta programación orientada a objetos y gestión de memoria."
+imagenCurso: "https://cdn-icons-png.flaticon.com/512/6132/6132222.png"
+categoria: "Programación"
+bloques:
+  - titulo: "Fundamentos de C++"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué significa C++?"
+        opciones:
+          - "Una extensión de C con programación orientada a objetos"
+          - "Un lenguaje completamente diferente de C"
+          - "Una versión simplificada de C"
+          - "Un preprocesador de C"
+        respuestaCorrecta: "Una extensión de C con programación orientada a objetos"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Cuál es la función principal en C++?"
+        opciones:
+          - "int main()"
+          - "void start()"
+          - "begin()"
+          - "execute()"
+        respuestaCorrecta: "int main()"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "Selecciona el símbolo que representa mejor C++:"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/6132/6132222.png"
+          - "https://cdn-icons-png.flaticon.com/512/226/226777.png"
+          - "https://cdn-icons-png.flaticon.com/512/5968/5968350.png"
+        textos:
+          - "C++ (con ++)"
+          - "Java"
+          - "Python"
+        imagenCorrecta: 0
+
+  - titulo: "Gestión de Memoria"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa el código para asignación dinámica de memoria:"
+        textoCompleto: "int* ptr = new int(42); delete ptr;"
+        huecos:
+          - "int*"
+          - "new"
+          - "delete"
+          - "ptr"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Qué operador se usa para liberar memoria dinámica?"
+        opciones:
+          - "delete"
+          - "free"
+          - "remove"
+          - "clear"
+        respuestaCorrecta: "delete"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "¿Qué imagen representa mejor la gestión de memoria?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176438.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176430.png"
+          - "https://cdn-icons-png.flaticon.com/512/3176/3176455.png"
+        textos:
+          - "Allocation/Deallocation"
+          - "Simple Operation"
+          - "Loop Process"
+        imagenCorrecta: 0
+
+  - titulo: "POO en C++"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la declaración de una clase en C++:"
+        textoCompleto: "class MiClase { private: int x; public: MiClase(int val); };"
+        huecos:
+          - "class"
+          - "private"
+          - "public"
+          - "MiClase"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Qué palabra clave se usa para la herencia en C++?"
+        opciones:
+          - ": public"
+          - "extends"
+          - "inherits"
+          - "derives"
+        respuestaCorrecta: ": public"
+
+  - titulo: "Templates y STL"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué permite hacer los templates en C++?"
+        opciones:
+          - "Programación genérica con tipos parametrizados"
+          - "Solo plantillas de texto"
+          - "Macros avanzadas"
+          - "Herencia múltiple"
+        respuestaCorrecta: "Programación genérica con tipos parametrizados"
+
+      - tipo: "arrastrar"
+        numPregunta: 2
+        enunciado: "Completa la declaración de un template de función:"
+        textoCompleto: "template <typename T> T maximo(T a, T b) { return (a > b) ? a : b; }"
+        huecos:
+          - "template"
+          - "typename"
+          - "maximo"
+          - "return"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "¿Qué imagen representa mejor la STL (Standard Template Library)?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308375.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308395.png"
+          - "https://cdn-icons-png.flaticon.com/512/3308/3308388.png"
+        textos:
+          - "Standard Library Templates"
+          - "Class Inheritance"
+          - "Data Encapsulation"
+        imagenCorrecta: 0
