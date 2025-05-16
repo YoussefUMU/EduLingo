@@ -17,8 +17,8 @@ public class GestorLogros {
     public static final String LOGRO_MADRUGADOR = "madrugador";
     public static final String LOGRO_NOCTURNO = "nocturno";
     public static final String LOGRO_MAESTRO_JAVA = "maestro_java";
-    public static final String LOGRO_POLIGLOTA = "poliglota";
-    public static final String LOGRO_COLABORADOR = "colaborador";
+    public static final String LOGRO_PROGRAMADOR = "programador";
+    public static final String LOGRO_MAESTRO_PYTHON = "maestro_python";
     
     // Información de los logros (título, descripción, etc.)
     private static final Map<String, LogroInfo> infoLogros = new HashMap<>();
@@ -44,13 +44,13 @@ public class GestorLogros {
                 new LogroInfo("Nocturno", "Estudiaste después de las 22:00"));
         
         infoLogros.put(LOGRO_MAESTRO_JAVA, 
-                new LogroInfo("Maestro Java", "Completa el curso de Java"));
+                new LogroInfo("Maestro Java", "Completa un curso de Java"));
         
-        infoLogros.put(LOGRO_POLIGLOTA, 
-                new LogroInfo("Políglota", "Aprende 3 lenguajes"));
+        infoLogros.put(LOGRO_PROGRAMADOR, 
+                new LogroInfo("Programador", "Completa 5 cursos de programación"));
         
-        infoLogros.put(LOGRO_COLABORADOR, 
-                new LogroInfo("Colaborador", "Crea tu primer curso"));
+        infoLogros.put(LOGRO_MAESTRO_PYTHON, 
+                new LogroInfo("Maestro Python", "Completa un curso de Python"));
     }
     
     /**
@@ -104,7 +104,7 @@ public class GestorLogros {
             }
         }
         
-        // Comprobar logro: Maestro Java
+        // Comprobar logro: Maestro Java/Maestro C++
         for (String cursoId : stats.getCursosCompletadosIds()) {
             // Verificar si alguno de los cursos completados es de Java
             if (cursoId.toLowerCase().contains("java")) {
@@ -113,16 +113,20 @@ public class GestorLogros {
                 }
                 break;
             }
-        }
-        
-        // Comprobar logro: Políglota
-        if (stats.getLenguajesAprendidos() >= 3) {
-            if (stats.desbloquearLogro(LOGRO_POLIGLOTA)) {
-                nuevosLogros.add(LOGRO_POLIGLOTA);
+            if (cursoId.toLowerCase().contains("python")) {
+                if (stats.desbloquearLogro(LOGRO_MAESTRO_PYTHON)) {
+                    nuevosLogros.add(LOGRO_MAESTRO_PYTHON);
+                }
+                break;
             }
         }
         
-        // El logro 'Colaborador' se verificará cuando se implemente la creación de cursos
+        // Comprobar logro: Programador
+        if (stats.getCursosProgramacionCompletados() >= 5) {
+            if (stats.desbloquearLogro(LOGRO_PROGRAMADOR)) {
+                nuevosLogros.add(LOGRO_PROGRAMADOR);
+            }
+        }
         
         return nuevosLogros.toArray(new String[0]);
     }

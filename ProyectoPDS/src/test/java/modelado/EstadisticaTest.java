@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ class EstadisticaTest {
 		assertEquals(0, stats.getPreguntasRespondidas());
 		assertEquals(0, stats.getPreguntasCorrectas());
 		assertEquals(0, stats.getCursosCompletados());
-		assertEquals(0, stats.getLenguajesAprendidos());
+		assertEquals(0, stats.getCursosProgramacionCompletados());
 		assertTrue(stats.getCursosCompletadosIds().isEmpty());
 		assertTrue(stats.getLogrosDesbloqueados().isEmpty());
 		// experiencia inicial < XP_NIVEL_2
@@ -51,7 +50,7 @@ class EstadisticaTest {
 		assertEquals(1, stats.getCursosCompletados());
 		// XP por curso completado
 		assertEquals(Estadistica.XP_POR_CURSO_COMPLETADO, stats.getExperiencia());
-		assertEquals(1, stats.getLenguajesAprendidos());
+		assertEquals(1, stats.getCursosProgramacionCompletados());
 
 		// repetido
 		boolean segunda = stats.registrarCursoCompletado("C1", "Programación Java");
@@ -61,16 +60,18 @@ class EstadisticaTest {
 
 	@Test
 	void testActualizarRacha() {
-		// Simular primer timestamp (en segundos desde 1970)
-		stats.setUltimoInicioSesion(0);
-		// Un día después exacto (86400 segundos)
-		stats.actualizarRacha(86400);
+		LocalDate date = LocalDate.now();
+		stats.setUltimoInicioSesion(date);
+		// Un día después
+		date = date.plusDays(1);
+		stats.actualizarRacha(date);
 		assertEquals(1, stats.getMejorRacha(), "Al cabo de un día, racha debe ser 1");
 		assertEquals(Estadistica.XP_POR_RACHA_DIARIA, stats.getExperiencia(),
 				"Debemos recibir sólo XP_POR_RACHA_DIARIA tras el aumento de racha");
 
 		// Más de un día (ruptura de racha)
-		stats.actualizarRacha(86400 * 3);
+		date = date.plusDays(3);
+		stats.actualizarRacha(date);
 		assertEquals(1, stats.getMejorRacha(), "Si se interrumpe la racha, se reinicia a 1");
 	}
 

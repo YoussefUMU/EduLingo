@@ -80,7 +80,8 @@ public class ControladorPDS {
 			return false;
 		}
 		sesionActual = usuario;
-		
+		sesionActual.actualizarRacha(LocalDate.now());
+		repositorioUsuarios.actualizarUsuario(usuario);
         inicioSesionActual = LocalDateTime.now();
 		return true;
 	}

@@ -1,20 +1,20 @@
 package modelado;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Clase que almacena las estadísticas de uso de un usuario.
@@ -30,7 +30,7 @@ public class Estadistica {
 	private int preguntasCorrectas;
 	private int cursosCompletados;
 	private int sesionesEstudio;
-	private int ultimoInicioSesion; // Timestamp para cálculo de rachas
+	private LocalDate ultimoInicioSesion; // Timestamp para cálculo de rachas
 	private int experiencia; // Nueva variable para almacenar la experiencia
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> cursosCompletadosIds; // Set para almacenar IDs de cursos completados
@@ -38,7 +38,7 @@ public class Estadistica {
 	private List<String> logrosDesbloqueados; // Lista para almacenar logros desbloqueados
 	private LocalDateTime primeraActividadDelDia; // Primera actividad registrada en el día
 	private LocalDateTime ultimaActividadDelDia; // Última actividad registrada en el día
-	private int lenguajesAprendidos; // Contador de lenguajes de programación aprendidos
+	private int cursosProgramacionCompletados; // Contador de lenguajes de programación aprendidos
 
 	// Constantes para cálculo de experiencia
 	public static final int XP_POR_PREGUNTA_CORRECTA = 10;
@@ -66,13 +66,13 @@ public class Estadistica {
 		this.preguntasCorrectas = 0;
 		this.cursosCompletados = 0;
 		this.sesionesEstudio = 0;
-		this.ultimoInicioSesion = 0;
+		this.ultimoInicioSesion = LocalDate.now();
 		this.experiencia = 0;
 		this.cursosCompletadosIds = new HashSet<>();
 		this.logrosDesbloqueados = new ArrayList<>();
 		this.primeraActividadDelDia = null;
 		this.ultimaActividadDelDia = null;
-		this.lenguajesAprendidos = 0;
+		this.cursosProgramacionCompletados = 0;
 	}
 
 	/**
@@ -114,9 +114,9 @@ public class Estadistica {
 			// Aumentar experiencia
 			experiencia += XP_POR_CURSO_COMPLETADO;
 
-			// Si es un curso de un lenguaje nuevo, incrementar contador
+			// Si es un curso de programacion, incrementar contador
 			if (categoria != null && categoria.toLowerCase().contains("programación")) {
-				lenguajesAprendidos++;
+				cursosProgramacionCompletados++;
 			}
 
 			return true;
@@ -130,12 +130,10 @@ public class Estadistica {
 	 * @param timestampActual Timestamp actual en formato Unix (segundos desde
 	 *                        1970).
 	 */
-	public void actualizarRacha(int timestampActual) {
+	public void actualizarRacha(LocalDate actual) {
 		// Lógica para actualizar rachas basada en diferencia de días
 		// Esta es una implementación simple, se puede mejorar según necesidades
-		int segundosEnUnDia = 86400;
-		int diasDesdeUltimoUso = (timestampActual - ultimoInicioSesion) / segundosEnUnDia;
-
+		long diasDesdeUltimoUso = ChronoUnit.DAYS.between(ultimoInicioSesion, actual);
 		if (diasDesdeUltimoUso == 1) {
 			// El usuario ha vuelto un día después, incrementamos racha
 			mejorRacha++;
@@ -145,8 +143,7 @@ public class Estadistica {
 			// El usuario ha interrumpido su racha, reiniciamos a 1
 			mejorRacha = 1;
 		}
-
-		ultimoInicioSesion = timestampActual;
+		ultimoInicioSesion = actual;
 	}
 
 	/**
@@ -269,12 +266,6 @@ public class Estadistica {
 	 * Verifica si el usuario estudió tarde (después de las 22:00, antes de las
 	 * 5:00).
 	 */
-	/*
-	 * public boolean estudioPorLaNoche() { if (ultimaActividadDelDia == null)
-	 * return false; return
-	 * ultimaActividadDelDia.toLocalTime().isAfter(LocalTime.of(22, 0)) &&
-	 * primeraActividadDelDia.toLocalTime().isBefore(LocalTime.of(5, 0)); }
-	 */
 	public boolean estudioPorLaNoche() {
 		if (ultimaActividadDelDia == null)
 			return false;
@@ -299,8 +290,8 @@ public class Estadistica {
 		return new HashSet<>(cursosCompletadosIds);
 	}
 
-	public int getLenguajesAprendidos() {
-		return lenguajesAprendidos;
+	public int getCursosProgramacionCompletados() {
+		return cursosProgramacionCompletados;
 	}
 
 	// Getters existentes
@@ -343,11 +334,11 @@ public class Estadistica {
 		return sesionesEstudio;
 	}
 
-	public int getUltimoInicioSesion() {
+	public LocalDate getUltimoInicioSesion() {
 		return ultimoInicioSesion;
 	}
 
-	public void setUltimoInicioSesion(int ultimoInicioSesion) {
+	public void setUltimoInicioSesion(LocalDate ultimoInicioSesion) {
 		this.ultimoInicioSesion = ultimoInicioSesion;
 	}
 
