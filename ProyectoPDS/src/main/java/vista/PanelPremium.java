@@ -147,7 +147,7 @@ public class PanelPremium extends JPanel {
 		textoDesc.setContentType("text/html");
 		textoDesc.setText("<html><body style='width: 300px; font-family: Segoe UI; font-size: 14px;'>"
 				+ "<p>Con Premium disfrutarás de una experiencia de aprendizaje sin límites, pudiendo practicar "
-				+ "todas las veces que necesites y accediendo a contenido exclusivo.</p>"
+				+ "todas las veces que necesites.</p>"
 				+ "<p>Elige el plan que mejor se adapte a ti y comienza a disfrutar de todas las ventajas.</p>"
 				+ "</body></html>");
 		textoDesc.setEditable(false);
