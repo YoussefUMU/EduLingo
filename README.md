@@ -24,9 +24,9 @@
 
 - 🎮 **Sistema de Gamificación**: Niveles, experiencia, rangos y logros
 - 📚 **Cursos Interactivos**: Preguntas tipo test, drag & drop e imágenes
-- 📊 **Estadísticas Detalladas**: Tiempo de estudio, rachas, porcentaje de aciertos
+- 📊 **Estadísticas Detalladas**: Tiempo de estudio, rachas, cursos completados, racha...
 - 🏆 **Sistema de Logros**: Desbloquea logros según tu progreso
-- 👑 **Suscripción Premium**: Vidas infinitas y contenido exclusivo
+- 👑 **Suscripción Premium**: Vidas infinitas 
 - 🎯 **Estrategias de Aprendizaje**: Secuencial, aleatoria y espaciada
 - 💬 **Comunidad**: Sistema de comentarios entre usuarios
 - 🤖 **Asistente Virtual**: Consejos personalizados y seguimiento
