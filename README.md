@@ -48,13 +48,8 @@
 - **Sistema de Estadísticas Avanzado**: Métricas detalladas de rendimiento
 - **Importación de Cursos YAML**: Carga dinámica de contenido educativo
 
-## 🚀 Requisitos y Instalación
+## 🚀 Instalación
 
-### Requisitos Previos:
-- **Java 17** o superior
-- **Apache Maven 3.8+**
-- **4GB RAM** mínimo
-- **500MB** espacio en disco
 
 ### Instalación y Ejecución:
 
@@ -71,14 +66,10 @@ mvn clean compile
 
 3. **Ejecutar la aplicación**
 ```bash
-mvn exec:java -Dexec.mainClass="lanzador.Lanzador"
+Abrir proyecto en Eclipse -> Ejecutar Lanzador
 ```
 
-4. **(Opcional) Generar JAR ejecutable**
-```bash
-mvn package
-java -jar target/edulingo-1.0.jar
-```
+
 
 ## 📋 Casos de Uso
 
