@@ -1,0 +1,133 @@
+id: "curso-python-completo"
+nombre: "Curso Completo de Python"
+autor: "María González"
+descripcion: "Aprende Python desde lo básico hasta programación avanzada con ejercicios prácticos."
+imagenCurso: "https://cdn-icons-png.flaticon.com/512/5968/5968350.png"
+categoria: "Programación"
+bloques:
+  - titulo: "Introducción a Python"
+    preguntas:
+      - tipo: "test"
+        numPregunta: 1
+        enunciado: "¿Qué tipo de lenguaje es Python?"
+        opciones:
+          - "Interpretado y de alto nivel"
+          - "Compilado de bajo nivel"
+          - "Solo para scripts"
+          - "Lenguaje ensamblador"
+        respuestaCorrecta: "Interpretado y de alto nivel"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Cuál es la extensión de los archivos Python?"
+        opciones:
+          - ".py"
+          - ".python"
+          - ".pyt"
+          - ".pyth"
+        respuestaCorrecta: ".py"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "Identifica el logo oficial de Python:"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/5968/5968350.png"
+          - "https://cdn-icons-png.flaticon.com/512/226/226777.png"
+          - "https://cdn-icons-png.flaticon.com/512/732/732212.png"
+        textos:
+          - "Python (serpientes entrelazadas)"
+          - "Java (taza de café)"
+          - "JavaScript (JS)"
+        imagenCorrecta: 0
+
+  - titulo: "Tipos de Datos y Variables"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la declaración de variables en Python:"
+        textoCompleto: "En Python, las variables se declaran dinámicamente. Por ejemplo: nombre = \"Juan\", edad = 25, es_estudiante = True"
+        huecos:
+          - "dinámicamente"
+          - "nombre"
+          - "edad"
+          - "es_estudiante"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Cuál es un tipo de dato inmutable en Python?"
+        opciones:
+          - "tuple"
+          - "list"
+          - "dict"
+          - "set"
+        respuestaCorrecta: "tuple"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "¿Qué imagen representa mejor los tipos de datos en Python?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103665.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103588.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103633.png"
+        textos:
+          - "Variables y Tipos"
+          - "Funciones"
+          - "Clases"
+        imagenCorrecta: 0
+
+  - titulo: "Estructuras de Control"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la sintaxis de un bucle for en Python:"
+        textoCompleto: "for i in range(10): print(i)"
+        huecos:
+          - "for"
+          - "in"
+          - "range"
+          - "print"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Qué función se usa para obtener input del usuario?"
+        opciones:
+          - "input()"
+          - "get()"
+          - "read()"
+          - "scan()"
+        respuestaCorrecta: "input()"
+
+  - titulo: "Funciones y Módulos"
+    preguntas:
+      - tipo: "arrastrar"
+        numPregunta: 1
+        enunciado: "Completa la definición de una función en Python:"
+        textoCompleto: "def saludar(nombre): return f\"Hola {nombre}\""
+        huecos:
+          - "def"
+          - "saludar"
+          - "return"
+          - "nombre"
+
+      - tipo: "test"
+        numPregunta: 2
+        enunciado: "¿Cómo se importa un módulo completo en Python?"
+        opciones:
+          - "import modulo"
+          - "include modulo"
+          - "require modulo"
+          - "using modulo"
+        respuestaCorrecta: "import modulo"
+
+      - tipo: "imagen"
+        numPregunta: 3
+        enunciado: "¿Qué símbolo representa mejor las funciones en programación?"
+        imagenes:
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103588.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103633.png"
+          - "https://cdn-icons-png.flaticon.com/512/2103/2103665.png"
+        textos:
+          - "Función (f(x))"
+          - "Clase"
+          - "Variable"
+        imagenCorrecta: 0
