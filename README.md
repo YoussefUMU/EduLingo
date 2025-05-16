@@ -153,7 +153,7 @@ Abrir proyecto en Eclipse -> Ejecutar Lanzador
 
 ## 📊 Modelo de Dominio
 
-![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/502bc265b7a61bda6f40d6bd1c5a1b938e8dedad/Recursos%20Entrega%20Opcional/modelado/ModeladoDominioEntrega2.jpg)
+![Modelado de dominio](https://github.com/YoussefUMU/proyecto-pds-24-25/blob/62eaff7b3c3beaf37e54e21d80181c3da2cc6798/Recursos/ModeladoDominioEduLingo.jpg)
 
 ### Descripción del Modelo
 
