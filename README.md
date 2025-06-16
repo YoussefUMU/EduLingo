@@ -13,12 +13,9 @@
 ## 👥 Equipo de Desarrollo
 
 ### Realizado por:
-- **Joaquín Manuel Redón Sánchez**
-- **Marcos Davidson Antón**  
-- **Youssef Bouaouiouich Souidi**
-
-### Profesor Responsable:
-**Jesús Sánchez Cuadrado**
+- **Joaquín Manuel RS**
+- **Marcos DA**  
+- **Youssef BS**
 
 ## ✨ Características Principales
 
